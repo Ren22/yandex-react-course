@@ -1,0 +1,12 @@
+.list {
+  list-style-type: none;
+  margin: 0;
+  display: flex;
+  flex-wrap: wrap;
+}
+
+.main {
+  flex-basis: 50%;
+  height: 90vh;
+  overflow: scroll;
+}
