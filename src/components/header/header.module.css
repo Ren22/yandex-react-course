@@ -1,0 +1,22 @@
+.header {
+  background-color: #1c1c21;
+  padding: 0 10rem;
+  display: flex;
+  position: relative;
+  height: 4rem;
+  align-items: center;
+}
+
+.box {
+  flex: 1;
+  display: flex;
+  justify-content: space-evenly;
+}
+
+.box:first-child > span {
+  margin-right: auto;
+}
+
+.box:last-child > span {
+  margin-left: auto;
+}

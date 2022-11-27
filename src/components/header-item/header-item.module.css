@@ -1,0 +1,11 @@
+.item {
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  opacity: 0.6;
+}
+
+.item:hover {
+  text-decoration: underline;
+  opacity: 1;
+}
