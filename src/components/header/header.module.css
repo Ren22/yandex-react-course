@@ -1,23 +1,31 @@
 .header {
-  background-color: #1c1c21;
-  flex-basis: 1200px;
-  justify-content: center;
+  width: 1200px;
   display: flex;
   position: relative;
   height: 4rem;
   align-items: center;
 }
 
-.box {
+.wrapper {
+  display: flex;
+  justify-content: center;
+  background-color: #1c1c21;
+}
+
+.spacing {
+  flex-grow: 1;
+}
+
+.header__box {
   flex: 1;
   display: flex;
   justify-content: space-evenly;
 }
 
-.box:first-child > span {
+.header__box:first-child > span {
   margin-right: auto;
 }
 
-.box:last-child > span {
+.header__box:last-child > span {
   margin-left: auto;
 }

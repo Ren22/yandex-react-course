@@ -8,9 +8,9 @@ type Props = {
 
 const HeaderItem: React.FC<Props> = ({ children, text }) => {
   return (
-    <div className={headerItem.item}>
+    <div className={`${headerItem.item} pr-5`}>
       {children}
-      <span className="p-2">{text}</span>
+      <span className="text text_type_main-default p-2">{text}</span>
     </div>
   );
 };

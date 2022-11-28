@@ -10,24 +10,28 @@ import {
 
 const Header = () => {
   return (
-    <header className={headerStyles.header}>
-      <div className={headerStyles.box}>
-        <HeaderItem text="Конструктор">
-          <BurgerIcon type={"primary"} />
-        </HeaderItem>
-        <HeaderItem text="Лента заказов">
-          <ListIcon type={"primary"} />
-        </HeaderItem>
-      </div>
-      <div className={headerStyles.box}>
-        <Logo />
-      </div>
-      <div className={headerStyles.box}>
-        <HeaderItem text="Личный кабинет">
-          <ProfileIcon type={"primary"} />
-        </HeaderItem>
-      </div>
-    </header>
+    <div className={headerStyles.wrapper}>
+      <header className={headerStyles.header}>
+        <div className={headerStyles.header__box}>
+          <HeaderItem text="Конструктор">
+            <BurgerIcon type={"primary"} />
+          </HeaderItem>
+          <HeaderItem text="Лента заказов">
+            <ListIcon type={"primary"} />
+          </HeaderItem>
+          <div className={headerStyles.spacing}></div>
+        </div>
+        <div className={headerStyles.header__box}>
+          <Logo />
+        </div>
+        <div className={headerStyles.header__box}>
+          <div className={headerStyles.spacing}></div>
+          <HeaderItem text="Личный кабинет">
+            <ProfileIcon type={"primary"} />
+          </HeaderItem>
+        </div>
+      </header>
+    </div>
   );
 };
 
