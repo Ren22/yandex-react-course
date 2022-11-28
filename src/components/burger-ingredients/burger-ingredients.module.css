@@ -6,7 +6,7 @@
 }
 
 .main {
-  flex-basis: 50%;
+  flex-basis: 600px;
   height: 90vh;
   overflow: scroll;
 }

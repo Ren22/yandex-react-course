@@ -1,4 +1,4 @@
 .main {
   display: flex;
-  padding: 0 10rem;
+  justify-content: center;
 }

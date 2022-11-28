@@ -10,7 +10,7 @@ const BurgerIngredients = () => {
     (b) => !b.name.includes("булка") && !b.name.includes("Соус")
   );
   return (
-    <div className={burgerIngredients.main}>
+    <div className={`${burgerIngredients.main} mr-10`}>
       <h3 className="text text_type_main-medium">Булки</h3>
       <ul className={`${burgerIngredients.list} pt-6 pl-4 pb-10`}>
         {breads.map((b, key) => (

@@ -2,6 +2,7 @@ import React from "react";
 import BurgerIngredients from "./components/burger-ingredients/burger-ingredients";
 import Header from "./components/header/header";
 import appStyle from "./app.module.css";
+import OrderList from "./components/order-list/order-list";
 
 function App() {
   return (
@@ -9,9 +10,7 @@ function App() {
       <Header />
       <main className={appStyle.main}>
         <BurgerIngredients />
-        <div>
-          <h2>2 column</h2>
-        </div>
+        <OrderList />
       </main>
     </div>
   );
