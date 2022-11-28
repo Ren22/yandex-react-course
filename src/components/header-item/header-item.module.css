@@ -9,3 +9,12 @@
   text-decoration: underline;
   opacity: 1;
 }
+
+.item_active {
+  opacity: 1;
+}
+
+a {
+  text-decoration: none;
+  color: #fff;
+}

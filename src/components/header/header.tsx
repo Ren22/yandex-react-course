@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import { Logo } from "@ya.praktikum/react-developer-burger-ui-components";
 import HeaderItem from "../header-item/header-item";
 import headerStyles from "./header.module.css";
@@ -9,14 +9,23 @@ import {
 } from "@ya.praktikum/react-developer-burger-ui-components";
 
 const Header = () => {
+  const [current] = useState("constructor");
   return (
     <div className={headerStyles.wrapper}>
       <header className={headerStyles.header}>
         <div className={headerStyles.header__box}>
-          <HeaderItem text="Конструктор">
+          <HeaderItem
+            active={current === "constructor"}
+            src="/constructor"
+            text="Конструктор"
+          >
             <BurgerIcon type={"primary"} />
           </HeaderItem>
-          <HeaderItem text="Лента заказов">
+          <HeaderItem
+            active={current === "orders"}
+            src="/orders"
+            text="Лента заказов"
+          >
             <ListIcon type={"primary"} />
           </HeaderItem>
           <div className={headerStyles.spacing}></div>
@@ -26,7 +35,11 @@ const Header = () => {
         </div>
         <div className={headerStyles.header__box}>
           <div className={headerStyles.spacing}></div>
-          <HeaderItem text="Личный кабинет">
+          <HeaderItem
+            active={current === "profile"}
+            src="/proile"
+            text="Личный кабинет"
+          >
             <ProfileIcon type={"primary"} />
           </HeaderItem>
         </div>

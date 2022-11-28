@@ -1,3 +1,8 @@
+.listWrapper {
+  overflow-y: scroll;
+  height: 50vh;
+}
+
 .list {
   list-style-type: none;
   margin: 0;
@@ -7,6 +12,8 @@
 
 .main {
   flex-basis: 600px;
-  height: 90vh;
-  overflow: scroll;
+}
+
+.tabs {
+  display: flex;
 }
