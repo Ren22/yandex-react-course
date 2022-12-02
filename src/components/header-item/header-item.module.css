@@ -2,7 +2,6 @@
   cursor: pointer;
   display: flex;
   align-items: center;
-  opacity: 0.6;
 }
 
 .item:hover {
@@ -11,10 +10,10 @@
 }
 
 .item_active {
-  opacity: 1;
+  color: #f2f2f3;
 }
 
 a {
   text-decoration: none;
-  color: #fff;
+  color: #8585ad;
 }

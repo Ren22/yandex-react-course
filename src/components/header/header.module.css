@@ -2,14 +2,7 @@
   width: 1200px;
   display: flex;
   position: relative;
-  height: 4rem;
   align-items: center;
-}
-
-.wrapper {
-  display: flex;
-  justify-content: center;
-  background-color: #1c1c21;
 }
 
 .spacing {

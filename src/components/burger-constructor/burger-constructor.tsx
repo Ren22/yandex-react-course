@@ -6,24 +6,22 @@ import {
   Button,
 } from "@ya.praktikum/react-developer-burger-ui-components";
 import { burgersData } from "../../api/burgers";
-import listStyle from "./order-list.module.css";
+import listStyle from "./burger-constructor.module.css";
 
 const orderList = () => {
   const ordersSum = burgersData.reduce((p, n) => p + n.price, 0);
-  const breads = burgersData.filter((it) => it.name.includes("булка"));
-  const topBread = breads.splice(0, 1)[0];
-  const bottomBread = breads.pop();
+  const bread = burgersData.filter((it) => it.name.includes("булка"))[0];
 
   return (
     <div className={`${listStyle.container} pl-4 pr-4`}>
       <li className={`${listStyle.list__item} mt-25`} draggable="true">
-        {topBread && (
+        {bread && (
           <ConstructorElement
             isLocked={true}
             type="top"
-            text={topBread.name}
-            price={topBread.price}
-            thumbnail={topBread.image}
+            text={bread.name + "(верх)"}
+            price={bread.price}
+            thumbnail={bread.image}
           />
         )}
       </li>
@@ -41,13 +39,13 @@ const orderList = () => {
         ))}
       </ul>
       <li className={`${listStyle.list__item}  mb-10`} draggable="true">
-        {bottomBread && (
+        {bread && (
           <ConstructorElement
             isLocked={true}
             type="bottom"
-            text={bottomBread.name}
-            price={bottomBread.price}
-            thumbnail={bottomBread.image}
+            text={bread.name + "(низ)"}
+            price={bread.price}
+            thumbnail={bread.image}
           />
         )}
       </li>

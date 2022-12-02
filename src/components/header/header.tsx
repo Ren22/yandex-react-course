@@ -11,7 +11,7 @@ import {
 const Header = () => {
   const [current] = useState("constructor");
   return (
-    <div className={headerStyles.wrapper}>
+    <>
       <header className={headerStyles.header}>
         <div className={headerStyles.header__box}>
           <HeaderItem
@@ -19,14 +19,16 @@ const Header = () => {
             src="/constructor"
             text="Конструктор"
           >
-            <BurgerIcon type={"primary"} />
+            <BurgerIcon
+              type={current === "constructor" ? "primary" : "secondary"}
+            />
           </HeaderItem>
           <HeaderItem
             active={current === "orders"}
             src="/orders"
             text="Лента заказов"
           >
-            <ListIcon type={"primary"} />
+            <ListIcon type={current === "orders" ? "primary" : "secondary"} />
           </HeaderItem>
           <div className={headerStyles.spacing}></div>
         </div>
@@ -40,11 +42,13 @@ const Header = () => {
             src="/proile"
             text="Личный кабинет"
           >
-            <ProfileIcon type={"primary"} />
+            <ProfileIcon
+              type={current === "proile" ? "primary" : "secondary"}
+            />
           </HeaderItem>
         </div>
       </header>
-    </div>
+    </>
   );
 };
 
