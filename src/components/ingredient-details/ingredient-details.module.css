@@ -1,0 +1,19 @@
+.main {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.main__image {
+  width: 30rem;
+}
+
+.footer {
+  display: flex;
+}
+
+.footer__subsection {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}

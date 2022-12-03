@@ -4,7 +4,7 @@
 }
 
 .modal {
-  min-width: 720px;
+  width: 45rem;
   min-height: 50vh;
   background: #1c1c21;
   opacity: 1;
