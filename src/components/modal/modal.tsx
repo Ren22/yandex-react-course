@@ -31,9 +31,10 @@ const Modal = ({ children, header, closeModal }: Props) => {
       <div className={modalStyle.modalWrapper}>
         <section className={`${modalStyle.modal}`}>
           <header
-            className={`${modalStyle.header} pl-10 pr-10 pt-10 text text_type_main-medium`}
+            className={`${modalStyle.header} pl-10 pr-10 pt-10 text text_type_main-large`}
           >
             {header}
+            {header ? null : <div className={modalStyle.header__spacer}></div>}
             <div onClick={closeModal} className={modalStyle.closeIcon}>
               <CloseIcon type="primary" />
             </div>

@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import {
   ConstructorElement,
   DragIcon,
@@ -7,10 +7,27 @@ import {
 } from "@ya.praktikum/react-developer-burger-ui-components";
 import { burgersData } from "../../api/burgers";
 import listStyle from "./burger-constructor.module.css";
+import Modal from "../modal/modal";
+import OrderDetails from "../order-details/order-details";
 
-const orderList = () => {
+const OrderList = () => {
+  const [isModalVisible, setIsModalVisible] = useState(false);
+
   const ordersSum = burgersData.reduce((p, n) => p + n.price, 0);
   const bread = burgersData.filter((it) => it.name.includes("булка"))[0];
+  const handleOpenModal = () => {
+    setIsModalVisible(true);
+  };
+
+  const handleCloseModal = () => {
+    setIsModalVisible(false);
+  };
+
+  const modal = (
+    <Modal closeModal={handleCloseModal}>
+      <OrderDetails orderId={"03456"} />
+    </Modal>
+  );
 
   return (
     <div className={`${listStyle.container} pl-4 pr-4`}>
@@ -55,11 +72,17 @@ const orderList = () => {
         <span className="text text_type_main-large ml-1 mr-10">
           <CurrencyIcon type="primary" />
         </span>
-        <Button htmlType="button" type="primary" size="medium">
+        <Button
+          onClick={handleOpenModal}
+          htmlType="button"
+          type="primary"
+          size="medium"
+        >
           Оформить заказ
         </Button>
       </section>
+      {isModalVisible && modal}
     </div>
   );
 };
-export default orderList;
+export default OrderList;
