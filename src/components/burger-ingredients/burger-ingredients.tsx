@@ -1,14 +1,20 @@
 import React, { useState } from "react";
-import BurgerIngredientsItem from "../burger-ingredients-item/burger-ingredients-item";
+import BurgerIngredientsItem, {
+  IngredientDetailsType,
+} from "../burger-ingredients-item/burger-ingredients-item";
 import burgerIngredients from "./burger-ingredients.module.css";
-import { burgersData } from "../../api/burgers";
 import { Tab } from "@ya.praktikum/react-developer-burger-ui-components";
 
-const BurgerIngredients = () => {
+interface Props {
+  burgersData: IngredientDetailsType[];
+}
+
+const BurgerIngredients = (props: Props) => {
   const [current, setCurrent] = useState("Breads");
-  const breads = burgersData.filter((b) => b.name.includes("булка"));
-  const sauce = burgersData.filter((b) => b.name.includes("Соус"));
-  const filling = burgersData.filter(
+  const { burgersData } = props;
+  const breads = burgersData?.filter((b) => b.name.includes("булка"));
+  const sauce = burgersData?.filter((b) => b.name.includes("Соус"));
+  const filling = burgersData?.filter(
     (b) => !b.name.includes("булка") && !b.name.includes("Соус")
   );
   return (

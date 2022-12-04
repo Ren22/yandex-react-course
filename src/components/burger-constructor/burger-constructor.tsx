@@ -5,14 +5,18 @@ import {
   CurrencyIcon,
   Button,
 } from "@ya.praktikum/react-developer-burger-ui-components";
-import { burgersData } from "../../api/burgers";
 import listStyle from "./burger-constructor.module.css";
 import Modal from "../modal/modal";
 import OrderDetails from "../order-details/order-details";
+import { IngredientDetailsType } from "../burger-ingredients-item/burger-ingredients-item";
 
-const OrderList = () => {
+interface Props {
+  burgersData: IngredientDetailsType[];
+}
+
+const OrderList = (props: Props) => {
   const [isModalVisible, setIsModalVisible] = useState(false);
-
+  const { burgersData } = props;
   const ordersSum = burgersData.reduce((p, n) => p + n.price, 0);
   const bread = burgersData.filter((it) => it.name.includes("булка"))[0];
   const handleOpenModal = () => {
