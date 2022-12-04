@@ -10,6 +10,7 @@
 
 .footer {
   display: flex;
+  gap: 20px;
 }
 
 .footer__subsection {

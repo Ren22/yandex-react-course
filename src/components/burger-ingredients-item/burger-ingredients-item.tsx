@@ -6,21 +6,8 @@ import {
 import burgerIngredientStyle from "./burger-ingredients-item.module.css";
 import Modal from "../modal/modal";
 import IngredientDetails from "../ingredient-details/ingredient-details";
+import { IngredientDetailsType } from "../../utils/types";
 
-export interface IngredientDetailsType {
-  _id: string;
-  name: string;
-  type: string;
-  proteins: number;
-  fat: number;
-  carbohydrates: number;
-  calories: number;
-  price: number;
-  image: string;
-  image_mobile: string;
-  image_large: string;
-  __v: number;
-}
 interface Props {
   ingredientDetails: IngredientDetailsType;
 }
@@ -37,15 +24,13 @@ const BurgerIngredientsItem = (props: Props) => {
     setIsModalVisible(false);
   };
 
-  const modal = (
-    <Modal header="Детали ингредиента" closeModal={handleCloseModal}>
-      <IngredientDetails ingredientDetails={props.ingredientDetails} />
-    </Modal>
-  );
-
   return (
     <>
-      {isModalVisible && modal}
+      {isModalVisible && (
+        <Modal header="Детали ингредиента" closeModal={handleCloseModal}>
+          <IngredientDetails ingredientDetails={props.ingredientDetails} />
+        </Modal>
+      )}
       <li
         onClick={handleOpenModal}
         className={`${burgerIngredientStyle.item} text text_type_main-default`}
