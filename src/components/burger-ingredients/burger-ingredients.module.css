@@ -1,6 +1,11 @@
 .listWrapper {
   overflow-y: scroll;
   height: 55vh;
+  scroll-behavior: smooth;
+}
+
+.tabs__activeLink {
+  color: #fff;
 }
 
 .list {
