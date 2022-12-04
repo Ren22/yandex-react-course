@@ -14,10 +14,10 @@ const modalRoot = document.getElementById("react-modals");
 
 const Modal = ({ children, header, closeModal }: Props) => {
   useEffect(() => {
-    window.addEventListener("keydown", closeModal);
+    document.addEventListener("keydown", closeModal);
 
     return () => {
-      window.removeEventListener("keydown", closeModal);
+      document.removeEventListener("keydown", closeModal);
     };
   }, [closeModal]);
 
@@ -33,8 +33,11 @@ const Modal = ({ children, header, closeModal }: Props) => {
           <header
             className={`${modalStyle.header} pl-10 pr-10 pt-10 text text_type_main-large`}
           >
-            {header}
-            {header ? null : <div className={modalStyle.header__spacer}></div>}
+            {header ? (
+              header
+            ) : (
+              <div className={modalStyle.header__spacer}></div>
+            )}
             <div onClick={closeModal} className={modalStyle.closeIcon}>
               <CloseIcon type="primary" />
             </div>

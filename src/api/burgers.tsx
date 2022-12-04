@@ -1,10 +1,6 @@
-import { IngredientDetailsType } from "../components/burger-ingredients-item/burger-ingredients-item";
+import { IngredientDetailsType } from "../utils/types";
 
 const API_URL = "https://norma.nomoreparties.space/api/ingredients";
-
-export function isError(x: any): x is Error {
-  return x instanceof Error;
-}
 
 export function getBurgersData(): Promise<IngredientDetailsType[]> {
   return fetch(API_URL)
