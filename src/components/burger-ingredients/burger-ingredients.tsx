@@ -9,7 +9,7 @@ interface Props {
 }
 
 const BurgerIngredients = ({ burgersData }: Props) => {
-  const [current, setCurrent] = useState("Breads");
+  const [current, setCurrent] = useState("breads");
   const buns = useMemo(
     () => burgersData?.filter((b) => b.type === "bun"),
     [burgersData]
@@ -30,10 +30,10 @@ const BurgerIngredients = ({ burgersData }: Props) => {
         onClick={(e) => console.log(e)}
         className={`${burgerIngredientsStyle.tabs} pb-10`}
       >
-        <Tab value="Breads" active={current === "Breads"} onClick={setCurrent}>
+        <Tab value="breads" active={current === "breads"} onClick={setCurrent}>
           <a
             className={
-              current === "Breads"
+              current === "breads"
                 ? burgerIngredientsStyle.tabs__activeLink
                 : ""
             }
@@ -42,10 +42,10 @@ const BurgerIngredients = ({ burgersData }: Props) => {
             Булки
           </a>
         </Tab>
-        <Tab value="Sauces" active={current === "Sauces"} onClick={setCurrent}>
+        <Tab value="sauces" active={current === "sauces"} onClick={setCurrent}>
           <a
             className={
-              current === "Sauces"
+              current === "sauces"
                 ? burgerIngredientsStyle.tabs__activeLink
                 : ""
             }
@@ -55,13 +55,13 @@ const BurgerIngredients = ({ burgersData }: Props) => {
           </a>
         </Tab>
         <Tab
-          value="Fillings"
-          active={current === "Fillings"}
+          value="fillings"
+          active={current === "fillings"}
           onClick={setCurrent}
         >
           <a
             className={
-              current === "Fillings"
+              current === "fillings"
                 ? burgerIngredientsStyle.tabs__activeLink
                 : ""
             }
