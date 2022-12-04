@@ -48,10 +48,9 @@ const OrderList = (props: Props) => {
       </li>
       <ul className={`${listStyle.list}`}>
         {burgersData.slice(1, burgersData.length - 1).map((b, i) => (
-          <li className={listStyle.list__item} draggable="true">
+          <li key={i} className={listStyle.list__item} draggable="true">
             <DragIcon type="primary" />
             <ConstructorElement
-              key={i}
               text={b.name}
               price={b.price}
               thumbnail={b.image}
