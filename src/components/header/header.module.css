@@ -1,0 +1,24 @@
+.header {
+  width: 1200px;
+  display: flex;
+  position: relative;
+  align-items: center;
+}
+
+.spacing {
+  flex-grow: 1;
+}
+
+.header__box {
+  flex: 1;
+  display: flex;
+  justify-content: space-evenly;
+}
+
+.header__box:first-child > span {
+  margin-right: auto;
+}
+
+.header__box:last-child > span {
+  margin-left: auto;
+}

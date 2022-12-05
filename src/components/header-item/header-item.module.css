@@ -1,0 +1,19 @@
+.item {
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+}
+
+.item:hover {
+  text-decoration: underline;
+  opacity: 1;
+}
+
+.item_active {
+  color: #f2f2f3;
+}
+
+a {
+  text-decoration: none;
+  color: #8585ad;
+}

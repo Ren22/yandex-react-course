@@ -1,0 +1,26 @@
+.item {
+  position: relative;
+  width: 17rem;
+}
+
+.image {
+  width: 100%;
+}
+
+.counter {
+  position: absolute;
+  top: 0;
+  right: 0;
+}
+
+.price {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.description {
+  text-align: center;
+  min-height: 3rem;
+  margin: 0;
+}

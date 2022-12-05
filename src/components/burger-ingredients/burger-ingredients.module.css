@@ -1,0 +1,24 @@
+.listWrapper {
+  overflow-y: scroll;
+  height: 55vh;
+  scroll-behavior: smooth;
+}
+
+.tabs__activeLink {
+  color: #fff;
+}
+
+.list {
+  list-style-type: none;
+  margin: 0;
+  display: flex;
+  flex-wrap: wrap;
+}
+
+.main {
+  flex-basis: 600px;
+}
+
+.tabs {
+  display: flex;
+}
