@@ -1,66 +1,102 @@
-import React, { useState } from "react";
+import React, { useMemo, useState } from "react";
 import BurgerIngredientsItem from "../burger-ingredients-item/burger-ingredients-item";
-import burgerIngredients from "./burger-ingredients.module.css";
-import { burgersData } from "../../api/burgers";
+import burgerIngredientsStyle from "./burger-ingredients.module.css";
 import { Tab } from "@ya.praktikum/react-developer-burger-ui-components";
+import { IngredientDetailsType } from "../../utils/types";
 
-const BurgerIngredients = () => {
-  const [current, setCurrent] = useState("Breads");
-  const breads = burgersData.filter((b) => b.name.includes("булка"));
-  const sauce = burgersData.filter((b) => b.name.includes("Соус"));
-  const filling = burgersData.filter(
-    (b) => !b.name.includes("булка") && !b.name.includes("Соус")
+interface Props {
+  burgersData: IngredientDetailsType[];
+}
+
+const BurgerIngredients = ({ burgersData }: Props) => {
+  const [current, setCurrent] = useState("breads");
+  const buns = useMemo(
+    () => burgersData?.filter((b) => b.type === "bun"),
+    [burgersData]
   );
+  const sauces = useMemo(
+    () => burgersData?.filter((b) => b.type === "sauce"),
+    [burgersData]
+  );
+  const fillings = useMemo(
+    () => burgersData?.filter((b) => b.type === "main"),
+    [burgersData]
+  );
+
   return (
-    <div className={`${burgerIngredients.main} pt-6 pl-4 mr-10`}>
+    <div className={`${burgerIngredientsStyle.main} pt-6 pl-4 mr-10`}>
       <h1 className="text text_type_main-large mt-10 mb-5">Соберите бургер</h1>
-      <div className={`${burgerIngredients.tabs} pb-10`}>
-        <Tab value="Breads" active={current === "Breads"} onClick={setCurrent}>
-          Булки
+      <div
+        onClick={(e) => console.log(e)}
+        className={`${burgerIngredientsStyle.tabs} pb-10`}
+      >
+        <Tab value="breads" active={current === "breads"} onClick={setCurrent}>
+          <a
+            className={
+              current === "breads"
+                ? burgerIngredientsStyle.tabs__activeLink
+                : ""
+            }
+            href="#buns"
+          >
+            Булки
+          </a>
         </Tab>
-        <Tab value="Sauces" active={current === "Sauces"} onClick={setCurrent}>
-          Соусы
+        <Tab value="sauces" active={current === "sauces"} onClick={setCurrent}>
+          <a
+            className={
+              current === "sauces"
+                ? burgerIngredientsStyle.tabs__activeLink
+                : ""
+            }
+            href="#sauces"
+          >
+            Соусы
+          </a>
         </Tab>
         <Tab
-          value="Fillings"
-          active={current === "Fillings"}
+          value="fillings"
+          active={current === "fillings"}
           onClick={setCurrent}
         >
-          Начинки
+          <a
+            className={
+              current === "fillings"
+                ? burgerIngredientsStyle.tabs__activeLink
+                : ""
+            }
+            href="#fillings"
+          >
+            Начинки
+          </a>
         </Tab>
       </div>
-      <section className={burgerIngredients.listWrapper}>
+      <section className={burgerIngredientsStyle.listWrapper}>
         <h3 className="text text_type_main-medium">Булки</h3>
-        <ul className={`${burgerIngredients.list} pt-6 pl-4 pb-10`}>
-          {breads.map((b, key) => (
-            <BurgerIngredientsItem
-              key={key}
-              img={b.image}
-              description={b.name}
-              value={b.price}
-            />
+        <ul
+          id="buns"
+          className={`${burgerIngredientsStyle.list} pt-6 pl-4 pb-10`}
+        >
+          {buns.map((b) => (
+            <BurgerIngredientsItem key={b._id} ingredientDetails={b} />
           ))}
         </ul>
         <h3 className="text text_type_main-medium">Соусы</h3>
-        <ul className={`${burgerIngredients.list} pt-6 pl-4 pb-10`}>
-          {sauce.map((b, key) => (
-            <BurgerIngredientsItem
-              key={key}
-              img={b.image}
-              description={b.name}
-              value={b.price}
-            />
+        <ul
+          id="sauces"
+          className={`${burgerIngredientsStyle.list} pt-6 pl-4 pb-10`}
+        >
+          {sauces.map((s) => (
+            <BurgerIngredientsItem key={s._id} ingredientDetails={s} />
           ))}
         </ul>
         <h3 className="text text_type_main-medium">Начинки</h3>
-        <ul className={`${burgerIngredients.list} pt-6 pl-4 pb-10`}>
-          {filling.map((b, key) => (
-            <BurgerIngredientsItem
-              key={key}
-              img={b.image}
-              description={b.name}
-              value={b.price}
-            />
+        <ul
+          id="fillings"
+          className={`${burgerIngredientsStyle.list} pt-6 pl-4 pb-10`}
+        >
+          {fillings.map((f) => (
+            <BurgerIngredientsItem key={f._id} ingredientDetails={f} />
           ))}
         </ul>
       </section>

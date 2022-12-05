@@ -1,0 +1,33 @@
+.header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.header__spacer {
+  flex-grow: 1;
+}
+
+.modal {
+  width: 45rem;
+  min-height: 50vh;
+  background: #1c1c21;
+  opacity: 1;
+  border: 1px solid rgba(76, 76, 255, 0.2);
+  border-radius: 40px;
+  position: absolute;
+  z-index: 999;
+}
+
+.modalWrapper {
+  position: absolute;
+  width: 100vw;
+  height: 100vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.closeIcon {
+  cursor: pointer;
+}
