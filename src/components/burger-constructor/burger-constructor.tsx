@@ -1,4 +1,4 @@
-import React, { useContext, useMemo, useState } from "react";
+import React, { useContext, useState } from "react";
 import {
   ConstructorElement,
   DragIcon,
@@ -9,17 +9,23 @@ import listStyle from "./burger-constructor.module.css";
 import Modal from "../modal/modal";
 import OrderDetails from "../order-details/order-details";
 import { BurgerConstructorContext } from "../../services/ingredientsContext";
+import { useEffect } from "react";
+import { TotalSumContext } from "../../services/totalSumContext";
 
 const OrderList = () => {
   const [isModalVisible, setIsModalVisible] = useState(false);
   const { selectedIngredients } = useContext(BurgerConstructorContext);
-  const bun = selectedIngredients.bun;
-  const ingredients = selectedIngredients.others;
-  const totalSum = useMemo(() => {
-    return (
-      (bun ? bun.price * 2 : 0) + ingredients.reduce((p, n) => p + n.price, 0)
-    );
-  }, [bun, ingredients]);
+  const { totalSum, totalSumDispatcher } = useContext(TotalSumContext);
+  const { bun, otherIngredients } = selectedIngredients;
+
+  useEffect(() => {
+    debugger;
+    const newSum =
+      (bun ? bun.price * 2 : 0) +
+      otherIngredients.reduce((p, n) => p + n.price, 0);
+    totalSumDispatcher({ type: "updateTotalSum", payload: { value: newSum } });
+  }, [bun, otherIngredients, totalSumDispatcher]);
+
   const handleOpenModal = () => {
     setIsModalVisible(true);
   };
@@ -42,7 +48,7 @@ const OrderList = () => {
         )}
       </li>
       <ul className={`${listStyle.list}`}>
-        {ingredients.map((ingredient, i) => (
+        {otherIngredients.map((ingredient, i) => (
           <li key={i} className={listStyle.list__item} draggable="true">
             <DragIcon type="primary" />
             <ConstructorElement
@@ -66,7 +72,7 @@ const OrderList = () => {
       </li>
 
       <section className={listStyle.bottom}>
-        <span className="text text_type_digits-medium">{totalSum}</span>
+        <span className="text text_type_digits-medium">{totalSum.value}</span>
         <span className="text text_type_main-large ml-1 mr-10">
           <CurrencyIcon type="primary" />
         </span>

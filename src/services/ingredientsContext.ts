@@ -8,5 +8,5 @@ export const IngredientsContext =
 
 export const BurgerConstructorContext = 
   React.createContext
-  < { selectedIngredients: { bun: IngredientDetailsType | null, others: IngredientDetailsType[]}, setSelectedIngredients: Dispatch<SetStateAction<{ bun: IngredientDetailsType | null; others: IngredientDetailsType[]; }>>}>
-    ({ selectedIngredients: { bun: null, others: [] }, setSelectedIngredients: () => { } });
+  < { selectedIngredients: { bun: IngredientDetailsType | null, otherIngredients: IngredientDetailsType[]}, setSelectedIngredients: Dispatch<SetStateAction<{ bun: IngredientDetailsType | null; otherIngredients: IngredientDetailsType[]; }>>}>
+    ({ selectedIngredients: { bun: null, otherIngredients: [] }, setSelectedIngredients: () => { } });

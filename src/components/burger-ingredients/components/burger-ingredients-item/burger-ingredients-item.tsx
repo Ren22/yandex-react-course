@@ -4,10 +4,10 @@ import {
   CurrencyIcon,
 } from "@ya.praktikum/react-developer-burger-ui-components";
 import burgerIngredientStyle from "./burger-ingredients-item.module.css";
-import Modal from "../modal/modal";
-import IngredientDetails from "../ingredient-details/ingredient-details";
-import { IngredientDetailsType } from "../../utils/types";
-import { BurgerConstructorContext } from "../../services/ingredientsContext";
+import Modal from "../../../modal/modal";
+import IngredientDetails from "../../../ingredient-details/ingredient-details";
+import { IngredientDetailsType } from "../../../../utils/types";
+import { BurgerConstructorContext } from "../../../../services/ingredientsContext";
 
 interface Props {
   ingredientDetails: IngredientDetailsType;
@@ -27,10 +27,14 @@ const BurgerIngredientsItem = (props: Props) => {
         ...selectedIngredients,
         bun: props.ingredientDetails,
       });
-    } else if (!selectedIngredients.others.find((it) => it._id === _id))
+    } else if (
+      !selectedIngredients.otherIngredients.find((it) => it._id === _id)
+    )
       setSelectedIngredients({
         ...selectedIngredients,
-        others: selectedIngredients.others.concat(props.ingredientDetails),
+        otherIngredients: selectedIngredients.otherIngredients.concat(
+          props.ingredientDetails
+        ),
       });
   };
 

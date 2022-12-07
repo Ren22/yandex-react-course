@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { Logo } from "@ya.praktikum/react-developer-burger-ui-components";
-import HeaderItem from "../header-item/header-item";
+import HeaderItem from "./components/header-item/header-item";
 import headerStyles from "./header.module.css";
 import {
   BurgerIcon,

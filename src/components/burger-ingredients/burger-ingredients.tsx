@@ -1,5 +1,5 @@
 import React, { useMemo, useState, useContext } from "react";
-import BurgerIngredientsItem from "../burger-ingredients-item/burger-ingredients-item";
+import BurgerIngredientsItem from "./components/burger-ingredients-item/burger-ingredients-item";
 import burgerIngredientsStyle from "./burger-ingredients.module.css";
 import { Tab } from "@ya.praktikum/react-developer-burger-ui-components";
 import { IngredientsContext } from "../../services/ingredientsContext";
