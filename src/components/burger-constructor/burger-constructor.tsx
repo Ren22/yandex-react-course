@@ -1,4 +1,4 @@
-import React, { useMemo, useState } from "react";
+import React, { useContext, useMemo, useState } from "react";
 import {
   ConstructorElement,
   DragIcon,
@@ -8,22 +8,13 @@ import {
 import listStyle from "./burger-constructor.module.css";
 import Modal from "../modal/modal";
 import OrderDetails from "../order-details/order-details";
-import { IngredientDetailsType } from "../../utils/types";
+import { BurgerConstructorContext } from "../../services/ingredientsContext";
 
-interface Props {
-  burgersData: IngredientDetailsType[];
-}
-
-const OrderList = ({ burgersData }: Props) => {
+const OrderList = () => {
   const [isModalVisible, setIsModalVisible] = useState(false);
-  const bun = useMemo(
-    () => burgersData.find((it) => it.type === "bun"),
-    [burgersData]
-  );
-  const ingredients = useMemo(
-    () => burgersData.filter((it) => it.type !== "bun"),
-    [burgersData]
-  );
+  const { selectedIngredients } = useContext(BurgerConstructorContext);
+  const bun = selectedIngredients.bun;
+  const ingredients = selectedIngredients.others;
   const totalSum = useMemo(() => {
     return (
       (bun ? bun.price * 2 : 0) + ingredients.reduce((p, n) => p + n.price, 0)
