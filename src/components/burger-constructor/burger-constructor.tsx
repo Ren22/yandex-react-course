@@ -11,22 +11,31 @@ import OrderDetails from "../order-details/order-details";
 import { BurgerConstructorContext } from "../../services/ingredientsContext";
 import { useEffect } from "react";
 import { TotalSumContext } from "../../services/totalSumContext";
+import { submitOrder } from "../../api/burgers";
 
 const OrderList = () => {
   const [isModalVisible, setIsModalVisible] = useState(false);
   const { selectedIngredients } = useContext(BurgerConstructorContext);
   const { totalSum, totalSumDispatcher } = useContext(TotalSumContext);
   const { bun, otherIngredients } = selectedIngredients;
+  const [orderId, setOrderId] = useState("");
 
   useEffect(() => {
-    debugger;
     const newSum =
       (bun ? bun.price * 2 : 0) +
       otherIngredients.reduce((p, n) => p + n.price, 0);
     totalSumDispatcher({ type: "updateTotalSum", payload: { value: newSum } });
   }, [bun, otherIngredients, totalSumDispatcher]);
 
-  const handleOpenModal = () => {
+  const handleOpenModal = async () => {
+    const ingredientIdsToSubmit = selectedIngredients.otherIngredients.map(
+      (it) => it._id
+    );
+    if (bun) {
+      ingredientIdsToSubmit.push(bun._id);
+    }
+    const orderId = await submitOrder(ingredientIdsToSubmit);
+    setOrderId(orderId);
     setIsModalVisible(true);
   };
 
@@ -87,7 +96,7 @@ const OrderList = () => {
       </section>
       {isModalVisible && (
         <Modal closeModal={handleCloseModal}>
-          <OrderDetails orderId={"03456"} />
+          <OrderDetails orderId={orderId} />
         </Modal>
       )}
     </div>
