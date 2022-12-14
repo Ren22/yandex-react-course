@@ -34,9 +34,14 @@ const OrderList = () => {
     if (bun) {
       ingredientIdsToSubmit.push(bun._id);
     }
-    const orderId = await submitOrder(ingredientIdsToSubmit);
-    setOrderId(orderId);
-    setIsModalVisible(true);
+    try {
+      const orderId = await submitOrder(ingredientIdsToSubmit);
+      setOrderId(orderId);
+    } catch (e) {
+      console.error(e);
+    } finally {
+      setIsModalVisible(true);
+    }
   };
 
   const handleCloseModal = () => {

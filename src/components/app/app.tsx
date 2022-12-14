@@ -38,11 +38,17 @@ const App = () => {
     otherIngredients: [],
   });
   useEffect(() => {
-    getBurgersData().then((data) => setBurgersData(data));
+    async function fetchBurgerData() {
+      try {
+        const data = await getBurgersData();
+        setBurgersData(data);
+      } catch (e) {
+        console.error(e);
+      }
+    }
+    fetchBurgerData();
   }, []);
   const totalSumInitialState = { value: 0 };
-  useEffect(() => {}, [selectedIngredients]);
-
   const [totalSum, totalSumDispatcher] = useReducer(
     reducer,
     totalSumInitialState
@@ -55,9 +61,9 @@ const App = () => {
           value={{ selectedIngredients, setSelectedIngredients }}
         >
           <div className={appStyle.app}>
-            <header className={appStyle.header}>
+            <section className={appStyle.headerWrapper}>
               <Header />
-            </header>
+            </section>
             <main className={appStyle.main}>
               <BurgerIngredients />
               <OrderList />

@@ -12,3 +12,7 @@ export interface IngredientDetailsType {
   image_large: string;
   __v: number;
 }
+
+export type GenericObject<T = unknown> = {
+  [key in string]: T
+}

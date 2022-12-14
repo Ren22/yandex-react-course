@@ -1,26 +1,16 @@
+import { request } from "../utils/request";
 import { IngredientDetailsType } from "../utils/types";
 
-const INGREDIENTS_URL = "https://norma.nomoreparties.space/api/ingredients";
-const ORDERS_API = "https://norma.nomoreparties.space/api/orders";
+const BASE_URL = "https://norma.nomoreparties.space/api";
 
 export function getBurgersData(): Promise<IngredientDetailsType[]> {
-  return fetch(INGREDIENTS_URL)
-    .then((response) => {
-      if (!response.ok) {
-        throw new Error(response.statusText);
-      }
-      return response.json();
-    })
-    .then((data) => {
-      return data.data;
-    })
-    .catch((error: Error) => {
-      throw new Error(error.message);
-    });
+  return request(`${BASE_URL}/ingredients`).then((data) => {
+    return data.data;
+  });
 }
 
 export function submitOrder(ingredientIds: string[]) {
-  return fetch(ORDERS_API, {
+  return request(`${BASE_URL}/orders`, {
     method: "POST",
     body: JSON.stringify({
       ingredients: ingredientIds,
@@ -28,17 +18,7 @@ export function submitOrder(ingredientIds: string[]) {
     headers: {
       "Content-Type": "application/json",
     },
-  })
-    .then((response) => {
-      if (!response.ok) {
-        throw new Error(response.statusText);
-      }
-      return response.json();
-    })
-    .then((data) => {
-      return data.order.number;
-    })
-    .catch((error: Error) => {
-      throw new Error(error.message);
-    });
+  }).then((data) => {
+    return data.order.number;
+  });
 }
