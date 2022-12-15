@@ -1,4 +1,4 @@
-import React, { useMemo, useState } from "react";
+import React, { useContext, useState } from "react";
 import {
   ConstructorElement,
   DragIcon,
@@ -8,29 +8,40 @@ import {
 import listStyle from "./burger-constructor.module.css";
 import Modal from "../modal/modal";
 import OrderDetails from "../order-details/order-details";
-import { IngredientDetailsType } from "../../utils/types";
+import { BurgerConstructorContext } from "../../services/ingredientsContext";
+import { useEffect } from "react";
+import { TotalSumContext } from "../../services/totalSumContext";
+import { submitOrder } from "../../api/burgers";
 
-interface Props {
-  burgersData: IngredientDetailsType[];
-}
-
-const OrderList = ({ burgersData }: Props) => {
+const OrderList = () => {
   const [isModalVisible, setIsModalVisible] = useState(false);
-  const bun = useMemo(
-    () => burgersData.find((it) => it.type === "bun"),
-    [burgersData]
-  );
-  const ingredients = useMemo(
-    () => burgersData.filter((it) => it.type !== "bun"),
-    [burgersData]
-  );
-  const totalSum = useMemo(() => {
-    return (
-      (bun ? bun.price * 2 : 0) + ingredients.reduce((p, n) => p + n.price, 0)
+  const { selectedIngredients } = useContext(BurgerConstructorContext);
+  const { totalSum, totalSumDispatcher } = useContext(TotalSumContext);
+  const { bun, otherIngredients } = selectedIngredients;
+  const [orderId, setOrderId] = useState("");
+
+  useEffect(() => {
+    const newSum =
+      (bun ? bun.price * 2 : 0) +
+      otherIngredients.reduce((p, n) => p + n.price, 0);
+    totalSumDispatcher({ type: "updateTotalSum", payload: { value: newSum } });
+  }, [bun, otherIngredients, totalSumDispatcher]);
+
+  const handleOpenModal = async () => {
+    const ingredientIdsToSubmit = selectedIngredients.otherIngredients.map(
+      (it) => it._id
     );
-  }, [bun, ingredients]);
-  const handleOpenModal = () => {
-    setIsModalVisible(true);
+    if (bun) {
+      ingredientIdsToSubmit.push(bun._id);
+    }
+    try {
+      const orderId = await submitOrder(ingredientIdsToSubmit);
+      setOrderId(orderId);
+    } catch (e) {
+      console.error(e);
+    } finally {
+      setIsModalVisible(true);
+    }
   };
 
   const handleCloseModal = () => {
@@ -51,7 +62,7 @@ const OrderList = ({ burgersData }: Props) => {
         )}
       </li>
       <ul className={`${listStyle.list}`}>
-        {ingredients.map((ingredient, i) => (
+        {otherIngredients.map((ingredient, i) => (
           <li key={i} className={listStyle.list__item} draggable="true">
             <DragIcon type="primary" />
             <ConstructorElement
@@ -75,7 +86,7 @@ const OrderList = ({ burgersData }: Props) => {
       </li>
 
       <section className={listStyle.bottom}>
-        <span className="text text_type_digits-medium">{totalSum}</span>
+        <span className="text text_type_digits-medium">{totalSum.value}</span>
         <span className="text text_type_main-large ml-1 mr-10">
           <CurrencyIcon type="primary" />
         </span>
@@ -90,7 +101,7 @@ const OrderList = ({ burgersData }: Props) => {
       </section>
       {isModalVisible && (
         <Modal closeModal={handleCloseModal}>
-          <OrderDetails orderId={"03456"} />
+          <OrderDetails orderId={orderId} />
         </Modal>
       )}
     </div>

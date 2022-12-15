@@ -1,7 +1,7 @@
 import { CloseIcon } from "@ya.praktikum/react-developer-burger-ui-components";
 import React, { useEffect } from "react";
 import ReactDOM from "react-dom";
-import ModalOverlay from "../modal-overlay/modal-overlay";
+import ModalOverlay from "./components/modal-overlay/modal-overlay";
 import modalStyle from "./modal.module.css";
 
 type Props = {
@@ -14,10 +14,14 @@ const modalRoot = document.getElementById("react-modals");
 
 const Modal = ({ children, header, closeModal }: Props) => {
   useEffect(() => {
-    document.addEventListener("keydown", closeModal);
-
+    function closeByEscape(evt: KeyboardEvent) {
+      if (evt.key === "Escape") {
+        closeModal();
+      }
+    }
+    document.addEventListener("keydown", closeByEscape);
     return () => {
-      document.removeEventListener("keydown", closeModal);
+      document.removeEventListener("keydown", closeByEscape);
     };
   }, [closeModal]);
 

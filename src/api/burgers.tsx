@@ -1,19 +1,24 @@
+import { request } from "../utils/request";
 import { IngredientDetailsType } from "../utils/types";
 
-const API_URL = "https://norma.nomoreparties.space/api/ingredients";
+const BASE_URL = "https://norma.nomoreparties.space/api";
 
 export function getBurgersData(): Promise<IngredientDetailsType[]> {
-  return fetch(API_URL)
-    .then((response) => {
-      if (!response.ok) {
-        throw new Error(response.statusText);
-      }
-      return response.json();
-    })
-    .then((data) => {
-      return data.data;
-    })
-    .catch((error: Error) => {
-      throw new Error(error.message);
-    });
+  return request(`${BASE_URL}/ingredients`).then((data) => {
+    return data.data;
+  });
+}
+
+export function submitOrder(ingredientIds: string[]) {
+  return request(`${BASE_URL}/orders`, {
+    method: "POST",
+    body: JSON.stringify({
+      ingredients: ingredientIds,
+    }),
+    headers: {
+      "Content-Type": "application/json",
+    },
+  }).then((data) => {
+    return data.order.number;
+  });
 }
