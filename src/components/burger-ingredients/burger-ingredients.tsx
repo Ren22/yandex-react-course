@@ -1,23 +1,35 @@
-import React, { useMemo, useState, useContext } from "react";
+import React, { useEffect, useMemo, useState } from "react";
 import BurgerIngredientsItem from "./components/burger-ingredients-item/burger-ingredients-item";
 import burgerIngredientsStyle from "./burger-ingredients.module.css";
 import { Tab } from "@ya.praktikum/react-developer-burger-ui-components";
-import { IngredientsContext } from "../../services/ingredientsContext";
+import { useSelector } from "react-redux";
+import {
+  loadAllIngredients,
+  selectIngredientsState,
+} from "../../redux/slices/ingredients";
+import { useAppDispatch } from "../../redux/store";
 
 const BurgerIngredients = () => {
   const [current, setCurrent] = useState("breads");
-  const { burgersData } = useContext(IngredientsContext);
-  const buns = useMemo(
-    () => burgersData?.filter((b) => b.type === "bun"),
-    [burgersData]
-  );
+  // const { allIngredients } = useContext(IngredientsContext);
+  const { allIngredients } = useSelector(selectIngredientsState);
+  // const allIngredients: IngredientDetailsType[] = [];
+  const dispatch = useAppDispatch();
+
+  useEffect(() => {
+    dispatch(loadAllIngredients());
+  }, [dispatch]);
+
+  const buns = useMemo(() => {
+    return allIngredients?.filter((b) => b.type === "bun");
+  }, [allIngredients]);
   const sauces = useMemo(
-    () => burgersData?.filter((b) => b.type === "sauce"),
-    [burgersData]
+    () => allIngredients?.filter((b) => b.type === "sauce"),
+    [allIngredients]
   );
   const fillings = useMemo(
-    () => burgersData?.filter((b) => b.type === "main"),
-    [burgersData]
+    () => allIngredients?.filter((b) => b.type === "main"),
+    [allIngredients]
   );
 
   return (

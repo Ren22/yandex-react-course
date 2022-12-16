@@ -1,4 +1,4 @@
-import React, { useState, useContext } from "react";
+import React, { useState, useCallback } from "react";
 import {
   Counter,
   CurrencyIcon,
@@ -7,7 +7,12 @@ import burgerIngredientStyle from "./burger-ingredients-item.module.css";
 import Modal from "../../../modal/modal";
 import IngredientDetails from "../../../ingredient-details/ingredient-details";
 import { IngredientDetailsType } from "../../../../utils/types";
-import { BurgerConstructorContext } from "../../../../services/ingredientsContext";
+import {
+  addIngredient,
+  closeIngredientDetails,
+  pickIngredient,
+} from "../../../../redux/slices/ingredients";
+import { useDispatch } from "react-redux";
 
 interface Props {
   ingredientDetails: IngredientDetailsType;
@@ -15,30 +20,18 @@ interface Props {
 
 const BurgerIngredientsItem = (props: Props) => {
   const [isModalVisible, setIsModalVisible] = useState(false);
-  const { image, name, price, type, _id } = props.ingredientDetails;
-  const { selectedIngredients, setSelectedIngredients } = useContext(
-    BurgerConstructorContext
-  );
+  const { image, name, price } = props.ingredientDetails;
 
-  const handleOpenModal = () => {
+  const dispatch = useDispatch();
+
+  const handleOpenModal = useCallback(() => {
     setIsModalVisible(true);
-    if (type === "bun") {
-      setSelectedIngredients({
-        ...selectedIngredients,
-        bun: props.ingredientDetails,
-      });
-    } else if (
-      !selectedIngredients.otherIngredients.find((it) => it._id === _id)
-    )
-      setSelectedIngredients({
-        ...selectedIngredients,
-        otherIngredients: selectedIngredients.otherIngredients.concat(
-          props.ingredientDetails
-        ),
-      });
-  };
+    dispatch(pickIngredient(props.ingredientDetails));
+    dispatch(addIngredient(props.ingredientDetails));
+  }, [dispatch, props.ingredientDetails]);
 
   const handleCloseModal = () => {
+    dispatch(closeIngredientDetails());
     setIsModalVisible(false);
   };
 
