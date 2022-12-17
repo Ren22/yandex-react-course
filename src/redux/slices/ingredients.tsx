@@ -41,14 +41,22 @@ const ingredientsSlice = createSlice({
       if (action.payload.type === "bun") {
         state.selectedIngredients.bun = action.payload;
       } else {
-        state.selectedIngredients.others.push(action.payload);
+        state.selectedIngredients.others = [
+          ...state.selectedIngredients.others,
+          action.payload,
+        ];
       }
     },
     removeIngredient: (state, action: { payload: IngredientDetailsType }) => {
-      state.selectedIngredients.others =
-        state.selectedIngredients.others?.filter(
-          (it) => it._id !== action.payload._id
-        );
+      const indexToRemove = state.selectedIngredients.others.findIndex(
+        (it) => it._id === action.payload._id
+      );
+      if (indexToRemove !== -1) {
+        state.selectedIngredients.others = [
+          ...state.selectedIngredients.others.slice(0, indexToRemove),
+          ...state.selectedIngredients.others.slice(indexToRemove + 1),
+        ];
+      }
     },
     closeIngredientDetails: (state) => {
       state.currentIngredient = {};

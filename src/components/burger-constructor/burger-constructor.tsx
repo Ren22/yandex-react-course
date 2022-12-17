@@ -10,15 +10,21 @@ import Modal from "../modal/modal";
 import OrderDetails from "../order-details/order-details";
 import { useEffect } from "react";
 import { useSelector } from "react-redux";
-import { selectIngredientsState } from "../../redux/slices/ingredients";
+import {
+  addIngredient,
+  removeIngredient,
+  selectIngredientsState,
+} from "../../redux/slices/ingredients";
 import {
   postOrder,
   selectOrderState,
   updateTotalSum,
 } from "../../redux/slices/order";
 import { useAppDispatch } from "../../redux/store";
+import { useDrop } from "react-dnd";
+import { IngredientDetailsType } from "../../utils/types";
 
-const OrderList = () => {
+const BurgerConstructor = () => {
   const [isModalVisible, setIsModalVisible] = useState(false);
   const { orderId, totalSum } = useSelector(selectOrderState);
   const { bun, others } = useSelector(
@@ -26,6 +32,13 @@ const OrderList = () => {
   ).selectedIngredients;
 
   const dispatch = useAppDispatch();
+
+  const [, dropTarget] = useDrop({
+    accept: "ingredient",
+    drop(ingredientDetails: IngredientDetailsType) {
+      dispatch(addIngredient(ingredientDetails));
+    },
+  });
 
   useEffect(() => {
     const newSum =
@@ -49,8 +62,12 @@ const OrderList = () => {
     setIsModalVisible(false);
   };
 
+  const handleIngredientRemoval = (ingredient: IngredientDetailsType) => () => {
+    dispatch(removeIngredient(ingredient));
+  };
+
   return (
-    <div className={`${listStyle.container} pl-4 pr-4`}>
+    <div className={`${listStyle.container} pl-4 pr-4`} ref={dropTarget}>
       <li className={`${listStyle.list__item} mt-25`} draggable="true">
         {bun && (
           <ConstructorElement
@@ -70,6 +87,7 @@ const OrderList = () => {
               text={ingredient.name}
               price={ingredient.price}
               thumbnail={ingredient.image}
+              handleClose={handleIngredientRemoval(ingredient)}
             />
           </li>
         ))}
@@ -108,4 +126,4 @@ const OrderList = () => {
     </div>
   );
 };
-export default OrderList;
+export default BurgerConstructor;

@@ -95,7 +95,7 @@ const BurgerIngredients = () => {
                 ? burgerIngredientsStyle.tabs__activeLink
                 : ""
             }
-            href="#buns"
+            href={`#${NAV_TYPES.BUNS}`}
           >
             Булки
           </a>
@@ -111,7 +111,7 @@ const BurgerIngredients = () => {
                 ? burgerIngredientsStyle.tabs__activeLink
                 : ""
             }
-            href="#sauces"
+            href={`#${NAV_TYPES.SAUCES}`}
           >
             Соусы
           </a>
@@ -127,7 +127,7 @@ const BurgerIngredients = () => {
                 ? burgerIngredientsStyle.tabs__activeLink
                 : ""
             }
-            href="#fillings"
+            href={`#${NAV_TYPES.FILLINGS}`}
           >
             Начинки
           </a>
@@ -142,7 +142,7 @@ const BurgerIngredients = () => {
           Булки
         </h3>
         <ul
-          id="buns"
+          id={NAV_TYPES.BUNS}
           className={`${burgerIngredientsStyle.list} pt-6 pl-4 pb-10`}
         >
           {buns.map((b) => (
@@ -153,7 +153,7 @@ const BurgerIngredients = () => {
           Соусы
         </h3>
         <ul
-          id="sauces"
+          id={NAV_TYPES.SAUCES}
           className={`${burgerIngredientsStyle.list} pt-6 pl-4 pb-10`}
         >
           {sauces.map((s) => (
@@ -164,7 +164,7 @@ const BurgerIngredients = () => {
           Начинки
         </h3>
         <ul
-          id="fillings"
+          id={NAV_TYPES.FILLINGS}
           className={`${burgerIngredientsStyle.list} pt-6 pl-4 pb-10`}
         >
           {fillings.map((f) => (
