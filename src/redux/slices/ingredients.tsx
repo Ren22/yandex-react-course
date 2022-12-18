@@ -10,12 +10,14 @@ interface InitialStateIngredients {
     others: IngredientDetailsType[];
   };
   currentIngredient: IngredientDetailsType | {};
+  isIngredientDragged: boolean;
 }
 
 const initialState: InitialStateIngredients = {
   allIngredients: [],
   selectedIngredients: { others: [] },
   currentIngredient: {},
+  isIngredientDragged: false,
 };
 
 export const loadAllIngredients = createAsyncThunk(
@@ -43,14 +45,12 @@ const ingredientsSlice = createSlice({
       } else {
         state.selectedIngredients.others = [
           ...state.selectedIngredients.others,
-          action.payload,
+          { ...action.payload },
         ];
       }
     },
-    removeIngredient: (state, action: { payload: IngredientDetailsType }) => {
-      const indexToRemove = state.selectedIngredients.others.findIndex(
-        (it) => it._id === action.payload._id
-      );
+    removeIngredient: (state, action: { payload: number }) => {
+      const indexToRemove = action.payload;
       if (indexToRemove !== -1) {
         state.selectedIngredients.others = [
           ...state.selectedIngredients.others.slice(0, indexToRemove),
@@ -60,6 +60,28 @@ const ingredientsSlice = createSlice({
     },
     closeIngredientDetails: (state) => {
       state.currentIngredient = {};
+    },
+    moveIngredients: (
+      state,
+      action: { payload: { dragIndex: number; hoverIndex: number } }
+    ) => {
+      const dragItem =
+        state.selectedIngredients.others[action.payload.dragIndex];
+      if (dragItem) {
+        const copiedState = [...state.selectedIngredients.others];
+        // remove item by hover index and replace it with the dragItem
+        const prevItem = copiedState.splice(
+          action.payload.hoverIndex,
+          1,
+          dragItem
+        );
+        copiedState.splice(action.payload.dragIndex, 1, prevItem[0]);
+
+        state.selectedIngredients.others = [...copiedState];
+      }
+    },
+    changeDraggingIngredientState: (state, action: { payload: boolean }) => {
+      state.isIngredientDragged = action.payload;
     },
   },
   extraReducers: (builder) => {
@@ -79,6 +101,8 @@ export const {
   addIngredient,
   removeIngredient,
   closeIngredientDetails,
+  moveIngredients,
+  changeDraggingIngredientState,
 } = ingredientsSlice.actions;
 
 export default ingredientsSlice.reducer;

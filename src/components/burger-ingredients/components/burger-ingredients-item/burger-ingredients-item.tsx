@@ -9,6 +9,7 @@ import IngredientDetails from "../../../ingredient-details/ingredient-details";
 import { IngredientDetailsType } from "../../../../utils/types";
 import {
   addIngredient,
+  changeDraggingIngredientState,
   closeIngredientDetails,
   pickIngredient,
   selectIngredientsState,
@@ -23,9 +24,12 @@ interface Props {
 const BurgerIngredientsItem = (props: Props) => {
   const [isModalVisible, setIsModalVisible] = useState(false);
   const { image, name, price, _id } = props.ingredientDetails;
-  const [, dragRef] = useDrag({
+  const [{ isDragging }, dragRef] = useDrag({
     type: "ingredient",
     item: props.ingredientDetails,
+    collect: (monitor) => ({
+      isDragging: monitor.isDragging(),
+    }),
   });
   const { selectedIngredients } = useSelector(selectIngredientsState);
   const dispatch = useDispatch();
@@ -55,6 +59,10 @@ const BurgerIngredientsItem = (props: Props) => {
     dispatch(closeIngredientDetails());
     setIsModalVisible(false);
   };
+
+  useEffect(() => {
+    dispatch(changeDraggingIngredientState(isDragging));
+  }, [dispatch, isDragging]);
 
   return (
     <>

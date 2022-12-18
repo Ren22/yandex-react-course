@@ -1,7 +1,6 @@
 import React, { useState } from "react";
 import {
   ConstructorElement,
-  DragIcon,
   CurrencyIcon,
   Button,
 } from "@ya.praktikum/react-developer-burger-ui-components";
@@ -12,7 +11,6 @@ import { useEffect } from "react";
 import { useSelector } from "react-redux";
 import {
   addIngredient,
-  removeIngredient,
   selectIngredientsState,
 } from "../../redux/slices/ingredients";
 import {
@@ -23,6 +21,7 @@ import {
 import { useAppDispatch } from "../../redux/store";
 import { useDrop } from "react-dnd";
 import { IngredientDetailsType } from "../../utils/types";
+import DraggbleItem from "./draggable-item/draggable-item";
 
 const BurgerConstructor = () => {
   const [isModalVisible, setIsModalVisible] = useState(false);
@@ -30,14 +29,20 @@ const BurgerConstructor = () => {
   const { bun, others } = useSelector(
     selectIngredientsState
   ).selectedIngredients;
+  const isIngredientDragged = useSelector(
+    selectIngredientsState
+  ).isIngredientDragged;
 
   const dispatch = useAppDispatch();
 
-  const [, dropTarget] = useDrop({
+  const [{ isHover }, dropTarget] = useDrop({
     accept: "ingredient",
     drop(ingredientDetails: IngredientDetailsType) {
       dispatch(addIngredient(ingredientDetails));
     },
+    collect: (monitor) => ({
+      isHover: monitor.isOver(),
+    }),
   });
 
   useEffect(() => {
@@ -62,47 +67,43 @@ const BurgerConstructor = () => {
     setIsModalVisible(false);
   };
 
-  const handleIngredientRemoval = (ingredient: IngredientDetailsType) => () => {
-    dispatch(removeIngredient(ingredient));
-  };
+  const outline = isIngredientDragged ? "1px dashed lightgreen" : "transparent";
 
   return (
-    <div className={`${listStyle.container} pl-4 pr-4`} ref={dropTarget}>
-      <li className={`${listStyle.list__item} mt-25`} draggable="true">
-        {bun && (
-          <ConstructorElement
-            isLocked={true}
-            type="top"
-            text={bun.name + "(верх)"}
-            price={bun.price}
-            thumbnail={bun.image}
-          />
-        )}
-      </li>
-      <ul className={`${listStyle.list}`}>
-        {others?.map((ingredient, i) => (
-          <li key={i} className={listStyle.list__item} draggable="true">
-            <DragIcon type="primary" />
+    <div className={`${listStyle.container} pl-4 pr-4`}>
+      <div ref={dropTarget} style={{ outline }} className={"mt-25"}>
+        <li className={`${listStyle.list__item}`}>
+          {bun && (
             <ConstructorElement
-              text={ingredient.name}
-              price={ingredient.price}
-              thumbnail={ingredient.image}
-              handleClose={handleIngredientRemoval(ingredient)}
+              isLocked={true}
+              type="top"
+              text={bun.name + "(верх)"}
+              price={bun.price}
+              thumbnail={bun.image}
             />
-          </li>
-        ))}
-      </ul>
-      <li className={`${listStyle.list__item}  mb-10`} draggable="true">
-        {bun && (
-          <ConstructorElement
-            isLocked={true}
-            type="bottom"
-            text={bun.name + "(низ)"}
-            price={bun.price}
-            thumbnail={bun.image}
-          />
-        )}
-      </li>
+          )}
+        </li>
+        <ul className={`${listStyle.list}`}>
+          {others?.map((ingredient, i) => (
+            <DraggbleItem
+              key={i}
+              orderIndex={i}
+              ingredientDetails={ingredient}
+            />
+          ))}
+        </ul>
+        <li className={`${listStyle.list__item}  mb-10`}>
+          {bun && (
+            <ConstructorElement
+              isLocked={true}
+              type="bottom"
+              text={bun.name + "(низ)"}
+              price={bun.price}
+              thumbnail={bun.image}
+            />
+          )}
+        </li>
+      </div>
 
       <section className={listStyle.bottom}>
         <span className="text text_type_digits-medium">{totalSum}</span>
