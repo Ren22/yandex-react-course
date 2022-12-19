@@ -14,6 +14,7 @@ import {
   selectIngredientsState,
 } from "../../redux/slices/ingredients";
 import { useAppDispatch } from "../../redux/store";
+import { INGREDIENT_TYPES } from "../../utils/types";
 
 enum NAV_TYPES {
   BUNS = "buns",
@@ -35,14 +36,14 @@ const BurgerIngredients = () => {
   }, [dispatch]);
 
   const buns = useMemo(() => {
-    return allIngredients?.filter((b) => b.type === "bun");
+    return allIngredients?.filter((b) => b.type === INGREDIENT_TYPES.bun);
   }, [allIngredients]);
   const sauces = useMemo(
-    () => allIngredients?.filter((b) => b.type === "sauce"),
+    () => allIngredients?.filter((b) => b.type === INGREDIENT_TYPES.sauce),
     [allIngredients]
   );
   const fillings = useMemo(
-    () => allIngredients?.filter((b) => b.type === "main"),
+    () => allIngredients?.filter((b) => b.type === INGREDIENT_TYPES.main),
     [allIngredients]
   );
 

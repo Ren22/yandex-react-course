@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useMemo, useState } from "react";
 import {
   ConstructorElement,
   CurrencyIcon,
@@ -7,16 +7,16 @@ import {
 import listStyle from "./burger-constructor.module.css";
 import Modal from "../modal/modal";
 import OrderDetails from "../order-details/order-details";
-import { useEffect } from "react";
 import { useSelector } from "react-redux";
 import {
   addIngredient,
-  selectIngredientsState,
+  selectIsIngredientDragged,
+  selectSelectedIngredients,
 } from "../../redux/slices/ingredients";
 import {
   postOrder,
   selectOrderState,
-  updateTotalSum,
+  setOrderToNull,
 } from "../../redux/slices/order";
 import { useAppDispatch } from "../../redux/store";
 import { useDrop } from "react-dnd";
@@ -24,33 +24,26 @@ import { IngredientDetailsType } from "../../utils/types";
 import DraggbleItem from "./draggable-item/draggable-item";
 
 const BurgerConstructor = () => {
-  const [isModalVisible, setIsModalVisible] = useState(false);
-  const { orderId, totalSum } = useSelector(selectOrderState);
-  const { bun, others } = useSelector(
-    selectIngredientsState
-  ).selectedIngredients;
-  const isIngredientDragged = useSelector(
-    selectIngredientsState
-  ).isIngredientDragged;
+  const { orderId } = useSelector(selectOrderState);
+  const { bun, others } = useSelector(selectSelectedIngredients);
+  const isIngredientDragged = useSelector(selectIsIngredientDragged);
+  const [totalSum, setTotalSum] = useState(0);
 
   const dispatch = useAppDispatch();
 
-  const [{ isHover }, dropTarget] = useDrop({
+  const [, dropTarget] = useDrop({
     accept: "ingredient",
     drop(ingredientDetails: IngredientDetailsType) {
       dispatch(addIngredient(ingredientDetails));
     },
-    collect: (monitor) => ({
-      isHover: monitor.isOver(),
-    }),
   });
 
-  useEffect(() => {
+  useMemo(() => {
     const newSum =
       (bun ? bun.price * 2 : 0) +
       (others ? others.reduce((p, n) => p + n.price, 0) : 0);
-    dispatch(updateTotalSum(newSum));
-  }, [bun, dispatch, others]);
+    setTotalSum(newSum);
+  }, [bun, others]);
 
   const handleOpenModal = async () => {
     const ingredientIdsToSubmit = others?.map((it) => it._id);
@@ -59,12 +52,11 @@ const BurgerConstructor = () => {
     }
     if (ingredientIdsToSubmit) {
       dispatch(postOrder(ingredientIdsToSubmit));
-      setIsModalVisible(true);
     }
   };
 
   const handleCloseModal = () => {
-    setIsModalVisible(false);
+    dispatch(setOrderToNull());
   };
 
   const outline = isIngredientDragged ? "1px dashed lightgreen" : "transparent";
@@ -119,7 +111,7 @@ const BurgerConstructor = () => {
           Оформить заказ
         </Button>
       </section>
-      {isModalVisible && (
+      {orderId && (
         <Modal closeModal={handleCloseModal}>
           <OrderDetails orderId={orderId} />
         </Modal>

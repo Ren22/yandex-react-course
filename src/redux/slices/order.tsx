@@ -3,12 +3,14 @@ import { submitOrder } from "../../api/burgers";
 import { RootState } from "../store";
 
 interface InitialStateOrder {
-  totalSum: number;
-  orderId?: string;
+  orderId?: string | null;
+  orderIsLoading: boolean;
+  error?: string;
 }
 
 const initialState: InitialStateOrder = {
-  totalSum: 0,
+  orderId: null,
+  orderIsLoading: false,
 };
 
 export const postOrder = createAsyncThunk(
@@ -27,19 +29,29 @@ const orderSlice = createSlice({
   name: "order",
   initialState,
   reducers: {
-    updateTotalSum: (state, action: { payload: number }) => {
-      state.totalSum = action.payload;
+    setOrderToNull: (state) => {
+      state.orderId = null;
     },
   },
   extraReducers: (builder) => {
-    builder.addCase(postOrder.fulfilled, (state, action) => {
-      state.orderId = action.payload?.orderId;
-    });
+    builder
+      .addCase(postOrder.fulfilled, (state, action) => {
+        state.orderIsLoading = false;
+        state.orderId = action.payload?.orderId;
+      })
+      .addCase(postOrder.pending, (state) => {
+        state.orderIsLoading = true;
+      })
+      .addCase(postOrder.rejected, (state) => {
+        state.orderIsLoading = false;
+        state.error =
+          "Error, something went wrong. Contact support if problem persis";
+      });
   },
 });
 
 export const selectOrderState = (rootState: RootState) => rootState.order;
 
-export const { updateTotalSum } = orderSlice.actions;
+export const { setOrderToNull } = orderSlice.actions;
 
 export default orderSlice.reducer;

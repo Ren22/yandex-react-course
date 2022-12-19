@@ -1,6 +1,6 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import { getBurgersData } from "../../api/burgers";
-import { IngredientDetailsType } from "../../utils/types";
+import { IngredientDetailsType, INGREDIENT_TYPES } from "../../utils/types";
 import { RootState } from "../store";
 
 interface InitialStateIngredients {
@@ -9,15 +9,18 @@ interface InitialStateIngredients {
     bun?: IngredientDetailsType;
     others: IngredientDetailsType[];
   };
-  currentIngredient: IngredientDetailsType | {};
+  currentIngredient: IngredientDetailsType | null;
   isIngredientDragged: boolean;
+  ingredientsAreLoaded: boolean;
+  error?: string;
 }
 
 const initialState: InitialStateIngredients = {
   allIngredients: [],
   selectedIngredients: { others: [] },
-  currentIngredient: {},
+  currentIngredient: null,
   isIngredientDragged: false,
+  ingredientsAreLoaded: false,
 };
 
 export const loadAllIngredients = createAsyncThunk(
@@ -40,7 +43,7 @@ const ingredientsSlice = createSlice({
       state.currentIngredient = action.payload;
     },
     addIngredient: (state, action: { payload: IngredientDetailsType }) => {
-      if (action.payload.type === "bun") {
+      if (action.payload.type === INGREDIENT_TYPES.bun) {
         state.selectedIngredients.bun = action.payload;
       } else {
         state.selectedIngredients.others = [
@@ -51,15 +54,14 @@ const ingredientsSlice = createSlice({
     },
     removeIngredient: (state, action: { payload: number }) => {
       const indexToRemove = action.payload;
-      if (indexToRemove !== -1) {
-        state.selectedIngredients.others = [
-          ...state.selectedIngredients.others.slice(0, indexToRemove),
-          ...state.selectedIngredients.others.slice(indexToRemove + 1),
-        ];
-      }
+      if (indexToRemove === -1) return;
+      state.selectedIngredients.others = [
+        ...state.selectedIngredients.others.slice(0, indexToRemove),
+        ...state.selectedIngredients.others.slice(indexToRemove + 1),
+      ];
     },
     closeIngredientDetails: (state) => {
-      state.currentIngredient = {};
+      state.currentIngredient = null;
     },
     moveIngredients: (
       state,
@@ -85,16 +87,32 @@ const ingredientsSlice = createSlice({
     },
   },
   extraReducers: (builder) => {
-    builder.addCase(loadAllIngredients.fulfilled, (state, action) => {
-      state.allIngredients = action.payload
-        ? action.payload.allIngredients
-        : [];
-    });
+    builder
+      .addCase(loadAllIngredients.fulfilled, (state, action) => {
+        state.ingredientsAreLoaded = false;
+        state.allIngredients = action.payload
+          ? action.payload.allIngredients
+          : [];
+      })
+      .addCase(loadAllIngredients.pending, (state) => {
+        state.ingredientsAreLoaded = true;
+      })
+      .addCase(loadAllIngredients.rejected, (state) => {
+        state.ingredientsAreLoaded = false;
+        state.error =
+          "Error, something went wrong. Contact support if problem persis";
+      });
   },
 });
 
 export const selectIngredientsState = (rootState: RootState) =>
   rootState.ingredients;
+
+export const selectSelectedIngredients = (rootState: RootState) =>
+  rootState.ingredients.selectedIngredients;
+
+export const selectIsIngredientDragged = (rootState: RootState) =>
+  rootState.ingredients.isIngredientDragged;
 
 export const {
   pickIngredient,
