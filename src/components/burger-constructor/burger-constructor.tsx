@@ -1,4 +1,4 @@
-import React, { useMemo, useState } from "react";
+import React, { useMemo } from "react";
 import {
   ConstructorElement,
   CurrencyIcon,
@@ -27,7 +27,6 @@ const BurgerConstructor = () => {
   const { orderId } = useSelector(selectOrderState);
   const { bun, others } = useSelector(selectSelectedIngredients);
   const isIngredientDragged = useSelector(selectIsIngredientDragged);
-  const [totalSum, setTotalSum] = useState(0);
 
   const dispatch = useAppDispatch();
 
@@ -38,12 +37,12 @@ const BurgerConstructor = () => {
     },
   });
 
-  useMemo(() => {
-    const newSum =
+  const totalSum = useMemo(
+    () =>
       (bun ? bun.price * 2 : 0) +
-      (others ? others.reduce((p, n) => p + n.price, 0) : 0);
-    setTotalSum(newSum);
-  }, [bun, others]);
+      (others ? others.reduce((p, n) => p + n.price, 0) : 0),
+    [bun, others]
+  );
 
   const handleOpenModal = async () => {
     const ingredientIdsToSubmit = others?.map((it) => it._id);
