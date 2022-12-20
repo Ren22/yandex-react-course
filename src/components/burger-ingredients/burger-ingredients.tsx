@@ -1,95 +1,171 @@
-import React, { useMemo, useState, useContext } from "react";
+import React, {
+  SyntheticEvent,
+  useEffect,
+  useMemo,
+  useRef,
+  useState,
+} from "react";
 import BurgerIngredientsItem from "./components/burger-ingredients-item/burger-ingredients-item";
 import burgerIngredientsStyle from "./burger-ingredients.module.css";
 import { Tab } from "@ya.praktikum/react-developer-burger-ui-components";
-import { IngredientsContext } from "../../services/ingredientsContext";
+import { useSelector } from "react-redux";
+import {
+  loadAllIngredients,
+  selectIngredientsState,
+} from "../../redux/slices/ingredients";
+import { useAppDispatch } from "../../redux/store";
+import { INGREDIENT_TYPES } from "../../utils/types";
+
+enum NAV_TYPES {
+  BUNS = "buns",
+  SAUCES = "sauces",
+  FILLINGS = "fillings",
+}
 
 const BurgerIngredients = () => {
-  const [current, setCurrent] = useState("breads");
-  const { burgersData } = useContext(IngredientsContext);
-  const buns = useMemo(
-    () => burgersData?.filter((b) => b.type === "bun"),
-    [burgersData]
-  );
+  const [current, setCurrent] = useState("buns");
+  const { allIngredients } = useSelector(selectIngredientsState);
+  const dispatch = useAppDispatch();
+  const burgerIngredientsContainerRef = useRef<HTMLElement>(null);
+  const bunsHeaderRef = useRef<HTMLHeadingElement>(null);
+  const sauceHeaderRef = useRef<HTMLHeadingElement>(null);
+  const fillingsHeaderRef = useRef<HTMLHeadingElement>(null);
+
+  useEffect(() => {
+    dispatch(loadAllIngredients());
+  }, [dispatch]);
+
+  const buns = useMemo(() => {
+    return allIngredients?.filter((b) => b.type === INGREDIENT_TYPES.bun);
+  }, [allIngredients]);
   const sauces = useMemo(
-    () => burgersData?.filter((b) => b.type === "sauce"),
-    [burgersData]
+    () => allIngredients?.filter((b) => b.type === INGREDIENT_TYPES.sauce),
+    [allIngredients]
   );
   const fillings = useMemo(
-    () => burgersData?.filter((b) => b.type === "main"),
-    [burgersData]
+    () => allIngredients?.filter((b) => b.type === INGREDIENT_TYPES.main),
+    [allIngredients]
   );
+
+  const handleScroll = (e: SyntheticEvent) => {
+    const containerPos =
+      burgerIngredientsContainerRef.current?.getBoundingClientRect();
+    const bunsHeaderPos = bunsHeaderRef.current?.getBoundingClientRect();
+    const sauceHeaderPos = sauceHeaderRef.current?.getBoundingClientRect();
+    const fillingsHeaderPos =
+      fillingsHeaderRef.current?.getBoundingClientRect();
+    let closestHeaderElement = null;
+
+    if (containerPos && bunsHeaderPos && sauceHeaderPos && fillingsHeaderPos) {
+      const allDistances = [
+        {
+          distance: Math.abs(containerPos.top - bunsHeaderPos?.top),
+          id: NAV_TYPES.BUNS,
+        },
+        {
+          distance: Math.abs(containerPos.top - sauceHeaderPos?.top),
+          id: NAV_TYPES.SAUCES,
+        },
+        {
+          distance: Math.abs(containerPos.top - fillingsHeaderPos?.top),
+          id: NAV_TYPES.FILLINGS,
+        },
+      ];
+      closestHeaderElement = allDistances.sort(
+        (a, b) => a.distance - b.distance
+      )[0];
+    }
+    if (!closestHeaderElement) {
+      return;
+    }
+    setCurrent(closestHeaderElement.id);
+  };
 
   return (
     <div className={`${burgerIngredientsStyle.main} pt-6 pl-4 mr-10`}>
       <h1 className="text text_type_main-large mt-10 mb-5">Соберите бургер</h1>
-      <div
-        onClick={(e) => console.log(e)}
-        className={`${burgerIngredientsStyle.tabs} pb-10`}
-      >
-        <Tab value="breads" active={current === "breads"} onClick={setCurrent}>
+      <div className={`${burgerIngredientsStyle.tabs} pb-10`}>
+        <Tab
+          value={NAV_TYPES.BUNS}
+          active={current === NAV_TYPES.BUNS}
+          onClick={setCurrent}
+        >
           <a
             className={
-              current === "breads"
+              current === NAV_TYPES.BUNS
                 ? burgerIngredientsStyle.tabs__activeLink
                 : ""
             }
-            href="#buns"
+            href={`#${NAV_TYPES.BUNS}`}
           >
             Булки
           </a>
         </Tab>
-        <Tab value="sauces" active={current === "sauces"} onClick={setCurrent}>
+        <Tab
+          value={NAV_TYPES.SAUCES}
+          active={current === NAV_TYPES.SAUCES}
+          onClick={setCurrent}
+        >
           <a
             className={
-              current === "sauces"
+              current === NAV_TYPES.SAUCES
                 ? burgerIngredientsStyle.tabs__activeLink
                 : ""
             }
-            href="#sauces"
+            href={`#${NAV_TYPES.SAUCES}`}
           >
             Соусы
           </a>
         </Tab>
         <Tab
-          value="fillings"
-          active={current === "fillings"}
+          value={NAV_TYPES.FILLINGS}
+          active={current === NAV_TYPES.FILLINGS}
           onClick={setCurrent}
         >
           <a
             className={
-              current === "fillings"
+              current === NAV_TYPES.FILLINGS
                 ? burgerIngredientsStyle.tabs__activeLink
                 : ""
             }
-            href="#fillings"
+            href={`#${NAV_TYPES.FILLINGS}`}
           >
             Начинки
           </a>
         </Tab>
       </div>
-      <section className={burgerIngredientsStyle.listWrapper}>
-        <h3 className="text text_type_main-medium">Булки</h3>
+      <section
+        className={burgerIngredientsStyle.listWrapper}
+        onScroll={handleScroll}
+        ref={burgerIngredientsContainerRef}
+      >
+        <h3 ref={bunsHeaderRef} className="text text_type_main-medium">
+          Булки
+        </h3>
         <ul
-          id="buns"
+          id={NAV_TYPES.BUNS}
           className={`${burgerIngredientsStyle.list} pt-6 pl-4 pb-10`}
         >
           {buns.map((b) => (
             <BurgerIngredientsItem key={b._id} ingredientDetails={b} />
           ))}
         </ul>
-        <h3 className="text text_type_main-medium">Соусы</h3>
+        <h3 ref={sauceHeaderRef} className="text text_type_main-medium">
+          Соусы
+        </h3>
         <ul
-          id="sauces"
+          id={NAV_TYPES.SAUCES}
           className={`${burgerIngredientsStyle.list} pt-6 pl-4 pb-10`}
         >
           {sauces.map((s) => (
             <BurgerIngredientsItem key={s._id} ingredientDetails={s} />
           ))}
         </ul>
-        <h3 className="text text_type_main-medium">Начинки</h3>
+        <h3 ref={fillingsHeaderRef} className="text text_type_main-medium">
+          Начинки
+        </h3>
         <ul
-          id="fillings"
+          id={NAV_TYPES.FILLINGS}
           className={`${burgerIngredientsStyle.list} pt-6 pl-4 pb-10`}
         >
           {fillings.map((f) => (

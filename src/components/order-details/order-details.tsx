@@ -2,7 +2,7 @@ import React from "react";
 import OrderDetailsStyle from "./order-details.module.css";
 
 type Props = {
-  orderId: string;
+  orderId?: string;
 };
 
 const OrderDetails = ({ orderId }: Props) => {

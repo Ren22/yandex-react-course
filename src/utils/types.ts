@@ -13,6 +13,13 @@ export interface IngredientDetailsType {
   __v: number;
 }
 
+export enum INGREDIENT_TYPES {
+  bun = "bun",
+  sauce = "sauce",
+  main = "main",
+}
+
+
 export type GenericObject<T = unknown> = {
   [key in string]: T
 }

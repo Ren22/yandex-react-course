@@ -1,92 +1,103 @@
-import React, { useContext, useState } from "react";
+import React, { useMemo } from "react";
 import {
   ConstructorElement,
-  DragIcon,
   CurrencyIcon,
   Button,
 } from "@ya.praktikum/react-developer-burger-ui-components";
 import listStyle from "./burger-constructor.module.css";
 import Modal from "../modal/modal";
 import OrderDetails from "../order-details/order-details";
-import { BurgerConstructorContext } from "../../services/ingredientsContext";
-import { useEffect } from "react";
-import { TotalSumContext } from "../../services/totalSumContext";
-import { submitOrder } from "../../api/burgers";
+import { useSelector } from "react-redux";
+import {
+  addIngredient,
+  selectIsIngredientDragged,
+  selectSelectedIngredients,
+} from "../../redux/slices/ingredients";
+import {
+  postOrder,
+  selectOrderState,
+  setOrderToNull,
+} from "../../redux/slices/order";
+import { useAppDispatch } from "../../redux/store";
+import { useDrop } from "react-dnd";
+import { IngredientDetailsType } from "../../utils/types";
+import DraggbleItem from "./draggable-item/draggable-item";
 
-const OrderList = () => {
-  const [isModalVisible, setIsModalVisible] = useState(false);
-  const { selectedIngredients } = useContext(BurgerConstructorContext);
-  const { totalSum, totalSumDispatcher } = useContext(TotalSumContext);
-  const { bun, otherIngredients } = selectedIngredients;
-  const [orderId, setOrderId] = useState("");
+const BurgerConstructor = () => {
+  const { orderId } = useSelector(selectOrderState);
+  const { bun, others } = useSelector(selectSelectedIngredients);
+  const isIngredientDragged = useSelector(selectIsIngredientDragged);
 
-  useEffect(() => {
-    const newSum =
+  const dispatch = useAppDispatch();
+
+  const [, dropTarget] = useDrop({
+    accept: "ingredient",
+    drop(ingredientDetails: IngredientDetailsType) {
+      dispatch(addIngredient(ingredientDetails));
+    },
+  });
+
+  const totalSum = useMemo(
+    () =>
       (bun ? bun.price * 2 : 0) +
-      otherIngredients.reduce((p, n) => p + n.price, 0);
-    totalSumDispatcher({ type: "updateTotalSum", payload: { value: newSum } });
-  }, [bun, otherIngredients, totalSumDispatcher]);
+      (others ? others.reduce((p, n) => p + n.price, 0) : 0),
+    [bun, others]
+  );
 
   const handleOpenModal = async () => {
-    const ingredientIdsToSubmit = selectedIngredients.otherIngredients.map(
-      (it) => it._id
-    );
+    const ingredientIdsToSubmit = others?.map((it) => it._id);
     if (bun) {
-      ingredientIdsToSubmit.push(bun._id);
+      ingredientIdsToSubmit?.push(bun._id);
     }
-    try {
-      const orderId = await submitOrder(ingredientIdsToSubmit);
-      setOrderId(orderId);
-    } catch (e) {
-      console.error(e);
-    } finally {
-      setIsModalVisible(true);
+    if (ingredientIdsToSubmit) {
+      dispatch(postOrder(ingredientIdsToSubmit));
     }
   };
 
   const handleCloseModal = () => {
-    setIsModalVisible(false);
+    dispatch(setOrderToNull());
   };
+
+  const outline = isIngredientDragged ? "1px dashed lightgreen" : "transparent";
 
   return (
     <div className={`${listStyle.container} pl-4 pr-4`}>
-      <li className={`${listStyle.list__item} mt-25`} draggable="true">
-        {bun && (
-          <ConstructorElement
-            isLocked={true}
-            type="top"
-            text={bun.name + "(верх)"}
-            price={bun.price}
-            thumbnail={bun.image}
-          />
-        )}
-      </li>
-      <ul className={`${listStyle.list}`}>
-        {otherIngredients.map((ingredient, i) => (
-          <li key={i} className={listStyle.list__item} draggable="true">
-            <DragIcon type="primary" />
+      <div ref={dropTarget} style={{ outline }} className={"mt-25"}>
+        <li className={`${listStyle.list__item}`}>
+          {bun && (
             <ConstructorElement
-              text={ingredient.name}
-              price={ingredient.price}
-              thumbnail={ingredient.image}
+              isLocked={true}
+              type="top"
+              text={bun.name + "(верх)"}
+              price={bun.price}
+              thumbnail={bun.image}
             />
-          </li>
-        ))}
-      </ul>
-      <li className={`${listStyle.list__item}  mb-10`} draggable="true">
-        {bun && (
-          <ConstructorElement
-            isLocked={true}
-            type="bottom"
-            text={bun.name + "(низ)"}
-            price={bun.price}
-            thumbnail={bun.image}
-          />
-        )}
-      </li>
+          )}
+        </li>
+        <ul className={`${listStyle.list}`}>
+          {others?.map((ingredient, i) => (
+            <DraggbleItem
+              key={i}
+              orderIndex={i}
+              ingredientDetails={ingredient}
+            />
+          ))}
+        </ul>
+        <li className={`${listStyle.list__item}  mb-10`}>
+          {bun && (
+            <ConstructorElement
+              isLocked={true}
+              type="bottom"
+              text={bun.name + "(низ)"}
+              price={bun.price}
+              thumbnail={bun.image}
+            />
+          )}
+        </li>
+      </div>
 
       <section className={listStyle.bottom}>
-        <span className="text text_type_digits-medium">{totalSum.value}</span>
+        <span className="text text_type_digits-medium">{totalSum}</span>
         <span className="text text_type_main-large ml-1 mr-10">
           <CurrencyIcon type="primary" />
         </span>
@@ -99,7 +110,7 @@ const OrderList = () => {
           Оформить заказ
         </Button>
       </section>
-      {isModalVisible && (
+      {orderId && (
         <Modal closeModal={handleCloseModal}>
           <OrderDetails orderId={orderId} />
         </Modal>
@@ -107,4 +118,4 @@ const OrderList = () => {
     </div>
   );
 };
-export default OrderList;
+export default BurgerConstructor;

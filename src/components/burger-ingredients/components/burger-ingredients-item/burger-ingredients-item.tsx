@@ -1,4 +1,4 @@
-import React, { useState, useContext } from "react";
+import React, { useState, useCallback, useEffect } from "react";
 import {
   Counter,
   CurrencyIcon,
@@ -7,7 +7,15 @@ import burgerIngredientStyle from "./burger-ingredients-item.module.css";
 import Modal from "../../../modal/modal";
 import IngredientDetails from "../../../ingredient-details/ingredient-details";
 import { IngredientDetailsType } from "../../../../utils/types";
-import { BurgerConstructorContext } from "../../../../services/ingredientsContext";
+import {
+  addIngredient,
+  changeDraggingIngredientState,
+  closeIngredientDetails,
+  pickIngredient,
+  selectIngredientsState,
+} from "../../../../redux/slices/ingredients";
+import { useDispatch, useSelector } from "react-redux";
+import { useDrag } from "react-dnd";
 
 interface Props {
   ingredientDetails: IngredientDetailsType;
@@ -15,32 +23,46 @@ interface Props {
 
 const BurgerIngredientsItem = (props: Props) => {
   const [isModalVisible, setIsModalVisible] = useState(false);
-  const { image, name, price, type, _id } = props.ingredientDetails;
-  const { selectedIngredients, setSelectedIngredients } = useContext(
-    BurgerConstructorContext
-  );
+  const { image, name, price, _id } = props.ingredientDetails;
+  const [{ isDragging }, dragRef] = useDrag({
+    type: "ingredient",
+    item: props.ingredientDetails,
+    collect: (monitor) => ({
+      isDragging: monitor.isDragging(),
+    }),
+  });
+  const { selectedIngredients } = useSelector(selectIngredientsState);
+  const dispatch = useDispatch();
+  const [count, setCount] = useState<number | null>(null);
 
-  const handleOpenModal = () => {
+  useEffect(() => {
+    // we reset the counter every time selected ingredients are updated
+    setCount(null);
+    let count = null;
+    if (selectedIngredients.bun?._id === _id) {
+      setCount(1);
+      return;
+    }
+    count = selectedIngredients.others.filter((it) => it._id === _id);
+    if (count.length > 0) {
+      setCount(count.length);
+    }
+  }, [_id, selectedIngredients]);
+
+  const handleOpenModal = useCallback(() => {
     setIsModalVisible(true);
-    if (type === "bun") {
-      setSelectedIngredients({
-        ...selectedIngredients,
-        bun: props.ingredientDetails,
-      });
-    } else if (
-      !selectedIngredients.otherIngredients.find((it) => it._id === _id)
-    )
-      setSelectedIngredients({
-        ...selectedIngredients,
-        otherIngredients: selectedIngredients.otherIngredients.concat(
-          props.ingredientDetails
-        ),
-      });
-  };
+    dispatch(pickIngredient(props.ingredientDetails));
+    dispatch(addIngredient(props.ingredientDetails));
+  }, [dispatch, props.ingredientDetails]);
 
   const handleCloseModal = () => {
+    dispatch(closeIngredientDetails());
     setIsModalVisible(false);
   };
+
+  useEffect(() => {
+    dispatch(changeDraggingIngredientState(isDragging));
+  }, [dispatch, isDragging]);
 
   return (
     <>
@@ -50,10 +72,11 @@ const BurgerIngredientsItem = (props: Props) => {
         </Modal>
       )}
       <li
+        ref={dragRef}
         onClick={handleOpenModal}
         className={`${burgerIngredientStyle.item} text text_type_main-default`}
       >
-        <Counter count={1} />
+        {count && <Counter count={count} />}
         <img className="pl-4 pr-4" alt={"bulka-item"} src={image} />
         <div className={`${burgerIngredientStyle.price} mb-1 mt-1`}>
           <span className="mr-2">{price}</span>
