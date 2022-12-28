@@ -1,0 +1,15 @@
+.main {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: calc(100% - (4rem));
+  flex-direction: column;
+}
+
+.text_grayed {
+  color: #8585ad;
+}
+
+.text_blued {
+  color: #4c4cff;
+}

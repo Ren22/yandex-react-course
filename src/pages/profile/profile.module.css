@@ -1,0 +1,32 @@
+.main {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: calc(100% - (4rem));
+}
+
+.main__columnsWrapper {
+  display: flex;
+  flex-direction: row;
+}
+
+.main__columnsWrapper a {
+  color: unset;
+}
+
+.main__column1 {
+  display: flex;
+  flex-direction: column;
+  justify-content: top;
+  width: 320px;
+}
+
+.main__column1__text {
+  line-height: 4rem;
+  cursor: pointer;
+}
+
+.main__column2 {
+  display: flex;
+  flex-direction: column;
+}

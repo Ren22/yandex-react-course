@@ -1,7 +1,6 @@
+import { BASE_URL } from ".";
 import { request } from "../utils/request";
 import { IngredientDetailsType } from "../utils/types";
-
-const BASE_URL = "https://norma.nomoreparties.space/api";
 
 export function getBurgersData(): Promise<IngredientDetailsType[]> {
   return request(`${BASE_URL}/ingredients`).then((data) => {
