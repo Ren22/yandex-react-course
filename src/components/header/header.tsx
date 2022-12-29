@@ -55,19 +55,13 @@ const Header = () => {
             <div
               className={`${headerStyles.header__item}
             ${
-              path === ROUTES.PROFILE ||
-              path === `${ROUTES.PROFILE}/${ROUTES.ORDERS}`
+              path.includes(ROUTES.PROFILE)
                 ? headerStyles.header__item_active
                 : ""
             } `}
             >
               <ProfileIcon
-                type={
-                  path === ROUTES.PROFILE ||
-                  path === `${ROUTES.PROFILE}/${ROUTES.ORDERS}`
-                    ? "primary"
-                    : "secondary"
-                }
+                type={path.includes(ROUTES.PROFILE) ? "primary" : "secondary"}
               />
               <span className="text text_type_main-default p-2">
                 Личный кабинет

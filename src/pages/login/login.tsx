@@ -2,28 +2,35 @@ import {
   Button,
   Input,
 } from "@ya.praktikum/react-developer-burger-ui-components";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import loginPageStyle from "./login.module.css";
 import { Link, useHistory } from "react-router-dom";
 import Header from "../../components/header/header";
 import { loginUser } from "../../api/auth";
 import { ROUTES } from "../../components/app/app";
+import { useAppDispatch } from "../../redux/store";
+import {
+  loginUserReducer,
+  selectIsUserLoggedIn,
+} from "../../redux/slices/auth";
+import { useSelector } from "react-redux";
 
 export const LoginPage = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [isPasswordShown, setIsPasswordShown] = useState(false);
   const history = useHistory();
+  const dispatch = useAppDispatch();
+  const isUserLoggedIn = useSelector(selectIsUserLoggedIn);
+
+  useEffect(() => {
+    if (isUserLoggedIn) {
+      history.push({ pathname: `${ROUTES.MAIN}` });
+    }
+  }, [history, isUserLoggedIn]);
 
   const handleClick = async () => {
-    try {
-      const state = await loginUser(email, password);
-      if (state.success) {
-        history.push({ pathname: `${ROUTES.MAIN}` });
-      }
-    } catch (e: any) {
-      alert(e.message);
-    }
+    await dispatch(loginUserReducer({ email, password }));
   };
   return (
     <>

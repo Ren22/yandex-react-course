@@ -2,27 +2,34 @@ import {
   Input,
   Button,
 } from "@ya.praktikum/react-developer-burger-ui-components";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import Header from "../../components/header/header";
 import forgotPasswordStyle from "./forgot-password.module.css";
 import { Link, useHistory } from "react-router-dom";
-import { forgotPassword } from "../../api/auth";
 import { ROUTES } from "../../components/app/app";
+import { useAppDispatch } from "../../redux/store";
+import {
+  forgotPasswordReducer,
+  selectIsForgotPswrdEmailSent,
+} from "../../redux/slices/auth";
+import { useSelector } from "react-redux";
 
 export const ForgotPasswordPage = () => {
-  const [emailValue, setEmailValue] = useState("");
+  const [email, setEmail] = useState("");
   const history = useHistory();
+  const dispatch = useAppDispatch();
+  const isForgotPswrdEmailSent = useSelector(selectIsForgotPswrdEmailSent);
 
   const handleClick = async () => {
-    try {
-      const state = await forgotPassword(emailValue);
-      if (state.success) {
-        history.push({ pathname: "/reset-password" });
-      }
-    } catch (e: any) {
-      alert(e.message);
-    }
+    await dispatch(forgotPasswordReducer(email));
   };
+
+  useEffect(() => {
+    if (isForgotPswrdEmailSent) {
+      history.push({ pathname: `${ROUTES.RESETPWRD}` });
+    }
+  }, [history, isForgotPswrdEmailSent]);
+
   return (
     <>
       <Header />
@@ -31,8 +38,8 @@ export const ForgotPasswordPage = () => {
         <Input
           type={"email"}
           placeholder={"Email"}
-          onChange={(e) => setEmailValue(e.target.value)}
-          value={emailValue}
+          onChange={(e) => setEmail(e.target.value)}
+          value={email}
           name={"email"}
           error={false}
           errorText={"Ошибка"}

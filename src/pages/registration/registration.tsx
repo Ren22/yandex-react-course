@@ -2,12 +2,19 @@ import {
   Button,
   Input,
 } from "@ya.praktikum/react-developer-burger-ui-components";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import registrationPageStyle from "./registration.module.css";
 import { Link, useHistory } from "react-router-dom";
 import Header from "../../components/header/header";
 import { registerUser } from "../../api/auth";
 import { ROUTES } from "../../components/app/app";
+// import { registerUserReducer } from "../../redux/slices/auth";
+import { useAppDispatch } from "../../redux/store";
+import { useSelector } from "react-redux";
+import {
+  registerUserReducer,
+  selectIsUserRegistered,
+} from "../../redux/slices/auth";
 
 export const RegistraionPage = () => {
   const [name, setName] = useState("");
@@ -15,17 +22,20 @@ export const RegistraionPage = () => {
   const [password, setPassword] = useState("");
   const [isPasswordShown, setIsPasswordShown] = useState(false);
   const history = useHistory();
+  const dispatch = useAppDispatch();
+  const isUserRegistered = useSelector(selectIsUserRegistered);
+
+  useEffect(() => {
+    if (isUserRegistered) {
+      history.push({ pathname: `${ROUTES.MAIN}` });
+    }
+  }, [history, isUserRegistered]);
 
   const handleClick = async () => {
-    try {
-      const state = await registerUser(email, password, name);
-      if (state.success) {
-        history.push({ pathname: "/" });
-      }
-    } catch (e: any) {
-      alert(e.message);
-    }
+    debugger;
+    await dispatch(registerUserReducer({ email, password, name }));
   };
+
   return (
     <>
       <Header />

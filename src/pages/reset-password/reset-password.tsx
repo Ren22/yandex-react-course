@@ -2,28 +2,36 @@ import {
   Input,
   Button,
 } from "@ya.praktikum/react-developer-burger-ui-components";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import Header from "../../components/header/header";
 import resetPasswordStyle from "./reset-password.module.css";
-import { Link } from "react-router-dom";
-import { resetPassword } from "../../api/auth";
+import { Link, useHistory } from "react-router-dom";
 import { ROUTES } from "../../components/app/app";
+import {
+  resetPasswordReducer,
+  selectIsResetPasswordReqSent,
+} from "../../redux/slices/auth";
+import { useAppDispatch } from "../../redux/store";
+import { useSelector } from "react-redux";
 
 export const ResetPasswordPage = () => {
   const [password, setPassword] = useState("");
   const [token, setToken] = useState("");
   const [isPasswordShown, setIsPasswordShown] = useState(false);
+  const dispatch = useAppDispatch();
+  const isResetPasswrod = useSelector(selectIsResetPasswordReqSent);
+  const history = useHistory();
 
   const handleClick = async () => {
-    try {
-      const state = await resetPassword(password, token);
-      if (state.success) {
-        alert(state.message);
-      }
-    } catch (e: any) {
-      alert(e.message);
-    }
+    await dispatch(resetPasswordReducer({ password, token }));
   };
+
+  useEffect(() => {
+    if (isResetPasswrod) {
+      history.push({ pathname: `${ROUTES.LOGIN}` });
+    }
+  }, [history, isResetPasswrod]);
+
   return (
     <>
       <Header />
