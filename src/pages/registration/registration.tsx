@@ -6,9 +6,7 @@ import React, { useEffect, useState } from "react";
 import registrationPageStyle from "./registration.module.css";
 import { Link, useHistory } from "react-router-dom";
 import Header from "../../components/header/header";
-import { registerUser } from "../../api/auth";
 import { ROUTES } from "../../components/app/app";
-// import { registerUserReducer } from "../../redux/slices/auth";
 import { useAppDispatch } from "../../redux/store";
 import { useSelector } from "react-redux";
 import {

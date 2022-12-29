@@ -6,7 +6,6 @@ import React, { useEffect, useState } from "react";
 import loginPageStyle from "./login.module.css";
 import { Link, useHistory } from "react-router-dom";
 import Header from "../../components/header/header";
-import { loginUser } from "../../api/auth";
 import { ROUTES } from "../../components/app/app";
 import { useAppDispatch } from "../../redux/store";
 import {
