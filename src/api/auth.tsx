@@ -40,6 +40,12 @@ export interface ResetPasswordInput {
   token: string;
 }
 
+interface RefreshTokenResponse {
+  success: boolean;
+  accessToken: string;
+  refreshToken: string;
+}
+
 export function forgotPassword(email: string) {
   return request(`${BASE_URL}/password-reset`, {
     method: "POST",
@@ -100,7 +106,7 @@ export async function loginUser({ email, password }: LoginUserInput) {
   });
 }
 
-export async function logout(token: string) {
+export async function logoutUser(token: string | null) {
   return request(`${BASE_URL}/auth/logout`, {
     method: "POST",
     body: JSON.stringify({
@@ -114,7 +120,7 @@ export async function logout(token: string) {
   });
 }
 
-export async function refreshAccessToken(refreshToken: string) {
+export async function refreshAccessToken(refreshToken: string | null) {
   return request(`${BASE_URL}/auth/token`, {
     method: "POST",
     body: JSON.stringify({
@@ -123,5 +129,7 @@ export async function refreshAccessToken(refreshToken: string) {
     headers: {
       "Content-Type": "application/json",
     },
+  }).then((data: RefreshTokenResponse) => {
+    return data;
   });
 }

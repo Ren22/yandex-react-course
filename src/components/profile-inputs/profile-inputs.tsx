@@ -1,13 +1,40 @@
-import React, { useState } from "react";
+import React, { useCallback, useEffect, useState } from "react";
 import { Input } from "@ya.praktikum/react-developer-burger-ui-components";
+import { useSelector } from "react-redux";
+import { selectUserData } from "../../redux/slices/user";
 
-export const ProfileInputs = () => {
-  const [name, setName] = useState("");
+interface Props {
+  login: string;
+  setLogin: (s: string) => void;
+  password: string;
+  setPassword: (s: string) => void;
+  name: string;
+  setName: (s: string) => void;
+}
+
+export const ProfileInputs = ({
+  name,
+  setName,
+  login,
+  setLogin,
+  password,
+  setPassword,
+}: Props) => {
   const [isNameInputActive, setIsNameInputActive] = useState(false);
-  const [login, setLogin] = useState("");
   const [isLoginInputActive, setIsLoginInputActive] = useState(false);
-  const [password, setPassword] = useState("");
   const [isPasswordInputActive, setIsPasswordInputActive] = useState(false);
+
+  const user = useSelector(selectUserData);
+
+  const setAllInputsInactive = useCallback(() => {
+    setIsNameInputActive(false);
+    setIsLoginInputActive(false);
+    setIsPasswordInputActive(false);
+  }, []);
+
+  useEffect(() => {
+    setAllInputsInactive();
+  }, [setAllInputsInactive, user]);
 
   return (
     <>

@@ -1,12 +1,13 @@
 import { configureStore } from '@reduxjs/toolkit';
 import ingredientsReducer from './slices/ingredients';
 import orderReducer from './slices/order';
-import authSlice from './slices/auth';
+import authReducer from './slices/auth';
+import userReducer from './slices/user';
 import { useDispatch } from 'react-redux'
 import { combineReducers } from '@reduxjs/toolkit'
 const preloadedState = {};
 
-const rootReducer = combineReducers({ ingredients: ingredientsReducer, order: orderReducer, auth: authSlice });
+const rootReducer = combineReducers({ ingredients: ingredientsReducer, order: orderReducer, auth: authReducer, user: userReducer });
 
 export const store = configureStore({
   devTools: process.env.NODE_ENV !== 'production',

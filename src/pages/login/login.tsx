@@ -13,6 +13,7 @@ import {
   selectIsUserLoggedIn,
 } from "../../redux/slices/auth";
 import { useSelector } from "react-redux";
+import { getUserDataReducer } from "../../redux/slices/user";
 
 export const LoginPage = () => {
   const [email, setEmail] = useState("");
@@ -30,6 +31,7 @@ export const LoginPage = () => {
 
   const handleClick = async () => {
     await dispatch(loginUserReducer({ email, password }));
+    await dispatch(getUserDataReducer());
   };
   return (
     <>

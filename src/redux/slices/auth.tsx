@@ -3,14 +3,14 @@ import {
   forgotPassword,
   loginUser,
   LoginUserInput,
+  logoutUser,
   registerUser,
   RegisterUserInput,
   resetPassword,
   ResetPasswordInput,
 } from "../../api/auth";
-import { setCookie } from "../../utils/cookieHandler";
+import { deleteCookie, setCookie } from "../../utils/cookieHandler";
 import { RootState } from "../store";
-import { User } from "./user";
 
 interface InitialStateAuth {
   userIsLoading?: boolean;
@@ -20,8 +20,9 @@ interface InitialStateAuth {
   forgotPswrdIsLoading?: boolean;
   userIsPasswordReset: boolean;
   resetPswrdIsLoading?: boolean;
-  user?: User;
   error?: string;
+  userPassword?: string;
+  userLogoutIsLoading?: boolean;
 }
 
 const initialState: InitialStateAuth = {
@@ -29,6 +30,7 @@ const initialState: InitialStateAuth = {
   userIsRegistered: false,
   userForgotPswrdEmailSent: false,
   userIsPasswordReset: false,
+  userPassword: "",
 };
 
 export const registerUserReducer = createAsyncThunk(
@@ -47,7 +49,7 @@ export const loginUserReducer = createAsyncThunk(
     const res = await loginUser(userInput);
     setCookie("accessToken", res.accessToken);
     localStorage.setItem("refreshToken", res.refreshToken);
-    return { ...res };
+    return { ...res, password: userInput.password };
   }
 );
 
@@ -65,6 +67,12 @@ export const resetPasswordReducer = createAsyncThunk(
   }
 );
 
+export const logoutUserReducer = createAsyncThunk("logout", async () => {
+  const token = localStorage.getItem("refreshToken");
+  await logoutUser(token);
+  deleteCookie("accessToken");
+});
+
 const authSlice = createSlice({
   name: "auth",
   initialState,
@@ -75,7 +83,6 @@ const authSlice = createSlice({
       .addCase(registerUserReducer.fulfilled, (state, action) => {
         state.userIsLoading = false;
         state.userIsRegistered = true;
-        state.user = action.payload?.user;
       })
       .addCase(registerUserReducer.pending, (state) => {
         state.userIsLoading = true;
@@ -91,7 +98,6 @@ const authSlice = createSlice({
       .addCase(loginUserReducer.fulfilled, (state, action) => {
         state.userIsLoading = false;
         state.userIsLoggedIn = true;
-        state.user = action.payload?.user;
       })
       .addCase(loginUserReducer.pending, (state) => {
         state.userIsLoading = true;
@@ -137,6 +143,19 @@ const authSlice = createSlice({
         state.resetPswrdIsLoading = false;
         state.userIsPasswordReset = false;
         state.error = "User password reset has failed, please contact support.";
+      })
+      // logout user
+      .addCase(logoutUserReducer.fulfilled, (state) => {
+        state.userLogoutIsLoading = false;
+        alert("Logout is done. Redirecting to the main page");
+      })
+      .addCase(logoutUserReducer.pending, (state) => {
+        state.userLogoutIsLoading = true;
+      })
+      .addCase(logoutUserReducer.rejected, (state, action) => {
+        alert(action.error.message);
+        state.userLogoutIsLoading = false;
+        state.error = "User logout has failed, please contact support.";
       });
   },
 });
@@ -149,5 +168,4 @@ export const selectIsForgotPswrdEmailSent = (rootState: RootState) =>
   rootState.auth.userForgotPswrdEmailSent;
 export const selectIsResetPasswordReqSent = (rootState: RootState) =>
   rootState.auth.userIsPasswordReset;
-
 export default authSlice.reducer;

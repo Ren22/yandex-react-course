@@ -13,6 +13,7 @@ import {
   registerUserReducer,
   selectIsUserRegistered,
 } from "../../redux/slices/auth";
+import { getUserDataReducer } from "../../redux/slices/user";
 
 export const RegistraionPage = () => {
   const [name, setName] = useState("");
@@ -30,8 +31,8 @@ export const RegistraionPage = () => {
   }, [history, isUserRegistered]);
 
   const handleClick = async () => {
-    debugger;
     await dispatch(registerUserReducer({ email, password, name }));
+    await dispatch(getUserDataReducer());
   };
 
   return (
