@@ -59,6 +59,10 @@ const BurgerConstructor = () => {
       history.push({ pathname: `${ROUTES.LOGIN}` });
       return;
     }
+    if (totalSum === 0) {
+      alert("Nothing was selected!");
+      return;
+    }
     const ingredientIdsToSubmit = others?.map((it) => it._id);
     if (bun) {
       ingredientIdsToSubmit?.push(bun._id);

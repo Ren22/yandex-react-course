@@ -11,6 +11,7 @@ import { useAppDispatch } from "../../redux/store";
 import {
   forgotPasswordReducer,
   selectIsForgotPswrdEmailSent,
+  setIsEmailSentToDefault,
 } from "../../redux/slices/auth";
 import { useSelector } from "react-redux";
 import { getUserDataReducer, selectUser } from "../../redux/slices/user";
@@ -23,6 +24,7 @@ export const ForgotPasswordPage = () => {
   const user = useSelector(selectUser);
 
   useEffect(() => {
+    dispatch(setIsEmailSentToDefault());
     dispatch(getUserDataReducer());
   }, [dispatch]);
 
@@ -34,7 +36,7 @@ export const ForgotPasswordPage = () => {
 
   useEffect(() => {
     if (isForgotPswrdEmailSent) {
-      history.push({ pathname: `${ROUTES.RESETPWRD}` });
+      history.push(`${ROUTES.RESETPWRD}`, { from: `${ROUTES.FORGOTPWRD}` });
     }
   }, [history, isForgotPswrdEmailSent]);
 

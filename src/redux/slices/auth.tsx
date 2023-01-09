@@ -71,7 +71,14 @@ export const logoutUserReducer = createAsyncThunk("logout", async () => {
 const authSlice = createSlice({
   name: "auth",
   initialState,
-  reducers: {},
+  reducers: {
+    setIsEmailSentToDefault: (state) => {
+      state.userForgotPswrdEmailSent = false;
+    },
+    setIsResetPasswordReqSentToDefault: (state) => {
+      state.userIsPasswordReset = false;
+    },
+  },
   extraReducers: (builder) => {
     builder
       // user register
@@ -171,3 +178,6 @@ export const selectIsForgotPswrdEmailSent = (rootState: RootState) =>
 export const selectIsResetPasswordReqSent = (rootState: RootState) =>
   rootState.auth.userIsPasswordReset;
 export default authSlice.reducer;
+
+export const { setIsEmailSentToDefault, setIsResetPasswordReqSentToDefault } =
+  authSlice.actions;

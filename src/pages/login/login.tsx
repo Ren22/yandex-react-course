@@ -88,7 +88,7 @@ export const LoginPage = () => {
           <span className={loginPageStyle.text_grayed}>Забыли пароль? </span>
           <Link
             className={loginPageStyle.text_blued}
-            to={`${ROUTES.RESETPWRD}`}
+            to={`${ROUTES.FORGOTPWRD}`}
           >
             Восстановить пароль
           </Link>
