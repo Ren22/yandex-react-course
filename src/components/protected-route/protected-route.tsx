@@ -3,6 +3,7 @@ import { useSelector } from "react-redux";
 import { Redirect, Route } from "react-router-dom";
 import { getUserDataReducer, selectUser } from "../../redux/slices/user";
 import { useAppDispatch } from "../../redux/store";
+import { ROUTES } from "../app/app";
 import Header from "../header/header";
 import ProtectedRouteStyle from "./protected-route.module.css";
 
@@ -37,7 +38,9 @@ export const ProtectedRoute = ({
         ) : user ? (
           children
         ) : (
-          <Redirect to={{ pathname: "/login", state: { from: location } }} />
+          <Redirect
+            to={{ pathname: `${ROUTES.LOGIN}`, state: { from: location } }}
+          />
         )
       }
     />

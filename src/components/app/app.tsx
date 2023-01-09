@@ -10,6 +10,7 @@ import {
 import { ProfileOrder } from "../../pages/profile-order/profile-order";
 import { PROFILE_TABS } from "../../pages/profile/profile";
 import { ResetPasswordPage } from "../../pages/reset-password/reset-password";
+import IngredientDetails from "../ingredient-details/ingredient-details";
 import { ProtectedRoute } from "../protected-route/protected-route";
 
 export interface TotalSum {
@@ -24,6 +25,7 @@ export enum ROUTES {
   RESETPWRD = "/reset-password",
   PROFILE = "/profile",
   ORDERS = "/orders",
+  INGREDIENTS = "/ingredients",
 }
 
 const App = () => {
@@ -61,6 +63,9 @@ const App = () => {
           >
             <ProfileOrder />
           </ProtectedRoute>
+          <Route path={`${ROUTES.INGREDIENTS}/:id`}>
+            <IngredientDetails />
+          </Route>
         </Switch>
       </Router>
     </>
