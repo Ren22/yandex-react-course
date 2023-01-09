@@ -10,6 +10,7 @@ interface Props {
   setPassword: (s: string) => void;
   name: string;
   setName: (s: string) => void;
+  setDataIsChanged: (b: boolean) => void;
 }
 
 export const ProfileInputs = ({
@@ -19,6 +20,7 @@ export const ProfileInputs = ({
   setLogin,
   password,
   setPassword,
+  setDataIsChanged,
 }: Props) => {
   const [isNameInputActive, setIsNameInputActive] = useState(false);
   const [isLoginInputActive, setIsLoginInputActive] = useState(false);
@@ -42,7 +44,10 @@ export const ProfileInputs = ({
         disabled={isNameInputActive ? false : true}
         type={"text"}
         placeholder={"Name"}
-        onChange={(e) => setName(e.target.value)}
+        onChange={(e) => {
+          setName(e.target.value);
+          setDataIsChanged(true);
+        }}
         value={name}
         icon={"EditIcon"}
         onIconClick={() => setIsNameInputActive(!isNameInputActive)}
@@ -56,7 +61,10 @@ export const ProfileInputs = ({
         disabled={isLoginInputActive ? false : true}
         type={"text"}
         placeholder={"Login"}
-        onChange={(e) => setLogin(e.target.value)}
+        onChange={(e) => {
+          setLogin(e.target.value);
+          setDataIsChanged(true);
+        }}
         value={login}
         icon={"EditIcon"}
         onIconClick={() => setIsLoginInputActive(!isLoginInputActive)}
@@ -70,7 +78,10 @@ export const ProfileInputs = ({
         disabled={isPasswordInputActive ? false : true}
         type={"password"}
         placeholder={"Password"}
-        onChange={(e) => setPassword(e.target.value)}
+        onChange={(e) => {
+          setPassword(e.target.value);
+          setDataIsChanged(true);
+        }}
         value={password}
         icon={"EditIcon"}
         onIconClick={() => setIsPasswordInputActive(!isPasswordInputActive)}

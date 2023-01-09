@@ -1,4 +1,4 @@
-import React, { useMemo } from "react";
+import React, { useEffect, useMemo } from "react";
 import {
   ConstructorElement,
   CurrencyIcon,
@@ -22,11 +22,15 @@ import { useAppDispatch } from "../../redux/store";
 import { useDrop } from "react-dnd";
 import { IngredientDetailsType } from "../../utils/types";
 import DraggbleItem from "./draggable-item/draggable-item";
+import { selectUser, getUserDataReducer } from "../../redux/slices/user";
+import { ROUTES } from "../app/app";
+import { useHistory } from "react-router-dom";
 
 const BurgerConstructor = () => {
   const { orderId } = useSelector(selectOrderState);
   const { bun, others } = useSelector(selectSelectedIngredients);
   const isIngredientDragged = useSelector(selectIsIngredientDragged);
+  const history = useHistory();
 
   const dispatch = useAppDispatch();
 
@@ -37,6 +41,12 @@ const BurgerConstructor = () => {
     },
   });
 
+  const user = useSelector(selectUser);
+
+  useEffect(() => {
+    dispatch(getUserDataReducer());
+  }, [dispatch]);
+
   const totalSum = useMemo(
     () =>
       (bun ? bun.price * 2 : 0) +
@@ -45,6 +55,10 @@ const BurgerConstructor = () => {
   );
 
   const handleOpenModal = async () => {
+    if (!user) {
+      history.push({ pathname: `${ROUTES.LOGIN}` });
+      return;
+    }
     const ingredientIdsToSubmit = others?.map((it) => it._id);
     if (bun) {
       ingredientIdsToSubmit?.push(bun._id);

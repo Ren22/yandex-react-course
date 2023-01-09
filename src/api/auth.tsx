@@ -61,7 +61,7 @@ export function forgotPassword(email: string) {
 }
 
 export function resetPassword({ password, token }: ResetPasswordInput) {
-  return request(`${BASE_URL}/password-reset`, {
+  return request(`${BASE_URL}/password-reset/reset`, {
     method: "POST",
     body: JSON.stringify({
       password,
@@ -124,7 +124,7 @@ export async function refreshAccessToken(refreshToken: string | null) {
   return request(`${BASE_URL}/auth/token`, {
     method: "POST",
     body: JSON.stringify({
-      refreshToken,
+      token: refreshToken,
     }),
     headers: {
       "Content-Type": "application/json",

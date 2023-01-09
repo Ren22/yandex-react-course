@@ -9,28 +9,48 @@ import { Link, useHistory } from "react-router-dom";
 import { ROUTES } from "../../components/app/app";
 import {
   resetPasswordReducer,
+  selectIsForgotPswrdEmailSent,
   selectIsResetPasswordReqSent,
 } from "../../redux/slices/auth";
 import { useAppDispatch } from "../../redux/store";
 import { useSelector } from "react-redux";
+import { getUserDataReducer, selectUser } from "../../redux/slices/user";
 
 export const ResetPasswordPage = () => {
   const [password, setPassword] = useState("");
   const [token, setToken] = useState("");
   const [isPasswordShown, setIsPasswordShown] = useState(false);
   const dispatch = useAppDispatch();
-  const isResetPasswrod = useSelector(selectIsResetPasswordReqSent);
+  const isResetPassword = useSelector(selectIsResetPasswordReqSent);
+  const isForgotPswrdEmailSent = useSelector(selectIsForgotPswrdEmailSent);
   const history = useHistory();
 
   const handleClick = async () => {
     await dispatch(resetPasswordReducer({ password, token }));
   };
+  const user = useSelector(selectUser);
 
   useEffect(() => {
-    if (isResetPasswrod) {
+    dispatch(getUserDataReducer());
+  }, [dispatch]);
+
+  useEffect(() => {
+    if (user) {
+      history.push({ pathname: `${ROUTES.MAIN}` });
+    }
+  }, [history, user]);
+
+  useEffect(() => {
+    if (isResetPassword) {
       history.push({ pathname: `${ROUTES.LOGIN}` });
     }
-  }, [history, isResetPasswrod]);
+  }, [history, isResetPassword]);
+
+  useEffect(() => {
+    if (!user && !isForgotPswrdEmailSent) {
+      history.push({ pathname: `${ROUTES.FORGOTPWRD}` });
+    }
+  }, [history, isForgotPswrdEmailSent, user]);
 
   return (
     <>

@@ -1,5 +1,5 @@
 import { Button } from "@ya.praktikum/react-developer-burger-ui-components";
-import React, { useEffect, useState } from "react";
+import React, { useCallback, useEffect, useState } from "react";
 import { useSelector } from "react-redux";
 import { Link, useHistory } from "react-router-dom";
 import { ROUTES } from "../../components/app/app";
@@ -19,7 +19,6 @@ import profilePageStyle from "./profile.module.css";
 export enum PROFILE_TABS {
   PROFILE = "PROFILE",
   ORDERS = "ORDERS",
-  LOGOUT = "LOGOUT",
 }
 
 type Props = {
@@ -36,27 +35,43 @@ export const ProfilePage = ({ activeTab }: Props) => {
   }, [dispatch]);
   const user = useSelector(selectUserData);
   const history = useHistory();
+  const [dataIsChanged, setDataIsChanged] = useState(false);
 
-  useEffect(() => {
+  const setInitialState = useCallback(() => {
     if (user && user.name && user.email) {
       setName(user.name);
       setLogin(user.email);
+      setPassword("");
+      setDataIsChanged(false);
     }
   }, [user]);
 
+  useEffect(() => {
+    setInitialState();
+  }, [setInitialState]);
+
   const setNewUserData = () => {
-    dispatch(
-      setUserDataReducer({
-        name,
-        email: login,
-        password,
-      })
+    if (dataIsChanged) {
+      dispatch(
+        setUserDataReducer({
+          name,
+          email: login,
+          password,
+        })
+      );
+    } else {
+      alert("Data was not changed!");
+    }
+  };
+
+  const handleLogout = () => {
+    dispatch(logoutUserReducer()).then(() =>
+      history.push({ pathname: `${ROUTES.LOGIN}` })
     );
   };
 
-  const handleLogout = async () => {
-    await dispatch(logoutUserReducer());
-    history.push({ pathname: `${ROUTES.MAIN}` });
+  const cancelNewData = () => {
+    setInitialState();
   };
 
   return (
@@ -74,7 +89,6 @@ export const ProfilePage = ({ activeTab }: Props) => {
             >
               <Link to={`${ROUTES.PROFILE}`}>Профиль</Link>
             </p>
-
             <p
               className={`${
                 profilePageStyle.main__column1__text
@@ -102,6 +116,7 @@ export const ProfilePage = ({ activeTab }: Props) => {
                 setLogin={setLogin}
                 password={password}
                 setPassword={setPassword}
+                setDataIsChanged={setDataIsChanged}
               />
             ) : (
               <ProfileOrders />
@@ -112,6 +127,14 @@ export const ProfilePage = ({ activeTab }: Props) => {
           <span className={"text text_type_main-small text_color_inactive"}>
             В этом разделе вы можете изменить свои персональные данные
           </span>
+          <Button
+            onClick={cancelNewData}
+            htmlType="button"
+            type="secondary"
+            size="medium"
+          >
+            Отменить
+          </Button>
           <Button
             onClick={setNewUserData}
             htmlType="button"

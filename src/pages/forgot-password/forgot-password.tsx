@@ -13,22 +13,34 @@ import {
   selectIsForgotPswrdEmailSent,
 } from "../../redux/slices/auth";
 import { useSelector } from "react-redux";
+import { getUserDataReducer, selectUser } from "../../redux/slices/user";
 
 export const ForgotPasswordPage = () => {
   const [email, setEmail] = useState("");
   const history = useHistory();
   const dispatch = useAppDispatch();
   const isForgotPswrdEmailSent = useSelector(selectIsForgotPswrdEmailSent);
+  const user = useSelector(selectUser);
 
-  const handleClick = async () => {
-    await dispatch(forgotPasswordReducer(email));
-  };
+  useEffect(() => {
+    dispatch(getUserDataReducer());
+  }, [dispatch]);
+
+  useEffect(() => {
+    if (user) {
+      history.push({ pathname: `${ROUTES.MAIN}` });
+    }
+  }, [history, user]);
 
   useEffect(() => {
     if (isForgotPswrdEmailSent) {
       history.push({ pathname: `${ROUTES.RESETPWRD}` });
     }
   }, [history, isForgotPswrdEmailSent]);
+
+  const handleClick = () => {
+    dispatch(forgotPasswordReducer(email));
+  };
 
   return (
     <>

@@ -13,7 +13,7 @@ import {
   registerUserReducer,
   selectIsUserRegistered,
 } from "../../redux/slices/auth";
-import { getUserDataReducer } from "../../redux/slices/user";
+import { getUserDataReducer, selectUser } from "../../redux/slices/user";
 
 export const RegistraionPage = () => {
   const [name, setName] = useState("");
@@ -23,16 +23,20 @@ export const RegistraionPage = () => {
   const history = useHistory();
   const dispatch = useAppDispatch();
   const isUserRegistered = useSelector(selectIsUserRegistered);
+  const user = useSelector(selectUser);
 
   useEffect(() => {
-    if (isUserRegistered) {
+    dispatch(getUserDataReducer());
+  }, [dispatch]);
+
+  useEffect(() => {
+    if (user || isUserRegistered) {
       history.push({ pathname: `${ROUTES.MAIN}` });
     }
-  }, [history, isUserRegistered]);
+  }, [history, user, isUserRegistered]);
 
-  const handleClick = async () => {
-    await dispatch(registerUserReducer({ email, password, name }));
-    await dispatch(getUserDataReducer());
+  const handleClick = () => {
+    dispatch(registerUserReducer({ email, password, name }));
   };
 
   return (

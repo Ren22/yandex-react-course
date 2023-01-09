@@ -12,8 +12,8 @@ import {
   loginUserReducer,
   selectIsUserLoggedIn,
 } from "../../redux/slices/auth";
+import { getUserDataReducer, selectUser } from "../../redux/slices/user";
 import { useSelector } from "react-redux";
-import { getUserDataReducer } from "../../redux/slices/user";
 
 export const LoginPage = () => {
   const [email, setEmail] = useState("");
@@ -21,18 +21,23 @@ export const LoginPage = () => {
   const [isPasswordShown, setIsPasswordShown] = useState(false);
   const history = useHistory();
   const dispatch = useAppDispatch();
-  const isUserLoggedIn = useSelector(selectIsUserLoggedIn);
+  const user = useSelector(selectUser);
+  const userIsLoggedIn = useSelector(selectIsUserLoggedIn);
 
   useEffect(() => {
-    if (isUserLoggedIn) {
+    dispatch(getUserDataReducer());
+  }, [dispatch]);
+
+  useEffect(() => {
+    if (user || userIsLoggedIn) {
       history.push({ pathname: `${ROUTES.MAIN}` });
     }
-  }, [history, isUserLoggedIn]);
+  }, [history, user, userIsLoggedIn]);
 
   const handleClick = async () => {
-    await dispatch(loginUserReducer({ email, password }));
-    await dispatch(getUserDataReducer());
+    dispatch(loginUserReducer({ email, password }));
   };
+
   return (
     <>
       <Header />
@@ -83,9 +88,9 @@ export const LoginPage = () => {
           <span className={loginPageStyle.text_grayed}>Забыли пароль? </span>
           <Link
             className={loginPageStyle.text_blued}
-            to={`${ROUTES.FORGOTPWRD}`}
+            to={`${ROUTES.RESETPWRD}`}
           >
-            Восстановть пароль
+            Восстановить пароль
           </Link>
         </p>
       </main>

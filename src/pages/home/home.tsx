@@ -10,13 +10,13 @@ import homePageStyle from "./home.module.css";
 export const HomePage = () => {
   return (
     <>
-      <DndProvider backend={HTML5Backend}>
-        <Header />
-        <main className={homePageStyle.main}>
+      <Header />
+      <main className={homePageStyle.main}>
+        <DndProvider backend={HTML5Backend}>
           <BurgerIngredients />
           <BurgerConstructor />
-        </main>
-      </DndProvider>
+        </DndProvider>
+      </main>
     </>
   );
 };
