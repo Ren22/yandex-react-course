@@ -1,4 +1,4 @@
-import React, { useCallback, useEffect, useState } from "react";
+import React, { useCallback, useEffect, useRef, useState } from "react";
 import { Input } from "@ya.praktikum/react-developer-burger-ui-components";
 import { useSelector } from "react-redux";
 import { selectUserData } from "../../redux/slices/user";
@@ -22,6 +22,9 @@ export const ProfileInputs = ({
   setPassword,
   setDataIsChanged,
 }: Props) => {
+  const nameInputRef = useRef<HTMLInputElement>(null);
+  const loginInputRef = useRef<HTMLInputElement>(null);
+  const passwordInputRef = useRef<HTMLInputElement>(null);
   const [isNameInputActive, setIsNameInputActive] = useState(false);
   const [isLoginInputActive, setIsLoginInputActive] = useState(false);
   const [isPasswordInputActive, setIsPasswordInputActive] = useState(false);
@@ -41,6 +44,7 @@ export const ProfileInputs = ({
   return (
     <>
       <Input
+        ref={nameInputRef}
         disabled={isNameInputActive ? false : true}
         type={"text"}
         placeholder={"Name"}
@@ -50,7 +54,16 @@ export const ProfileInputs = ({
         }}
         value={name}
         icon={"EditIcon"}
-        onIconClick={() => setIsNameInputActive(!isNameInputActive)}
+        onIconClick={() => {
+          setIsNameInputActive(!isNameInputActive);
+          setTimeout(
+            () =>
+              nameInputRef &&
+              nameInputRef.current &&
+              nameInputRef.current.focus(),
+            0
+          );
+        }}
         name={"name"}
         error={false}
         errorText={"Ошибка"}
@@ -58,6 +71,7 @@ export const ProfileInputs = ({
         extraClass="ml-1"
       />
       <Input
+        ref={loginInputRef}
         disabled={isLoginInputActive ? false : true}
         type={"text"}
         placeholder={"Login"}
@@ -67,7 +81,16 @@ export const ProfileInputs = ({
         }}
         value={login}
         icon={"EditIcon"}
-        onIconClick={() => setIsLoginInputActive(!isLoginInputActive)}
+        onIconClick={() => {
+          setIsLoginInputActive(!isLoginInputActive);
+          setTimeout(
+            () =>
+              loginInputRef &&
+              loginInputRef.current &&
+              loginInputRef.current.focus(),
+            0
+          );
+        }}
         name={"name"}
         error={false}
         errorText={"Ошибка"}
@@ -75,6 +98,7 @@ export const ProfileInputs = ({
         extraClass="ml-1 mt-6"
       />
       <Input
+        ref={passwordInputRef}
         disabled={isPasswordInputActive ? false : true}
         type={"password"}
         placeholder={"Password"}
@@ -84,7 +108,16 @@ export const ProfileInputs = ({
         }}
         value={password}
         icon={"EditIcon"}
-        onIconClick={() => setIsPasswordInputActive(!isPasswordInputActive)}
+        onIconClick={() => {
+          setIsPasswordInputActive(!isPasswordInputActive);
+          setTimeout(
+            () =>
+              passwordInputRef &&
+              passwordInputRef.current &&
+              passwordInputRef.current.focus(),
+            0
+          );
+        }}
         error={false}
         name={"password"}
         errorText={"Ошибка"}

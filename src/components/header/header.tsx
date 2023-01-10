@@ -6,11 +6,11 @@ import {
   ListIcon,
   ProfileIcon,
 } from "@ya.praktikum/react-developer-burger-ui-components";
-import { Link, useRouteMatch } from "react-router-dom";
+import { Link, useLocation } from "react-router-dom";
 import { ROUTES } from "../app/app";
 
 const Header = () => {
-  const { path } = useRouteMatch();
+  const location = useLocation();
 
   return (
     <section className={headerStyles.headerWrapper}>
@@ -19,10 +19,16 @@ const Header = () => {
           <Link to={ROUTES.MAIN}>
             <div
               className={`${headerStyles.header__item}
-            ${path === ROUTES.MAIN ? headerStyles.header__item_active : null} `}
+            ${
+              location.pathname === ROUTES.MAIN
+                ? headerStyles.header__item_active
+                : null
+            } `}
             >
               <BurgerIcon
-                type={path === ROUTES.MAIN ? "primary" : "secondary"}
+                type={
+                  location.pathname === ROUTES.MAIN ? "primary" : "secondary"
+                }
               />
               <span className="text text_type_main-default p-2 mr-2">
                 Конструктор
@@ -33,11 +39,15 @@ const Header = () => {
             <div
               className={`${headerStyles.header__item}
             ${
-              path === ROUTES.ORDERS ? headerStyles.header__item_active : null
+              location.pathname === ROUTES.ORDERS
+                ? headerStyles.header__item_active
+                : null
             } `}
             >
               <ListIcon
-                type={path === ROUTES.ORDERS ? "primary" : "secondary"}
+                type={
+                  location.pathname === ROUTES.ORDERS ? "primary" : "secondary"
+                }
               />
               <span className="text text_type_main-default p-2">
                 Лента заказов
@@ -55,13 +65,17 @@ const Header = () => {
             <div
               className={`${headerStyles.header__item}
             ${
-              path.includes(ROUTES.PROFILE)
+              location.pathname.includes(ROUTES.PROFILE)
                 ? headerStyles.header__item_active
                 : ""
             } `}
             >
               <ProfileIcon
-                type={path.includes(ROUTES.PROFILE) ? "primary" : "secondary"}
+                type={
+                  location.pathname.includes(ROUTES.PROFILE)
+                    ? "primary"
+                    : "secondary"
+                }
               />
               <span className="text text_type_main-default p-2">
                 Личный кабинет

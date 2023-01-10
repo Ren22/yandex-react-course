@@ -4,7 +4,6 @@ import { Redirect, Route } from "react-router-dom";
 import { getUserDataReducer, selectUser } from "../../redux/slices/user";
 import { useAppDispatch } from "../../redux/store";
 import { ROUTES } from "../app/app";
-import Header from "../header/header";
 import ProtectedRouteStyle from "./protected-route.module.css";
 
 export const ProtectedRoute = ({
@@ -32,7 +31,6 @@ export const ProtectedRoute = ({
       render={({ location }) =>
         !userIsLoaded ? (
           <>
-            <Header />
             <p className={`${ProtectedRouteStyle.loadingMsg}`}>Loading...</p>
           </>
         ) : user ? (

@@ -15,27 +15,44 @@
   color: unset;
 }
 
-.main__column1 {
+.main__columnLeft {
   display: flex;
   flex-direction: column;
   justify-content: top;
   width: 320px;
 }
 
-.main__column1__text {
+.main__columnLeft__text {
   line-height: 4rem;
   cursor: pointer;
 }
 
-.main__column2 {
+.main__columnRight {
   display: flex;
   flex-direction: column;
 }
 
-.main__footer {
+.footer {
   display: flex;
   flex-direction: row;
   justify-content: space-between;
   align-items: center;
-  width: 50vw;
+}
+
+.footer__spacer {
+  flex-grow: 1;
+}
+
+.footer__btns_hidden {
+  display: none;
+}
+
+.footer__btns {
+  display: block;
+}
+
+.footer__btnsWrapper {
+  display: flex;
+  flex-direction: row;
+  justify-content: flex-end;
 }

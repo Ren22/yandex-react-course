@@ -65,6 +65,7 @@ const BurgerConstructor = () => {
     }
     const ingredientIdsToSubmit = others?.map((it) => it._id);
     if (bun) {
+      ingredientIdsToSubmit?.unshift(bun._id);
       ingredientIdsToSubmit?.push(bun._id);
     }
     if (ingredientIdsToSubmit) {

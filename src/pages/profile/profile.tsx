@@ -1,9 +1,8 @@
 import { Button } from "@ya.praktikum/react-developer-burger-ui-components";
-import React, { useCallback, useEffect, useState } from "react";
+import React, { SyntheticEvent, useCallback, useEffect, useState } from "react";
 import { useSelector } from "react-redux";
 import { Link, useHistory } from "react-router-dom";
 import { ROUTES } from "../../components/app/app";
-import Header from "../../components/header/header";
 import { ProfileInputs } from "../../components/profile-inputs/profile-inputs";
 import { ProfileOrders } from "../../components/profile-orders/profile-orders";
 import { logoutUserReducer } from "../../redux/slices/auth";
@@ -50,7 +49,8 @@ export const ProfilePage = ({ activeTab }: Props) => {
     setInitialState();
   }, [setInitialState]);
 
-  const setNewUserData = () => {
+  const handleSubmit = (e: SyntheticEvent) => {
+    e.preventDefault();
     if (dataIsChanged) {
       dispatch(
         setUserDataReducer({
@@ -76,13 +76,12 @@ export const ProfilePage = ({ activeTab }: Props) => {
 
   return (
     <>
-      <Header />
-      <main className={profilePageStyle.main}>
+      <form className={profilePageStyle.main} onSubmit={handleSubmit}>
         <div className={profilePageStyle.main__columnsWrapper}>
-          <div className={profilePageStyle.main__column1}>
+          <div className={profilePageStyle.main__columnLeft}>
             <p
               className={`${
-                profilePageStyle.main__column1__text
+                profilePageStyle.main__columnLeft__text
               } text text_type_main-medium ${
                 activeTab === PROFILE_TABS.PROFILE ? "" : "text_color_inactive"
               }`}
@@ -91,7 +90,7 @@ export const ProfilePage = ({ activeTab }: Props) => {
             </p>
             <p
               className={`${
-                profilePageStyle.main__column1__text
+                profilePageStyle.main__columnLeft__text
               } text text_type_main-medium ${
                 activeTab === PROFILE_TABS.ORDERS ? "" : "text_color_inactive"
               }`}
@@ -102,49 +101,58 @@ export const ProfilePage = ({ activeTab }: Props) => {
             </p>
             <p
               onClick={handleLogout}
-              className={`${profilePageStyle.main__column1__text} text text_type_main-medium text_color_inactive`}
+              className={`${profilePageStyle.main__columnLeft__text} text text_type_main-medium text_color_inactive`}
             >
               Выход
             </p>
+            {activeTab === PROFILE_TABS.PROFILE && (
+              <span
+                className={`text text_type_main-small text_color_inactive mt-30`}
+              >
+                В этом разделе вы можете изменить свои персональные данные
+              </span>
+            )}
           </div>
-          <div className={profilePageStyle.main__column2}>
+          <div className={profilePageStyle.main__columnRight}>
             {activeTab === PROFILE_TABS.PROFILE ? (
-              <ProfileInputs
-                name={name}
-                setName={setName}
-                login={login}
-                setLogin={setLogin}
-                password={password}
-                setPassword={setPassword}
-                setDataIsChanged={setDataIsChanged}
-              />
+              <>
+                <ProfileInputs
+                  name={name}
+                  setName={setName}
+                  login={login}
+                  setLogin={setLogin}
+                  password={password}
+                  setPassword={setPassword}
+                  setDataIsChanged={setDataIsChanged}
+                />
+                <div
+                  className={`mt-15 ${
+                    dataIsChanged
+                      ? `${profilePageStyle.footer__btns}`
+                      : `${profilePageStyle.footer__btns_hidden}`
+                  }`}
+                >
+                  <div className={`${profilePageStyle.footer__btnsWrapper}`}>
+                    <Button
+                      onClick={cancelNewData}
+                      htmlType="button"
+                      type="secondary"
+                      size="medium"
+                    >
+                      Отменить
+                    </Button>
+                    <Button htmlType="submit" type="primary" size="medium">
+                      Сохранить
+                    </Button>
+                  </div>
+                </div>
+              </>
             ) : (
               <ProfileOrders />
             )}
           </div>
         </div>
-        <div className={`${profilePageStyle.main__footer} mt-10`}>
-          <span className={"text text_type_main-small text_color_inactive"}>
-            В этом разделе вы можете изменить свои персональные данные
-          </span>
-          <Button
-            onClick={cancelNewData}
-            htmlType="button"
-            type="secondary"
-            size="medium"
-          >
-            Отменить
-          </Button>
-          <Button
-            onClick={setNewUserData}
-            htmlType="button"
-            type="primary"
-            size="medium"
-          >
-            Сохранить
-          </Button>
-        </div>
-      </main>
+      </form>
     </>
   );
 };

@@ -2,10 +2,9 @@ import {
   Button,
   Input,
 } from "@ya.praktikum/react-developer-burger-ui-components";
-import React, { useEffect, useState } from "react";
+import React, { SyntheticEvent, useEffect, useState } from "react";
 import loginPageStyle from "./login.module.css";
 import { Link, useHistory } from "react-router-dom";
-import Header from "../../components/header/header";
 import { ROUTES } from "../../components/app/app";
 import { useAppDispatch } from "../../redux/store";
 import {
@@ -30,18 +29,24 @@ export const LoginPage = () => {
 
   useEffect(() => {
     if (user || userIsLoggedIn) {
-      history.push({ pathname: `${ROUTES.MAIN}` });
+      const nextPath = history.location.state
+        ? (history.location.state as { from: { pathname: string } }).from
+            .pathname
+        : `${ROUTES.MAIN}`;
+      history.push({
+        pathname: nextPath,
+      });
     }
   }, [history, user, userIsLoggedIn]);
 
-  const handleClick = async () => {
+  const handleSubmit = async (e: SyntheticEvent) => {
+    e.preventDefault();
     dispatch(loginUserReducer({ email, password }));
   };
 
   return (
     <>
-      <Header />
-      <main className={loginPageStyle.main}>
+      <form className={loginPageStyle.main} onSubmit={handleSubmit}>
         <p className="text text_type_main-medium">Вход</p>
         <Input
           type={"email"}
@@ -69,10 +74,9 @@ export const LoginPage = () => {
         />
         <Button
           extraClass={"mt-6 mb-20"}
-          htmlType="button"
+          htmlType="submit"
           type="primary"
           size="medium"
-          onClick={handleClick}
         >
           Войти
         </Button>
@@ -93,7 +97,7 @@ export const LoginPage = () => {
             Восстановить пароль
           </Link>
         </p>
-      </main>
+      </form>
     </>
   );
 };

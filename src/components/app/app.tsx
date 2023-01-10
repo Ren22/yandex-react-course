@@ -10,6 +10,7 @@ import {
 import { ProfileOrder } from "../../pages/profile-order/profile-order";
 import { PROFILE_TABS } from "../../pages/profile/profile";
 import { ResetPasswordPage } from "../../pages/reset-password/reset-password";
+import Header from "../header/header";
 import IngredientDetails from "../ingredient-details/ingredient-details";
 import { ProtectedRoute } from "../protected-route/protected-route";
 
@@ -32,6 +33,7 @@ const App = () => {
   return (
     <>
       <Router>
+        <Header />
         <Switch>
           <Route path={`${ROUTES.MAIN}`} exact={true}>
             <HomePage />

@@ -2,7 +2,7 @@ import {
   Input,
   Button,
 } from "@ya.praktikum/react-developer-burger-ui-components";
-import React, { useEffect, useState } from "react";
+import React, { SyntheticEvent, useEffect, useState } from "react";
 import Header from "../../components/header/header";
 import resetPasswordStyle from "./reset-password.module.css";
 import { Link, useHistory } from "react-router-dom";
@@ -26,7 +26,8 @@ export const ResetPasswordPage = () => {
   const isForgotPswrdEmailSent = useSelector(selectIsForgotPswrdEmailSent);
   const history = useHistory();
 
-  const handleClick = async () => {
+  const handleSumbit = async (e: SyntheticEvent) => {
+    e.preventDefault();
     await dispatch(resetPasswordReducer({ password, token }));
   };
   const user = useSelector(selectUser);
@@ -61,7 +62,7 @@ export const ResetPasswordPage = () => {
   return (
     <>
       <Header />
-      <main className={resetPasswordStyle.main}>
+      <form className={resetPasswordStyle.main} onSubmit={handleSumbit}>
         <p className="text text_type_main-medium">Восстановление пароля</p>
         <Input
           type={isPasswordShown ? "text" : "password"}
@@ -89,10 +90,9 @@ export const ResetPasswordPage = () => {
         />
         <Button
           extraClass={"mt-6 mb-20"}
-          htmlType="button"
+          htmlType="submit"
           type="primary"
           size="medium"
-          onClick={handleClick}
         >
           Сохранить
         </Button>
@@ -107,7 +107,7 @@ export const ResetPasswordPage = () => {
             Войти
           </Link>
         </p>
-      </main>
+      </form>
     </>
   );
 };

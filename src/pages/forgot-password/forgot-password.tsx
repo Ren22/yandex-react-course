@@ -2,8 +2,7 @@ import {
   Input,
   Button,
 } from "@ya.praktikum/react-developer-burger-ui-components";
-import React, { useEffect, useState } from "react";
-import Header from "../../components/header/header";
+import React, { SyntheticEvent, useEffect, useState } from "react";
 import forgotPasswordStyle from "./forgot-password.module.css";
 import { Link, useHistory } from "react-router-dom";
 import { ROUTES } from "../../components/app/app";
@@ -40,14 +39,19 @@ export const ForgotPasswordPage = () => {
     }
   }, [history, isForgotPswrdEmailSent]);
 
-  const handleClick = () => {
+  const handleSubmit = (e: SyntheticEvent) => {
+    e.preventDefault();
+    if (!email) {
+      // todo validate email with regex
+      alert("Please enter your email!");
+      return;
+    }
     dispatch(forgotPasswordReducer(email));
   };
 
   return (
     <>
-      <Header />
-      <main className={forgotPasswordStyle.main}>
+      <form className={forgotPasswordStyle.main} onSubmit={handleSubmit}>
         <p className="text text_type_main-medium">Восстановление пароля</p>
         <Input
           type={"email"}
@@ -62,10 +66,9 @@ export const ForgotPasswordPage = () => {
         />
         <Button
           extraClass={"mt-6 mb-20"}
-          htmlType="button"
+          htmlType="submit"
           type="primary"
           size="medium"
-          onClick={handleClick}
         >
           Восстановить
         </Button>
@@ -80,7 +83,7 @@ export const ForgotPasswordPage = () => {
             Войти
           </Link>
         </p>
-      </main>
+      </form>
     </>
   );
 };

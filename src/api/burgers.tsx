@@ -1,4 +1,5 @@
 import { BASE_URL } from ".";
+import { getCookie } from "../utils/cookieHandler";
 import { request } from "../utils/request";
 import { IngredientDetailsType } from "../utils/types";
 
@@ -16,6 +17,7 @@ export function submitOrder(ingredientIds: string[]) {
     }),
     headers: {
       "Content-Type": "application/json",
+      Authorization: "Bearer" + getCookie("accessToken"),
     },
   }).then((data) => {
     return data.order.number;

@@ -2,10 +2,9 @@ import {
   Button,
   Input,
 } from "@ya.praktikum/react-developer-burger-ui-components";
-import React, { useEffect, useState } from "react";
+import React, { SyntheticEvent, useEffect, useState } from "react";
 import registrationPageStyle from "./registration.module.css";
 import { Link, useHistory } from "react-router-dom";
-import Header from "../../components/header/header";
 import { ROUTES } from "../../components/app/app";
 import { useAppDispatch } from "../../redux/store";
 import { useSelector } from "react-redux";
@@ -35,14 +34,14 @@ export const RegistraionPage = () => {
     }
   }, [history, user, isUserRegistered]);
 
-  const handleClick = () => {
+  const handleSubmit = (e: SyntheticEvent) => {
+    e.preventDefault();
     dispatch(registerUserReducer({ email, password, name }));
   };
 
   return (
     <>
-      <Header />
-      <main className={registrationPageStyle.main}>
+      <form className={registrationPageStyle.main} onSubmit={handleSubmit}>
         <p className="text text_type_main-medium">Регистрация</p>
         <Input
           type={"text"}
@@ -80,12 +79,7 @@ export const RegistraionPage = () => {
           extraClass="ml-1 mt-6"
         />
         <div className={"mt-6 mb-20"}>
-          <Button
-            onClick={handleClick}
-            htmlType="button"
-            type="primary"
-            size="medium"
-          >
+          <Button htmlType="submit" type="primary" size="medium">
             Зарегистрироваться
           </Button>
         </div>
@@ -100,7 +94,7 @@ export const RegistraionPage = () => {
             Войти
           </Link>
         </p>
-      </main>
+      </form>
     </>
   );
 };
