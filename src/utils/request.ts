@@ -1,4 +1,4 @@
-import { checkResponse } from "./checkResponse";
+import { checkResponse } from "./responseHandlers";
 import { GenericObject } from "./types";
 
 export function request(url: string, options?: GenericObject) {

@@ -1,3 +1,10 @@
+html,
+body,
+#root,
+#root > div {
+  height: 100%;
+}
+
 body {
   margin: 0;
   font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "Roboto", "Oxygen",
@@ -17,4 +24,9 @@ body {
 
 ::-webkit-scrollbar-thumb {
   background: #8585ad;
+}
+
+a {
+  text-decoration: none;
+  color: #8585ad;
 }

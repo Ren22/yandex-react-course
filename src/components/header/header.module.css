@@ -3,6 +3,14 @@
   display: flex;
   position: relative;
   align-items: center;
+  color: #fff;
+}
+
+.headerWrapper {
+  display: flex;
+  justify-content: center;
+  background-color: #1c1c21;
+  height: 4rem;
 }
 
 .spacing {
@@ -21,4 +29,20 @@
 
 .header__box:last-child > span {
   margin-left: auto;
+}
+
+.header__item {
+  cursor: pointer;
+  display: flex;
+  text-decoration: none;
+  align-items: center;
+}
+
+.header__item:hover {
+  text-decoration: underline;
+  opacity: 1;
+}
+
+.header__item_active {
+  color: #f2f2f3;
 }

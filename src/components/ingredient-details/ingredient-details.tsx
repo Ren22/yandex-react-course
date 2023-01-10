@@ -1,41 +1,76 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
+import { useSelector } from "react-redux";
+import { useHistory, useLocation, useRouteMatch } from "react-router-dom";
+import {
+  closeIngredientDetails,
+  selectIngredientsState,
+  loadAllIngredients,
+  pickIngredient,
+} from "../../redux/slices/ingredients";
+import { useAppDispatch } from "../../redux/store";
 import { IngredientDetailsType } from "../../utils/types";
+import Header from "../header/header";
+import Modal from "../modal/modal";
 import ingredientDetailsStyle from "./ingredient-details.module.css";
 
-interface Props {
-  ingredientDetails: IngredientDetailsType;
+interface MatchParams {
+  id: string;
 }
 
-const IngredientDetails = (props: Props) => {
-  const { image, name, fat, calories, proteins, carbohydrates } =
-    props.ingredientDetails;
+const IngredientDetails = () => {
+  const { params } = useRouteMatch<MatchParams>();
+  const { allIngredients } = useSelector(selectIngredientsState);
+  const dispatch = useAppDispatch();
+  const location = useLocation();
+  const history = useHistory();
+  const [pickedIngredient, setPickedIngredient] =
+    useState<IngredientDetailsType | null>(null);
 
+  useEffect(() => {
+    dispatch(loadAllIngredients());
+  }, [dispatch]);
+
+  useEffect(() => {
+    const ingredient = allIngredients.find((ing) => ing._id === params.id);
+    if (ingredient) {
+      setPickedIngredient(ingredient);
+      dispatch(pickIngredient(ingredient));
+    }
+  }, [params, allIngredients, dispatch]);
+
+  const handleCloseModal = () => {
+    dispatch(closeIngredientDetails());
+    history.goBack();
+  };
   const footerDetails = [
     {
       name: "Калории, ккал",
-      value: calories,
+      value: pickedIngredient?.calories,
     },
     {
       name: "Белки, г",
-      value: proteins,
+      value: pickedIngredient?.proteins,
     },
     {
       name: "Жиры, г",
-      value: fat,
+      value: pickedIngredient?.fat,
     },
     {
       name: "Углеводы, г",
-      value: carbohydrates,
+      value: pickedIngredient?.carbohydrates,
     },
   ];
-  return (
+
+  const commonPart = () => (
     <div className={ingredientDetailsStyle.main}>
       <img
         className={ingredientDetailsStyle.main__image}
-        alt={name}
-        src={image}
+        alt={pickedIngredient?.name}
+        src={pickedIngredient?.image}
       />
-      <span className="text text_type_main-medium mt-4 mb-8">{name}</span>
+      <span className="text text_type_main-medium mt-4 mb-8">
+        {pickedIngredient?.name}
+      </span>
       <section
         className={`${ingredientDetailsStyle.footer} text text_type_main-default text_color_inactive mb-15`}
       >
@@ -52,6 +87,18 @@ const IngredientDetails = (props: Props) => {
         })}
       </section>
     </div>
+  );
+
+  return (location.state as { prevPath: string })?.prevPath === "/" ? (
+    // user came from internal link
+    <Modal header="Детали ингредиента" closeModal={handleCloseModal}>
+      {commonPart()}
+    </Modal>
+  ) : (
+    <>
+      <Header />
+      {commonPart()}
+    </>
   );
 };
 

@@ -1,35 +1,59 @@
-import React, { useState } from "react";
+import React from "react";
 import { Logo } from "@ya.praktikum/react-developer-burger-ui-components";
-import HeaderItem from "./components/header-item/header-item";
 import headerStyles from "./header.module.css";
 import {
   BurgerIcon,
   ListIcon,
   ProfileIcon,
 } from "@ya.praktikum/react-developer-burger-ui-components";
+import { Link, useLocation } from "react-router-dom";
+import { ROUTES } from "../app/app";
 
 const Header = () => {
-  const [current] = useState("constructor");
+  const location = useLocation();
+
   return (
-    <>
+    <section className={headerStyles.headerWrapper}>
       <header className={headerStyles.header}>
         <div className={headerStyles.header__box}>
-          <HeaderItem
-            active={current === "constructor"}
-            src="/constructor"
-            text="Конструктор"
-          >
-            <BurgerIcon
-              type={current === "constructor" ? "primary" : "secondary"}
-            />
-          </HeaderItem>
-          <HeaderItem
-            active={current === "orders"}
-            src="/orders"
-            text="Лента заказов"
-          >
-            <ListIcon type={current === "orders" ? "primary" : "secondary"} />
-          </HeaderItem>
+          <Link to={ROUTES.MAIN}>
+            <div
+              className={`${headerStyles.header__item}
+            ${
+              location.pathname === ROUTES.MAIN
+                ? headerStyles.header__item_active
+                : null
+            } `}
+            >
+              <BurgerIcon
+                type={
+                  location.pathname === ROUTES.MAIN ? "primary" : "secondary"
+                }
+              />
+              <span className="text text_type_main-default p-2 mr-2">
+                Конструктор
+              </span>
+            </div>
+          </Link>
+          <Link to={ROUTES.ORDERS}>
+            <div
+              className={`${headerStyles.header__item}
+            ${
+              location.pathname === ROUTES.ORDERS
+                ? headerStyles.header__item_active
+                : null
+            } `}
+            >
+              <ListIcon
+                type={
+                  location.pathname === ROUTES.ORDERS ? "primary" : "secondary"
+                }
+              />
+              <span className="text text_type_main-default p-2">
+                Лента заказов
+              </span>
+            </div>
+          </Link>
           <div className={headerStyles.spacing}></div>
         </div>
         <div className={headerStyles.header__box}>
@@ -37,18 +61,30 @@ const Header = () => {
         </div>
         <div className={headerStyles.header__box}>
           <div className={headerStyles.spacing}></div>
-          <HeaderItem
-            active={current === "profile"}
-            src="/proile"
-            text="Личный кабинет"
-          >
-            <ProfileIcon
-              type={current === "proile" ? "primary" : "secondary"}
-            />
-          </HeaderItem>
+          <Link to={ROUTES.PROFILE}>
+            <div
+              className={`${headerStyles.header__item}
+            ${
+              location.pathname.includes(ROUTES.PROFILE)
+                ? headerStyles.header__item_active
+                : ""
+            } `}
+            >
+              <ProfileIcon
+                type={
+                  location.pathname.includes(ROUTES.PROFILE)
+                    ? "primary"
+                    : "secondary"
+                }
+              />
+              <span className="text text_type_main-default p-2">
+                Личный кабинет
+              </span>
+            </div>
+          </Link>
         </div>
       </header>
-    </>
+    </section>
   );
 };
 
