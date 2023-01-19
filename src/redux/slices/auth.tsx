@@ -83,6 +83,7 @@ const authSlice = createSlice({
     builder
       // user register
       .addCase(registerUserReducer.fulfilled, (state, action) => {
+        deleteCookie("accessToken");
         setCookie("accessToken", action.payload.accessToken);
         localStorage.setItem("refreshToken", action.payload.refreshToken);
         state.userIsLoading = false;
@@ -100,6 +101,7 @@ const authSlice = createSlice({
       })
       // user login
       .addCase(loginUserReducer.fulfilled, (state, action) => {
+        deleteCookie("accessToken");
         setCookie("accessToken", action.payload.accessToken);
         localStorage.setItem("refreshToken", action.payload.refreshToken);
         state.userIsLoading = false;

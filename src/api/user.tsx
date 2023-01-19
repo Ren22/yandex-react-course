@@ -24,7 +24,7 @@ export async function getUserData() {
     credentials: "same-origin",
     headers: {
       "Content-Type": "application/json",
-      Authorization: "Bearer" + getCookie("accessToken"),
+      Authorization: getCookie("accessToken"),
     },
     redirect: "follow",
     referrerPolicy: "no-referrer",

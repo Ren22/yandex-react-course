@@ -1,7 +1,10 @@
 /* eslint-disable no-useless-escape */
 
 export function setCookie(name: string, value: string, props?: Record<string, any>) {
-  props = props || {};
+  props = {
+    path: '/',
+    ...props
+  };
   let exp = props.expires;
   if (typeof exp == 'number' && exp) {
     const d = new Date();

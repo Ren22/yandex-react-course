@@ -19,6 +19,7 @@ export const ProtectedRoute = ({
 
   useEffect(() => {
     async function getUser() {
+      debugger;
       await dispatch(getUserDataReducer());
       setUserIsLoaded(true);
     }
