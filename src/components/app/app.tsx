@@ -53,18 +53,30 @@ const App = () => {
         <Route path={`${ROUTES.MAIN}`} exact={true}>
           <HomePage />
         </Route>
-        <Route path={`${ROUTES.LOGIN}`} exact={true}>
+        <ProtectedRoute onlyUnAuth={true} path={`${ROUTES.LOGIN}`} exact={true}>
           <LoginPage />
-        </Route>
-        <Route path={`${ROUTES.REGISTER}`} exact={true}>
+        </ProtectedRoute>
+        <ProtectedRoute
+          onlyUnAuth={true}
+          path={`${ROUTES.REGISTER}`}
+          exact={true}
+        >
           <RegistraionPage />
-        </Route>
-        <Route path={`${ROUTES.FORGOTPWRD}`} exact={true}>
+        </ProtectedRoute>
+        <ProtectedRoute
+          onlyUnAuth={true}
+          path={`${ROUTES.FORGOTPWRD}`}
+          exact={true}
+        >
           <ForgotPasswordPage />
-        </Route>
-        <Route path={`${ROUTES.RESETPWRD}`} exact={true}>
+        </ProtectedRoute>
+        <ProtectedRoute
+          onlyUnAuth={true}
+          path={`${ROUTES.RESETPWRD}`}
+          exact={true}
+        >
           <ResetPasswordPage />
-        </Route>
+        </ProtectedRoute>
         <ProtectedRoute path={`${ROUTES.PROFILE}`} exact={true}>
           <ProfilePage activeTab={`${PROFILE_TABS.PROFILE}`} />
         </ProtectedRoute>

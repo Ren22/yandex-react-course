@@ -61,7 +61,6 @@ export const ResetPasswordPage = () => {
 
   return (
     <>
-      <Header />
       <form className={resetPasswordStyle.main} onSubmit={handleSumbit}>
         <p className="text text_type_main-medium">Восстановление пароля</p>
         <Input
