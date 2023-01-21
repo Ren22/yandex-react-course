@@ -2,13 +2,15 @@ import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import {
   forgotPassword,
   loginUser,
-  LoginUserInput,
   logoutUser,
   registerUser,
-  RegisterUserInput,
   resetPassword,
-  ResetPasswordInput,
 } from "../../api/auth";
+import {
+  RegisterUserInput,
+  LoginUserInput,
+  ResetPasswordInput,
+} from "../../types/auth";
 import { deleteCookie, setCookie } from "../../utils/cookieHandler";
 import { RootState } from "../store";
 

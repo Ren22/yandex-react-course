@@ -1,22 +1,12 @@
 import { BASE_URL } from ".";
+import { YandexCustomErrorResp } from "../types/error";
+import { UserDataResponse, UserUpdateInput } from "../types/user";
 import { getCookie } from "../utils/cookieHandler";
 import { request } from "../utils/request";
 
-interface UserDataResponse {
-  success: boolean;
-  user: {
-    email: string;
-    name: string;
-  };
-}
-
-interface UserUpdateInput {
-  email?: string;
-  password?: string;
-  name?: string;
-}
-
-export async function getUserData() {
+export async function getUserData(): Promise<
+  UserDataResponse | YandexCustomErrorResp
+> {
   return request(`${BASE_URL}/auth/user`, {
     method: "GET",
     mode: "cors",
@@ -24,16 +14,16 @@ export async function getUserData() {
     credentials: "same-origin",
     headers: {
       "Content-Type": "application/json",
-      Authorization: getCookie("accessToken"),
+      Authorization: getCookie("accessToken") ?? "",
     },
     redirect: "follow",
     referrerPolicy: "no-referrer",
-  }).then((data: UserDataResponse) => {
-    return data;
   });
 }
 
-export async function patchUserData(userUpdateInput: UserUpdateInput) {
+export async function patchUserData(
+  userUpdateInput: UserUpdateInput
+): Promise<UserDataResponse | YandexCustomErrorResp> {
   return request(`${BASE_URL}/auth/user`, {
     method: "PATCH",
     mode: "cors",
@@ -41,12 +31,10 @@ export async function patchUserData(userUpdateInput: UserUpdateInput) {
     credentials: "same-origin",
     headers: {
       "Content-Type": "application/json",
-      Authorization: "Bearer" + getCookie("accessToken"),
+      Authorization: getCookie("accessToken") ?? "",
     },
     redirect: "follow",
     referrerPolicy: "no-referrer",
     body: JSON.stringify(userUpdateInput),
-  }).then((data: UserDataResponse) => {
-    return data;
   });
 }

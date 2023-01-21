@@ -3,7 +3,6 @@ import {
   Button,
 } from "@ya.praktikum/react-developer-burger-ui-components";
 import React, { SyntheticEvent, useEffect, useState } from "react";
-import Header from "../../components/header/header";
 import resetPasswordStyle from "./reset-password.module.css";
 import { Link, useHistory } from "react-router-dom";
 import { ROUTES } from "../../components/app/app";
@@ -13,8 +12,7 @@ import {
   selectIsResetPasswordReqSent,
   setIsResetPasswordReqSentToDefault,
 } from "../../redux/slices/auth";
-import { useAppDispatch } from "../../redux/store";
-import { useSelector } from "react-redux";
+import { useAppDispatch, useAppSelector } from "../../redux/store";
 import { getUserDataReducer, selectUser } from "../../redux/slices/user";
 
 export const ResetPasswordPage = () => {
@@ -22,15 +20,15 @@ export const ResetPasswordPage = () => {
   const [token, setToken] = useState("");
   const [isPasswordShown, setIsPasswordShown] = useState(false);
   const dispatch = useAppDispatch();
-  const isResetPasswordReqSent = useSelector(selectIsResetPasswordReqSent);
-  const isForgotPswrdEmailSent = useSelector(selectIsForgotPswrdEmailSent);
+  const isResetPasswordReqSent = useAppSelector(selectIsResetPasswordReqSent);
+  const isForgotPswrdEmailSent = useAppSelector(selectIsForgotPswrdEmailSent);
   const history = useHistory();
 
   const handleSumbit = async (e: SyntheticEvent) => {
     e.preventDefault();
     await dispatch(resetPasswordReducer({ password, token }));
   };
-  const user = useSelector(selectUser);
+  const user = useAppSelector(selectUser);
 
   useEffect(() => {
     dispatch(setIsResetPasswordReqSentToDefault());

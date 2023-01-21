@@ -1,50 +1,14 @@
 import { BASE_URL } from ".";
+import {
+  ResetPasswordInput,
+  RegisterUserInput,
+  RegistrationResponse,
+  LoginUserInput,
+  LoginResponse,
+  LogoutResponse,
+  RefreshTokenResponse,
+} from "../types/auth";
 import { request } from "../utils/request";
-export interface RegisterUserInput {
-  email: string;
-  password: string;
-  name: string;
-}
-
-export interface LoginUserInput {
-  email: string;
-  password: string;
-}
-interface RegistrationResponse {
-  success: boolean;
-  user: {
-    email: string;
-    name: string;
-  };
-  accessToken: string;
-  refreshToken: string;
-}
-
-interface LoginResponse {
-  success: boolean;
-  accessToken: string;
-  refreshToken: string;
-  user: {
-    email: string;
-    name: string;
-  };
-}
-
-interface LogoutResponse {
-  success: boolean;
-  message: string;
-}
-
-export interface ResetPasswordInput {
-  password: string;
-  token: string;
-}
-
-interface RefreshTokenResponse {
-  success: boolean;
-  accessToken: string;
-  refreshToken: string;
-}
 
 export function forgotPassword(email: string) {
   return request(`${BASE_URL}/password-reset`, {
@@ -55,8 +19,6 @@ export function forgotPassword(email: string) {
     headers: {
       "Content-Type": "application/json",
     },
-  }).then((data) => {
-    return data;
   });
 }
 
@@ -70,12 +32,14 @@ export function resetPassword({ password, token }: ResetPasswordInput) {
     headers: {
       "Content-Type": "application/json",
     },
-  }).then((data) => {
-    return data;
   });
 }
 
-export function registerUser({ email, password, name }: RegisterUserInput) {
+export function registerUser({
+  email,
+  password,
+  name,
+}: RegisterUserInput): Promise<RegistrationResponse> {
   return request(`${BASE_URL}/auth/register`, {
     method: "POST",
     body: JSON.stringify({
@@ -86,12 +50,13 @@ export function registerUser({ email, password, name }: RegisterUserInput) {
     headers: {
       "Content-Type": "application/json",
     },
-  }).then((data: RegistrationResponse) => {
-    return data;
   });
 }
 
-export async function loginUser({ email, password }: LoginUserInput) {
+export async function loginUser({
+  email,
+  password,
+}: LoginUserInput): Promise<LoginResponse> {
   return request(`${BASE_URL}/auth/login`, {
     method: "POST",
     body: JSON.stringify({
@@ -101,12 +66,12 @@ export async function loginUser({ email, password }: LoginUserInput) {
     headers: {
       "Content-Type": "application/json",
     },
-  }).then((data: LoginResponse) => {
-    return data;
   });
 }
 
-export async function logoutUser(token: string | null) {
+export async function logoutUser(
+  token: string | null
+): Promise<LogoutResponse> {
   return request(`${BASE_URL}/auth/logout`, {
     method: "POST",
     body: JSON.stringify({
@@ -115,12 +80,12 @@ export async function logoutUser(token: string | null) {
     headers: {
       "Content-Type": "application/json",
     },
-  }).then((data: LogoutResponse) => {
-    return data;
   });
 }
 
-export async function refreshAccessToken(refreshToken: string | null) {
+export async function refreshAccessToken(
+  refreshToken: string | null
+): Promise<RefreshTokenResponse> {
   return request(`${BASE_URL}/auth/token`, {
     method: "POST",
     body: JSON.stringify({
@@ -129,7 +94,5 @@ export async function refreshAccessToken(refreshToken: string | null) {
     headers: {
       "Content-Type": "application/json",
     },
-  }).then((data: RefreshTokenResponse) => {
-    return data;
   });
 }

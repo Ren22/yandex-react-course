@@ -1,6 +1,5 @@
 import { Button } from "@ya.praktikum/react-developer-burger-ui-components";
 import React, { SyntheticEvent, useCallback, useEffect, useState } from "react";
-import { useSelector } from "react-redux";
 import { Link, useHistory } from "react-router-dom";
 import { ROUTES } from "../../components/app/app";
 import { ProfileInputs } from "../../components/profile-inputs/profile-inputs";
@@ -11,7 +10,7 @@ import {
   getUserDataReducer,
   setUserDataReducer,
 } from "../../redux/slices/user";
-import { useAppDispatch } from "../../redux/store";
+import { useAppDispatch, useAppSelector } from "../../redux/store";
 
 import profilePageStyle from "./profile.module.css";
 
@@ -32,7 +31,7 @@ export const ProfilePage = ({ activeTab }: Props) => {
   useEffect(() => {
     dispatch(getUserDataReducer());
   }, [dispatch]);
-  const user = useSelector(selectUserData);
+  const user = useAppSelector(selectUserData);
   const history = useHistory();
   const [dataIsChanged, setDataIsChanged] = useState(false);
 

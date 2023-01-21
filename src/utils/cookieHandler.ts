@@ -27,6 +27,7 @@ export function setCookie(name: string, value: string, props?: Record<string, an
 }
 
 export function getCookie(name: string) {
+  debugger
   const matches = document.cookie.match(
     new RegExp('(?:^|; )' + name.replace(/([\.$?*|{}\(\)\[\]\\\/\+^])/g, '\\$1') + '=([^;]*)')
   );

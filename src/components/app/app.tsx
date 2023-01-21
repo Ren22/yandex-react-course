@@ -50,43 +50,28 @@ const App = () => {
     <>
       <Header />
       <Switch location={background || location}>
-        <Route path={`${ROUTES.MAIN}`} exact={true}>
+        <Route path={`${ROUTES.MAIN}`} exact>
           <HomePage />
         </Route>
-        <ProtectedRoute onlyUnAuth={true} path={`${ROUTES.LOGIN}`} exact={true}>
+        <ProtectedRoute onlyUnAuth path={`${ROUTES.LOGIN}`} exact>
           <LoginPage />
         </ProtectedRoute>
-        <ProtectedRoute
-          onlyUnAuth={true}
-          path={`${ROUTES.REGISTER}`}
-          exact={true}
-        >
+        <ProtectedRoute onlyUnAuth path={`${ROUTES.REGISTER}`} exact>
           <RegistraionPage />
         </ProtectedRoute>
-        <ProtectedRoute
-          onlyUnAuth={true}
-          path={`${ROUTES.FORGOTPWRD}`}
-          exact={true}
-        >
+        <ProtectedRoute onlyUnAuth path={`${ROUTES.FORGOTPWRD}`} exact>
           <ForgotPasswordPage />
         </ProtectedRoute>
-        <ProtectedRoute
-          onlyUnAuth={true}
-          path={`${ROUTES.RESETPWRD}`}
-          exact={true}
-        >
+        <ProtectedRoute onlyUnAuth path={`${ROUTES.RESETPWRD}`} exact>
           <ResetPasswordPage />
         </ProtectedRoute>
-        <ProtectedRoute path={`${ROUTES.PROFILE}`} exact={true}>
+        <ProtectedRoute path={`${ROUTES.PROFILE}`} exact>
           <ProfilePage activeTab={`${PROFILE_TABS.PROFILE}`} />
         </ProtectedRoute>
-        <ProtectedRoute path={`${ROUTES.PROFILE}${ROUTES.ORDERS}`} exact={true}>
+        <ProtectedRoute path={`${ROUTES.PROFILE}${ROUTES.ORDERS}`} exact>
           <ProfilePage activeTab={`${PROFILE_TABS.ORDERS}`} />
         </ProtectedRoute>
-        <ProtectedRoute
-          path={`${ROUTES.PROFILE}${ROUTES.ORDERS}/:id`}
-          exact={true}
-        >
+        <ProtectedRoute path={`${ROUTES.PROFILE}${ROUTES.ORDERS}/:id`} exact>
           <ProfileOrder />
         </ProtectedRoute>
         <Route path={`${ROUTES.INGREDIENTS}/:id`}>

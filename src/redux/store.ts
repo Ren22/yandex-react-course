@@ -3,7 +3,7 @@ import ingredientsReducer from './slices/ingredients';
 import orderReducer from './slices/order';
 import authReducer from './slices/auth';
 import userReducer from './slices/user';
-import { useDispatch } from 'react-redux'
+import { TypedUseSelectorHook, useDispatch, useSelector } from 'react-redux'
 import { combineReducers } from '@reduxjs/toolkit'
 const preloadedState = {};
 
@@ -22,3 +22,4 @@ export type RootState = ReturnType<typeof store.getState>;
 // Inferred type: {posts: PostsState, comments: CommentsState, users: UsersState}
 export type AppDispatch = typeof store.dispatch;
 export const useAppDispatch = () => useDispatch<typeof store.dispatch>()
+export const useAppSelector: TypedUseSelectorHook<RootState> = useSelector;

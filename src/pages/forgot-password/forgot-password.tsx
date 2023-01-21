@@ -6,21 +6,20 @@ import React, { SyntheticEvent, useEffect, useState } from "react";
 import forgotPasswordStyle from "./forgot-password.module.css";
 import { Link, useHistory } from "react-router-dom";
 import { ROUTES } from "../../components/app/app";
-import { useAppDispatch } from "../../redux/store";
+import { useAppDispatch, useAppSelector } from "../../redux/store";
 import {
   forgotPasswordReducer,
   selectIsForgotPswrdEmailSent,
   setIsEmailSentToDefault,
 } from "../../redux/slices/auth";
-import { useSelector } from "react-redux";
 import { getUserDataReducer, selectUser } from "../../redux/slices/user";
 
 export const ForgotPasswordPage = () => {
   const [email, setEmail] = useState("");
   const history = useHistory();
   const dispatch = useAppDispatch();
-  const isForgotPswrdEmailSent = useSelector(selectIsForgotPswrdEmailSent);
-  const user = useSelector(selectUser);
+  const isForgotPswrdEmailSent = useAppSelector(selectIsForgotPswrdEmailSent);
+  const user = useAppSelector(selectUser);
 
   useEffect(() => {
     dispatch(setIsEmailSentToDefault());

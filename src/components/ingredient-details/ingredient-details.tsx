@@ -1,12 +1,11 @@
 import React, { useEffect, useState } from "react";
-import { useSelector } from "react-redux";
 import { useRouteMatch } from "react-router-dom";
 import {
   selectIngredientsState,
   loadAllIngredients,
   pickIngredient,
 } from "../../redux/slices/ingredients";
-import { useAppDispatch } from "../../redux/store";
+import { useAppDispatch, useAppSelector } from "../../redux/store";
 import { IngredientDetailsType } from "../../utils/types";
 import ingredientDetailsStyle from "./ingredient-details.module.css";
 
@@ -16,7 +15,7 @@ interface MatchParams {
 
 const IngredientDetails = () => {
   const { params } = useRouteMatch<MatchParams>();
-  const { allIngredients } = useSelector(selectIngredientsState);
+  const { allIngredients } = useAppSelector(selectIngredientsState);
   const dispatch = useAppDispatch();
   const [pickedIngredient, setPickedIngredient] =
     useState<IngredientDetailsType | null>(null);

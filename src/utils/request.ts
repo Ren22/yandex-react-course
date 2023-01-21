@@ -1,7 +1,6 @@
 import { checkResponse } from "./responseHandlers";
-import { GenericObject } from "./types";
 
-export function request(url: string, options?: GenericObject) {
+export function request(url: RequestInfo, options: RequestInit = {}) {
   // принимает два аргумента: урл и объект опций, как и `fetch`
   return fetch(url, options).then(checkResponse)
 }

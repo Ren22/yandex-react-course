@@ -1,6 +1,7 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import { refreshAccessToken } from "../../api/auth";
 import { getUserData, patchUserData } from "../../api/user";
+import { UserDataResponse } from "../../types/user";
 import { setCookie } from "../../utils/cookieHandler";
 import { RootState } from "../store";
 import { logoutUserReducer } from "./auth";
@@ -39,7 +40,7 @@ export const getUserDataReducer = createAsyncThunk(
   "getUserData",
   async (_, { rejectWithValue }) => {
     const commonPart = async () => {
-      const res = await getUserData();
+      const res = (await getUserData()) as UserDataResponse;
       return { ...res };
     };
     try {
@@ -62,7 +63,7 @@ export const setUserDataReducer = createAsyncThunk(
   "setUserData",
   async (userInput: User, { rejectWithValue }) => {
     const commonPart = async () => {
-      const res = await patchUserData(userInput);
+      const res = (await patchUserData(userInput)) as UserDataResponse;
       return { ...res };
     };
     try {
