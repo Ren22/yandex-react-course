@@ -1,5 +1,5 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
-import { submitOrder } from "../../api/burgers";
+import { submitOrder } from "../../api/ingredients";
 import { RootState } from "../store";
 
 interface InitialStateOrder {

@@ -7,7 +7,6 @@ import {
 import listStyle from "./burger-constructor.module.css";
 import Modal from "../modal/modal";
 import OrderDetails from "../order-details/order-details";
-import { useSelector } from "react-redux";
 import {
   addIngredient,
   selectIsIngredientDragged,
@@ -18,7 +17,7 @@ import {
   selectOrderState,
   setOrderToNull,
 } from "../../redux/slices/order";
-import { useAppDispatch } from "../../redux/store";
+import { useAppDispatch, useAppSelector } from "../../redux/store";
 import { useDrop } from "react-dnd";
 import { IngredientDetailsType } from "../../utils/types";
 import DraggbleItem from "./draggable-item/draggable-item";
@@ -27,9 +26,9 @@ import { ROUTES } from "../app/app";
 import { useHistory } from "react-router-dom";
 
 const BurgerConstructor = () => {
-  const { orderId } = useSelector(selectOrderState);
-  const { bun, others } = useSelector(selectSelectedIngredients);
-  const isIngredientDragged = useSelector(selectIsIngredientDragged);
+  const { orderId } = useAppSelector(selectOrderState);
+  const { bun, others } = useAppSelector(selectSelectedIngredients);
+  const isIngredientDragged = useAppSelector(selectIsIngredientDragged);
   const history = useHistory();
 
   const dispatch = useAppDispatch();
@@ -41,7 +40,7 @@ const BurgerConstructor = () => {
     },
   });
 
-  const user = useSelector(selectUser);
+  const user = useAppSelector(selectUser);
 
   useEffect(() => {
     dispatch(getUserDataReducer());

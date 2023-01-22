@@ -1,16 +1,12 @@
 import React, { useEffect, useState } from "react";
-import { useSelector } from "react-redux";
-import { useHistory, useLocation, useRouteMatch } from "react-router-dom";
+import { useRouteMatch } from "react-router-dom";
 import {
-  closeIngredientDetails,
   selectIngredientsState,
   loadAllIngredients,
   pickIngredient,
 } from "../../redux/slices/ingredients";
-import { useAppDispatch } from "../../redux/store";
+import { useAppDispatch, useAppSelector } from "../../redux/store";
 import { IngredientDetailsType } from "../../utils/types";
-import Header from "../header/header";
-import Modal from "../modal/modal";
 import ingredientDetailsStyle from "./ingredient-details.module.css";
 
 interface MatchParams {
@@ -19,10 +15,8 @@ interface MatchParams {
 
 const IngredientDetails = () => {
   const { params } = useRouteMatch<MatchParams>();
-  const { allIngredients } = useSelector(selectIngredientsState);
+  const { allIngredients } = useAppSelector(selectIngredientsState);
   const dispatch = useAppDispatch();
-  const location = useLocation();
-  const history = useHistory();
   const [pickedIngredient, setPickedIngredient] =
     useState<IngredientDetailsType | null>(null);
 
@@ -38,10 +32,6 @@ const IngredientDetails = () => {
     }
   }, [params, allIngredients, dispatch]);
 
-  const handleCloseModal = () => {
-    dispatch(closeIngredientDetails());
-    history.goBack();
-  };
   const footerDetails = [
     {
       name: "Калории, ккал",
@@ -89,17 +79,7 @@ const IngredientDetails = () => {
     </div>
   );
 
-  return (location.state as { prevPath: string })?.prevPath === "/" ? (
-    // user came from internal link
-    <Modal header="Детали ингредиента" closeModal={handleCloseModal}>
-      {commonPart()}
-    </Modal>
-  ) : (
-    <>
-      <Header />
-      {commonPart()}
-    </>
-  );
+  return commonPart();
 };
 
 export default IngredientDetails;

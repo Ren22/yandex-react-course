@@ -2,13 +2,15 @@ import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import {
   forgotPassword,
   loginUser,
-  LoginUserInput,
   logoutUser,
   registerUser,
-  RegisterUserInput,
   resetPassword,
-  ResetPasswordInput,
 } from "../../api/auth";
+import {
+  RegisterUserInput,
+  LoginUserInput,
+  ResetPasswordInput,
+} from "../../types/auth";
 import { deleteCookie, setCookie } from "../../utils/cookieHandler";
 import { RootState } from "../store";
 
@@ -83,6 +85,7 @@ const authSlice = createSlice({
     builder
       // user register
       .addCase(registerUserReducer.fulfilled, (state, action) => {
+        deleteCookie("accessToken");
         setCookie("accessToken", action.payload.accessToken);
         localStorage.setItem("refreshToken", action.payload.refreshToken);
         state.userIsLoading = false;
@@ -100,6 +103,7 @@ const authSlice = createSlice({
       })
       // user login
       .addCase(loginUserReducer.fulfilled, (state, action) => {
+        deleteCookie("accessToken");
         setCookie("accessToken", action.payload.accessToken);
         localStorage.setItem("refreshToken", action.payload.refreshToken);
         state.userIsLoading = false;

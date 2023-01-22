@@ -8,12 +8,11 @@ import React, {
 import BurgerIngredientsItem from "./components/burger-ingredients-item/burger-ingredients-item";
 import burgerIngredientsStyle from "./burger-ingredients.module.css";
 import { Tab } from "@ya.praktikum/react-developer-burger-ui-components";
-import { useSelector } from "react-redux";
 import {
   loadAllIngredients,
   selectIngredientsState,
 } from "../../redux/slices/ingredients";
-import { useAppDispatch } from "../../redux/store";
+import { useAppDispatch, useAppSelector } from "../../redux/store";
 import { INGREDIENT_TYPES } from "../../utils/types";
 
 enum NAV_TYPES {
@@ -24,7 +23,7 @@ enum NAV_TYPES {
 
 const BurgerIngredients = () => {
   const [current, setCurrent] = useState("buns");
-  const { allIngredients } = useSelector(selectIngredientsState);
+  const { allIngredients } = useAppSelector(selectIngredientsState);
   const dispatch = useAppDispatch();
   const burgerIngredientsContainerRef = useRef<HTMLElement>(null);
   const bunsHeaderRef = useRef<HTMLHeadingElement>(null);

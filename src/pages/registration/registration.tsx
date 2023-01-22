@@ -6,8 +6,7 @@ import React, { SyntheticEvent, useEffect, useState } from "react";
 import registrationPageStyle from "./registration.module.css";
 import { Link, useHistory } from "react-router-dom";
 import { ROUTES } from "../../components/app/app";
-import { useAppDispatch } from "../../redux/store";
-import { useSelector } from "react-redux";
+import { useAppDispatch, useAppSelector } from "../../redux/store";
 import {
   registerUserReducer,
   selectIsUserRegistered,
@@ -21,8 +20,8 @@ export const RegistraionPage = () => {
   const [isPasswordShown, setIsPasswordShown] = useState(false);
   const history = useHistory();
   const dispatch = useAppDispatch();
-  const isUserRegistered = useSelector(selectIsUserRegistered);
-  const user = useSelector(selectUser);
+  const isUserRegistered = useAppSelector(selectIsUserRegistered);
+  const user = useAppSelector(selectUser);
 
   useEffect(() => {
     dispatch(getUserDataReducer());

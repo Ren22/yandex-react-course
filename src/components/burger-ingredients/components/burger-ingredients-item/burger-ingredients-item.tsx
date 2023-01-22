@@ -9,10 +9,11 @@ import {
   changeDraggingIngredientState,
   selectIngredientsState,
 } from "../../../../redux/slices/ingredients";
-import { useDispatch, useSelector } from "react-redux";
+import { useDispatch } from "react-redux";
 import { useDrag } from "react-dnd";
-import { Link } from "react-router-dom";
+import { Link, useLocation } from "react-router-dom";
 import { ROUTES } from "../../../app/app";
+import { useAppSelector } from "../../../../redux/store";
 
 interface Props {
   ingredientDetails: IngredientDetailsType;
@@ -27,9 +28,10 @@ const BurgerIngredientsItem = (props: Props) => {
       isDragging: monitor.isDragging(),
     }),
   });
-  const { selectedIngredients } = useSelector(selectIngredientsState);
+  const { selectedIngredients } = useAppSelector(selectIngredientsState);
   const dispatch = useDispatch();
   const [count, setCount] = useState<number | null>(null);
+  const location = useLocation();
 
   useEffect(() => {
     // we reset the counter every time selected ingredients are updated
@@ -54,7 +56,7 @@ const BurgerIngredientsItem = (props: Props) => {
       <Link
         to={{
           pathname: `${ROUTES.INGREDIENTS}/${props.ingredientDetails._id}`,
-          state: { prevPath: "/" },
+          state: { background: location },
         }}
       >
         <li

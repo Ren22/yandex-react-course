@@ -6,13 +6,12 @@ import React, { SyntheticEvent, useEffect, useState } from "react";
 import loginPageStyle from "./login.module.css";
 import { Link, useHistory } from "react-router-dom";
 import { ROUTES } from "../../components/app/app";
-import { useAppDispatch } from "../../redux/store";
+import { useAppDispatch, useAppSelector } from "../../redux/store";
 import {
   loginUserReducer,
   selectIsUserLoggedIn,
 } from "../../redux/slices/auth";
 import { getUserDataReducer, selectUser } from "../../redux/slices/user";
-import { useSelector } from "react-redux";
 
 export const LoginPage = () => {
   const [email, setEmail] = useState("");
@@ -20,8 +19,8 @@ export const LoginPage = () => {
   const [isPasswordShown, setIsPasswordShown] = useState(false);
   const history = useHistory();
   const dispatch = useAppDispatch();
-  const user = useSelector(selectUser);
-  const userIsLoggedIn = useSelector(selectIsUserLoggedIn);
+  const user = useAppSelector(selectUser);
+  const userIsLoggedIn = useAppSelector(selectIsUserLoggedIn);
 
   useEffect(() => {
     dispatch(getUserDataReducer());

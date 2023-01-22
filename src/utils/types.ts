@@ -18,8 +18,3 @@ export enum INGREDIENT_TYPES {
   sauce = "sauce",
   main = "main",
 }
-
-
-export type GenericObject<T = unknown> = {
-  [key in string]: T
-}

@@ -1,19 +1,8 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
-import { getBurgersData } from "../../api/burgers";
+import { getIngredientsData } from "../../api/ingredients";
+import { InitialStateIngredients } from "../../types/ingredients";
 import { IngredientDetailsType, INGREDIENT_TYPES } from "../../utils/types";
 import { RootState } from "../store";
-
-interface InitialStateIngredients {
-  allIngredients: IngredientDetailsType[];
-  selectedIngredients: {
-    bun?: IngredientDetailsType;
-    others: IngredientDetailsType[];
-  };
-  currentIngredient: IngredientDetailsType | null;
-  isIngredientDragged: boolean;
-  ingredientsAreLoaded: boolean;
-  error?: string;
-}
 
 const initialState: InitialStateIngredients = {
   allIngredients: [],
@@ -27,7 +16,7 @@ export const loadAllIngredients = createAsyncThunk(
   "loadAllIngredients",
   async () => {
     try {
-      const allIngredients = await getBurgersData();
+      const allIngredients = await getIngredientsData();
       return { allIngredients };
     } catch (e) {
       console.error(e);
