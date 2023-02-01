@@ -17,6 +17,7 @@ import Header from "../header/header";
 import IngredientDetails from "../ingredient-details/ingredient-details";
 import Modal from "../modal/modal";
 import { ProtectedRoute } from "../protected-route/protected-route";
+import { FeedPage } from "../../pages/feed/feed";
 
 export interface TotalSum {
   value: number;
@@ -31,6 +32,7 @@ export enum ROUTES {
   PROFILE = "/profile",
   ORDERS = "/orders",
   INGREDIENTS = "/ingredients",
+  FEED = "/feed",
 }
 
 const App = () => {
@@ -78,6 +80,9 @@ const App = () => {
           <>
             <IngredientDetails />
           </>
+        </Route>
+        <Route path={`${ROUTES.FEED}`}>
+          <FeedPage />
         </Route>
       </Switch>
       {background && (
