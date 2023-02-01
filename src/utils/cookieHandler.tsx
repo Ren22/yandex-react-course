@@ -39,7 +39,6 @@ export function setCookie(
 }
 
 export function getCookie(name: string) {
-  debugger;
   const matches = document.cookie.match(
     new RegExp(
       "(?:^|; )" +
