@@ -18,6 +18,7 @@ import IngredientDetails from "../ingredient-details/ingredient-details";
 import Modal from "../modal/modal";
 import { ProtectedRoute } from "../protected-route/protected-route";
 import { FeedPage } from "../../pages/feed/feed";
+import { OrderInfoFeedPopUp } from "../order-info-feed-popup/order-info-feed-popup";
 
 export interface TotalSum {
   value: number;
@@ -76,13 +77,18 @@ const App = () => {
         <ProtectedRoute path={`${ROUTES.PROFILE}${ROUTES.ORDERS}/:id`} exact>
           <ProfileOrder />
         </ProtectedRoute>
-        <Route path={`${ROUTES.INGREDIENTS}/:id`}>
+        <Route path={`${ROUTES.INGREDIENTS}/:id`} exact>
           <>
             <IngredientDetails />
           </>
         </Route>
-        <Route path={`${ROUTES.FEED}`}>
+        <Route path={`${ROUTES.FEED}`} exact>
           <FeedPage />
+        </Route>
+        <Route path={`${ROUTES.FEED}/:id`} exact>
+          <>
+            <OrderInfoFeedPopUp />
+          </>
         </Route>
       </Switch>
       {background && (
@@ -90,6 +96,11 @@ const App = () => {
           <Route path={`${ROUTES.INGREDIENTS}/:id`}>
             <Modal header="Детали ингредиента" closeModal={handleCloseModal}>
               <IngredientDetails />
+            </Modal>
+          </Route>
+          <Route path={`${ROUTES.FEED}/:id`}>
+            <Modal closeModal={handleCloseModal}>
+              <OrderInfoFeedPopUp />
             </Modal>
           </Route>
         </>

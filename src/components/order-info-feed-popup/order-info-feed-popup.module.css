@@ -1,0 +1,59 @@
+div.wrapper {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 90% !important;
+}
+
+.content {
+  width: 40rem;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+
+.orderId {
+  margin-top: -3rem;
+  margin-bottom: 2rem;
+  width: 2rem;
+}
+
+.status {
+  color: #00cccc;
+}
+
+.ingredientsWrapper {
+  overflow-y: scroll;
+  height: 35vh;
+}
+
+.ingredients {
+  list-style-type: none;
+  padding-left: 0;
+}
+
+.ingredient {
+  display: flex;
+  align-items: center;
+}
+
+.ingredient__img {
+  width: 64px;
+  height: 64px;
+  outline: 1px solid red;
+  background: #131316;
+  border-radius: 100px;
+}
+
+.ingredient__spacer {
+  flex-grow: 1;
+}
+
+.footer {
+  display: flex;
+  justify-content: space-between;
+}
+
+.footer_overallPrice {
+  display: flex;
+}
