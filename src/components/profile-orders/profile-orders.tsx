@@ -1,20 +1,15 @@
 import React from "react";
-import { Link, useRouteMatch } from "react-router-dom";
+import { OrderInFeed } from "../order-in-feed/order-in-feed";
+import ProfileOrdersStyle from "./profile-orders.module.css";
 
 export const ProfileOrders = () => {
-  const list = [
-    { id: 1, name: "name1" },
-    { id: 2, name: "name2" },
-  ];
-  const { url } = useRouteMatch();
-
   return (
-    <ul>
-      {list.map(({ name, id }) => (
-        <li key={id}>
-          <Link to={{ pathname: `${url}/${id}` }}>{name}</Link>
-        </li>
-      ))}
-    </ul>
+    <div className={`${ProfileOrdersStyle.ordersContainer} mr-2 `}>
+      <OrderInFeed showStatus />
+      <OrderInFeed showStatus />
+      <OrderInFeed showStatus />
+      <OrderInFeed showStatus />
+      <OrderInFeed showStatus />
+    </div>
   );
 };

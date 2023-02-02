@@ -75,7 +75,7 @@ const App = () => {
           <ProfilePage activeTab={`${PROFILE_TABS.ORDERS}`} />
         </ProtectedRoute>
         <ProtectedRoute path={`${ROUTES.PROFILE}${ROUTES.ORDERS}/:id`} exact>
-          <ProfileOrder />
+          <OrderInfoFeedPopUp />
         </ProtectedRoute>
         <Route path={`${ROUTES.INGREDIENTS}/:id`} exact>
           <>
@@ -99,6 +99,11 @@ const App = () => {
             </Modal>
           </Route>
           <Route path={`${ROUTES.FEED}/:id`}>
+            <Modal closeModal={handleCloseModal}>
+              <OrderInfoFeedPopUp />
+            </Modal>
+          </Route>
+          <Route path={`${ROUTES.PROFILE}${ROUTES.ORDERS}/:id`}>
             <Modal closeModal={handleCloseModal}>
               <OrderInfoFeedPopUp />
             </Modal>

@@ -4,14 +4,18 @@ import { Link, useLocation } from "react-router-dom";
 import { ROUTES } from "../app/app";
 import OrderInFeedStyle from "./order-in-feed.module.css";
 
-export const OrderInFeed = () => {
+interface Props {
+  showStatus?: boolean;
+}
+
+export const OrderInFeed = ({ showStatus }: Props) => {
   const location = useLocation();
 
   return (
     <Link
       to={{
-        pathname: `${ROUTES.FEED}/${1}`,
-        state: { background: location, orderId: "#034535" },
+        pathname: `${ROUTES.PROFILE}${ROUTES.ORDERS}/${1}`,
+        state: { background: location },
       }}
     >
       <div className={`${OrderInFeedStyle.order} pt-4 pb-4 pl-4 pr-4 mb-4`}>
@@ -25,6 +29,13 @@ export const OrderInFeed = () => {
           <p className="text text_type_main-medium">
             Death Star Starship Main бургер
           </p>
+          {showStatus && (
+            <p
+              className={`${OrderInFeedStyle.status} text text_type_main-small mt-2`}
+            >
+              Выполнен
+            </p>
+          )}
         </main>
         <footer className={`${OrderInFeedStyle.footer} mt-4`}>
           <section className={`${OrderInFeedStyle.footer__ingredients}`}>

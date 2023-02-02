@@ -4,11 +4,14 @@
   align-items: center;
   flex-direction: column;
   height: calc(100% - (4rem));
+  width: 75rem;
+  margin: auto;
 }
 
 .main__columnsWrapper {
   display: flex;
   flex-direction: row;
+  width: 100%;
 }
 
 .main__columnsWrapper a {
@@ -29,7 +32,9 @@
 
 .main__columnRight {
   display: flex;
+  width: 100%;
   flex-direction: column;
+  align-items: center;
 }
 
 .footer {
