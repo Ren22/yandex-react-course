@@ -8,7 +8,6 @@ import {
   ProfilePage,
 } from "../../pages";
 import * as H from "history";
-import { ProfileOrder } from "../../pages/profile-order/profile-order";
 import { PROFILE_TABS } from "../../pages/profile/profile";
 import { ResetPasswordPage } from "../../pages/reset-password/reset-password";
 import { closeIngredientDetails } from "../../redux/slices/ingredients";

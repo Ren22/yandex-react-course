@@ -32,12 +32,30 @@
   margin-left: -1rem;
 }
 
-.footer__ingredient {
-  width: 64px;
-  height: 64px;
-  outline: 1px solid red;
-  background: #131316;
-  border-radius: 100px;
+.footer__ingredient_border {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  position: relative;
+  width: 4rem;
+  height: 4rem;
+  background: linear-gradient(90deg, #801ab2, #4c4cff);
+  border-radius: 50%;
+}
+
+.footer__ingredient_content {
+  width: 3.8rem;
+  height: 3.8rem;
+  object-fit: contain;
+  background: #000;
+  border-radius: 50%;
+}
+
+.footer__ingredient_contentLast {
+  position: absolute;
+  left: 30%;
+  object-fit: contain;
+  width: 100%;
 }
 
 .status {

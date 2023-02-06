@@ -1,7 +1,54 @@
+import React, { ReactNode } from "react";
 import { OrderInFeed } from "../../components/order-in-feed/order-in-feed";
 import feedPageStyle from "./feed.module.css";
+import { useAppDispatch, useAppSelector } from "../../redux/store";
+import {
+  OrderDetails,
+  selectOrders,
+  selectTotalOrders,
+  selectTotalOrdersToday,
+  wsInit,
+} from "../../redux/slices/orders-feed";
+import { useEffect, useState } from "react";
+import {
+  loadAllIngredients,
+  selectIngredientsState,
+} from "../../redux/slices/ingredients";
+
+const ROWS_PER_COLUMN_IN_READY_STATE = 12;
 
 export const FeedPage = () => {
+  const dispatch = useAppDispatch();
+  const totalOrders = useAppSelector(selectTotalOrders);
+  const ordersToday = useAppSelector(selectTotalOrdersToday);
+  const allOrders = useAppSelector(selectOrders);
+  const { allIngredients } = useAppSelector(selectIngredientsState);
+  const [doneOrdersChunks, setDoneOrdersChunks] = useState<
+    OrderDetails[][] | null
+  >(null);
+
+  function chunkArray<T>(array: T[], chunkSize: number): T[][] {
+    const chunks = [];
+    for (let i = 0; i < array.length; i += chunkSize) {
+      chunks.push(array.slice(i, i + chunkSize));
+    }
+    return chunks;
+  }
+
+  useEffect(() => {
+    const doneOrders = allOrders?.filter((order) => order.status === "done");
+    if (doneOrders?.length) {
+      setDoneOrdersChunks(
+        chunkArray(doneOrders, ROWS_PER_COLUMN_IN_READY_STATE)
+      );
+    }
+  }, [allOrders]);
+
+  useEffect(() => {
+    dispatch(loadAllIngredients());
+    dispatch(wsInit());
+  }, [dispatch]);
+
   return (
     <>
       <main className={feedPageStyle.main}>
@@ -10,59 +57,57 @@ export const FeedPage = () => {
             Лента заказов
           </h1>
           <div className={`${feedPageStyle.ordersContainer} mr-2 `}>
-            <OrderInFeed />
-            <OrderInFeed />
-            <OrderInFeed />
-            <OrderInFeed />
-            <OrderInFeed />
+            {allOrders?.map((order) => (
+              <OrderInFeed
+                showStatus={false}
+                allIngredients={allIngredients}
+                {...order}
+              />
+            ))}
           </div>
         </section>
         <section className={`${feedPageStyle.rightColumn} mt-25 ml-10`}>
           <div className={`${feedPageStyle.ordersStatusWrapper}`}>
-            <div>
+            <div
+              className={`${feedPageStyle.ordersStatus__readyOrdersWrapper}`}
+            >
               <p className="text text_type_main-medium mb-5">Готовы:</p>
-              <p
-                className={`${feedPageStyle.readyOrders__number} text text_type_digits-default`}
-              >
-                034544
-              </p>
-              <p
-                className={`${feedPageStyle.readyOrders__number} text text_type_digits-default`}
-              >
-                034544
-              </p>
-              <p
-                className={`${feedPageStyle.readyOrders__number} text text_type_digits-default`}
-              >
-                034544
-              </p>
-              <p
-                className={`${feedPageStyle.readyOrders__number} text text_type_digits-default`}
-              >
-                034544
-              </p>
-              <p
-                className={`${feedPageStyle.readyOrders__number} text text_type_digits-default`}
-              >
-                034544
-              </p>
+              <div className={`${feedPageStyle.ordersStatus__readyOrders}`}>
+                {doneOrdersChunks?.map((ordersChunks) => (
+                  <div className=" mr-4">
+                    {ordersChunks.map((order) => (
+                      <p
+                        className={`${feedPageStyle.readyOrders__number} text text_type_digits-default`}
+                      >
+                        {order.number}
+                      </p>
+                    ))}
+                  </div>
+                ))}
+              </div>
             </div>
-            <div className="ml-30">
+            <div>
               <p className="text text_type_main-medium mb-5">В работе:</p>
-              <p className={`text text_type_digits-default`}>034544</p>
-              <p className={`text text_type_digits-default`}>034544</p>
-              <p className={`text text_type_digits-default`}>034544</p>
+              {allOrders
+                ?.filter((order) => order.status !== "done")
+                .map((it) => (
+                  <p
+                    className={`${feedPageStyle.readyOrders__number} text text_type_digits-default`}
+                  >
+                    {it.number}
+                  </p>
+                ))}
             </div>
           </div>
           <div className={`${feedPageStyle.doneOverall}`}>
-            <p className="text text_type_main-medium mt-20">
+            <p className="text text_type_main-medium mt-5">
               Выполнено за все время:
             </p>
-            <p className="text text_type_digits-large">28752</p>
+            <p className="text text_type_digits-medium">{totalOrders}</p>
           </div>
           <div className={`${feedPageStyle.doneToday}`}>
             <p className="text text_type_main-medium">Выполнено за сегодня:</p>
-            <p className="text text_type_digits-large">138</p>
+            <p className="text text_type_digits-medium">{ordersToday}</p>
           </div>
         </section>
       </main>

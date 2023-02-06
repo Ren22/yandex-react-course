@@ -27,6 +27,19 @@
   display: flex;
 }
 
+.ordersStatus__readyOrdersWrapper {
+  display: flex;
+  flex-direction: column;
+}
+
+.ordersStatus__readyOrders {
+  display: flex;
+}
+
+.ordersStatus__lineBreak {
+  flex-grow: 1;
+}
+
 .doneOverall,
 .doneToday {
   display: flex;
