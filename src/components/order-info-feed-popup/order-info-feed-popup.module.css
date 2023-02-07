@@ -76,3 +76,12 @@ div.wrapper {
   background: #000;
   border-radius: 50%;
 }
+
+.orderStatusText_done,
+.orderStatusText_pending {
+  color: #00cccc;
+}
+
+.orderStatusText_canceled {
+  color: #e52b1a;
+}

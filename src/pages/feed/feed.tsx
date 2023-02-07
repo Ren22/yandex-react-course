@@ -14,6 +14,10 @@ import {
   loadAllIngredients,
   selectIngredientsState,
 } from "../../redux/slices/ingredients";
+import { chunkArray } from "../../utils/chunkArray";
+import { ORDER_STATUS } from "../../components/order-info-feed-popup/order-info-feed-popup";
+import { shearBearerInToken, getCookie } from "../../utils/cookieHandler";
+import { ORDERS_URL_BASE } from "../../api";
 
 const ROWS_PER_COLUMN_IN_READY_STATE = 12;
 
@@ -27,16 +31,10 @@ export const FeedPage = () => {
     OrderDetails[][] | null
   >(null);
 
-  function chunkArray<T>(array: T[], chunkSize: number): T[][] {
-    const chunks = [];
-    for (let i = 0; i < array.length; i += chunkSize) {
-      chunks.push(array.slice(i, i + chunkSize));
-    }
-    return chunks;
-  }
-
   useEffect(() => {
-    const doneOrders = allOrders?.filter((order) => order.status === "done");
+    const doneOrders = allOrders?.filter(
+      (order) => order.status === ORDER_STATUS.DONE
+    );
     if (doneOrders?.length) {
       setDoneOrdersChunks(
         chunkArray(doneOrders, ROWS_PER_COLUMN_IN_READY_STATE)
@@ -46,7 +44,7 @@ export const FeedPage = () => {
 
   useEffect(() => {
     dispatch(loadAllIngredients());
-    dispatch(wsInit());
+    dispatch(wsInit(`wss://${ORDERS_URL_BASE}/all?`));
   }, [dispatch]);
 
   return (

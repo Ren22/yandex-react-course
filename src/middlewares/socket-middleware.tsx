@@ -6,8 +6,7 @@ import {
 } from "../redux/slices/orders-feed";
 import { AnyAction, Dispatch, Middleware } from "redux";
 import { getCookie, shearBearerInToken } from "../utils/cookieHandler";
-
-const ALL_ORDERS_URL = "norma.nomoreparties.space/orders/all";
+import { ORDERS_URL_BASE } from "../api";
 
 export const socketMiddlwareCreator = (): Middleware<{}> => {
   return (store) => {
@@ -20,14 +19,10 @@ export const socketMiddlwareCreator = (): Middleware<{}> => {
     const { dispatch, getState } = store;
 
     return (next: Dispatch) => (action: AnyAction) => {
-      const { type } = action;
+      const { type, payload } = action;
 
-      const { user } = getState().user;
       if (type === "ordersFeed/wsInit") {
-        socket = new WebSocket(
-          `wss://${ALL_ORDERS_URL}?
-          )}`
-        );
+        socket = new WebSocket(payload);
       }
       if (socket) {
         socket.onopen = () => {

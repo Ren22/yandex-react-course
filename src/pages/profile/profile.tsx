@@ -69,6 +69,23 @@ export const ProfilePage = ({ activeTab }: Props) => {
     );
   };
 
+  const helperText = () => {
+    let text = null;
+    switch (activeTab) {
+      case PROFILE_TABS.PROFILE: {
+        text = "В этом разделе вы можете изменить свои персональные данные";
+        break;
+      }
+      case PROFILE_TABS.ORDERS: {
+        text = "В этом разделе вы можете просмотреть свою историю заказов";
+        break;
+      }
+      default:
+        break;
+    }
+    return text;
+  };
+
   const cancelNewData = () => {
     setInitialState();
   };
@@ -104,13 +121,11 @@ export const ProfilePage = ({ activeTab }: Props) => {
             >
               Выход
             </p>
-            {activeTab === PROFILE_TABS.PROFILE && (
-              <span
-                className={`text text_type_main-small text_color_inactive mt-30`}
-              >
-                В этом разделе вы можете изменить свои персональные данные
-              </span>
-            )}
+            <span
+              className={`text text_type_main-small text_color_inactive mt-30`}
+            >
+              {helperText()}
+            </span>
           </div>
           <div className={profilePageStyle.main__columnRight}>
             {activeTab === PROFILE_TABS.PROFILE ? (

@@ -23,6 +23,7 @@ type InitialStateOrdersFeed = {
   totalToday?: number;
   connectionError: string | undefined;
   selectedOrderInFeed?: SelectedOrderInFeed;
+  webSocketURL?: string;
 };
 
 const initialState: InitialStateOrdersFeed = {
@@ -51,7 +52,8 @@ const ordersFeedSlice = createSlice({
   name: "ordersFeed",
   initialState,
   reducers: {
-    wsInit: (state) => {
+    wsInit: (state, action: { payload: string }) => {
+      state.webSocketURL = action.payload;
       state.status = WebsocketStatus.CONNECTING;
     },
     wsOpen: (state) => {

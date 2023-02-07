@@ -21,7 +21,7 @@
 .main__columnLeft {
   display: flex;
   flex-direction: column;
-  justify-content: top;
+  justify-content: center;
   width: 320px;
 }
 

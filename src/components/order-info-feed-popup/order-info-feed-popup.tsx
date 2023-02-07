@@ -7,6 +7,8 @@ import OrderInfoFeedPopUpStyle from "./order-info-feed-popup.module.css";
 
 export enum ORDER_STATUS {
   DONE = "done",
+  CREATED = "created",
+  PENDING = "pending",
 }
 
 export interface IngredientDetailsTypeWithCount extends IngredientDetailsType {
