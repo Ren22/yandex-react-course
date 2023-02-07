@@ -1,4 +1,4 @@
-import React, { ReactNode } from "react";
+import React from "react";
 import { OrderInFeed } from "../../components/order-in-feed/order-in-feed";
 import feedPageStyle from "./feed.module.css";
 import { useAppDispatch, useAppSelector } from "../../redux/store";

@@ -23,7 +23,7 @@ export const socketMiddlwareCreator = (): Middleware<{}> => {
       const { type } = action;
 
       const { user } = getState().user;
-      if (type === "ordersFeed/wsInit" && !user) {
+      if (type === "ordersFeed/wsInit") {
         socket = new WebSocket(
           `wss://${ALL_ORDERS_URL}?
           )}`

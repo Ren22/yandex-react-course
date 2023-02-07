@@ -1,4 +1,5 @@
 import { createSlice } from "@reduxjs/toolkit";
+import { IngredientDetailsType } from "../../utils/types";
 import { RootState } from "../store";
 
 enum WebsocketStatus {
@@ -7,12 +8,21 @@ enum WebsocketStatus {
   OFFLINE = "OFFLINE",
 }
 
+type SelectedOrderInFeed = {
+  ingredients: IngredientDetailsType[];
+  number: number;
+  createdAt: string;
+  status: string;
+  name: string;
+};
+
 type InitialStateOrdersFeed = {
   status: WebsocketStatus;
   orders?: OrderDetails[];
   totalOrders?: number;
   totalToday?: number;
   connectionError: string | undefined;
+  selectedOrderInFeed?: SelectedOrderInFeed;
 };
 
 const initialState: InitialStateOrdersFeed = {
@@ -59,6 +69,12 @@ const ordersFeedSlice = createSlice({
       state.totalOrders = action.payload.total;
       state.totalToday = action.payload.totalToday;
     },
+    setSelectedOrderInFeed: (
+      state,
+      action: { payload: SelectedOrderInFeed }
+    ) => {
+      state.selectedOrderInFeed = action.payload;
+    },
   },
 });
 
@@ -71,6 +87,15 @@ export const selectTotalOrdersToday = (rootState: RootState) =>
 export const selectOrders = (rootState: RootState) =>
   rootState.ordersFeed.orders;
 
-export const { wsClose, wsError, wsGetMessage, wsOpen, wsInit } =
-  ordersFeedSlice.actions;
+export const selectSelectedOrderInFeed = (rootState: RootState) =>
+  rootState.ordersFeed.selectedOrderInFeed;
+
+export const {
+  wsClose,
+  wsError,
+  wsGetMessage,
+  wsOpen,
+  wsInit,
+  setSelectedOrderInFeed,
+} = ordersFeedSlice.actions;
 export default ordersFeedSlice.reducer;

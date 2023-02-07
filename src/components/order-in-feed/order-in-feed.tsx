@@ -1,7 +1,11 @@
 import { CurrencyIcon } from "@ya.praktikum/react-developer-burger-ui-components";
-import React from "react";
+import React, { useEffect, useMemo, useState } from "react";
 import { Link, useLocation } from "react-router-dom";
-import { OrderDetails } from "../../redux/slices/orders-feed";
+import {
+  OrderDetails,
+  setSelectedOrderInFeed,
+} from "../../redux/slices/orders-feed";
+import { useAppDispatch } from "../../redux/store";
 import { IngredientDetailsType } from "../../utils/types";
 import { ROUTES } from "../app/app";
 import OrderInFeedStyle from "./order-in-feed.module.css";
@@ -24,23 +28,49 @@ export const OrderInFeed = (props: Props) => {
     allIngredients,
   } = props;
   const location = useLocation();
+  const [detailedIngredients, setDetailedIngredients] = useState<
+    IngredientDetailsType[]
+  >([]);
+  const dispatch = useAppDispatch();
 
-  const ingredientsSum = (ingredients: string[]) => {
-    let sum: number = 0;
+  useMemo(() => {
+    setDetailedIngredients([]);
     ingredients.forEach((ingredient) => {
-      const ingPrice = allIngredients.find(
-        (it) => it._id === ingredient
-      )?.price;
-      if (ingPrice) sum += ingPrice;
+      const ing = allIngredients.find((it) => it._id === ingredient);
+      if (ing)
+        setDetailedIngredients((detailedIngredients) => [
+          ...detailedIngredients,
+          ing,
+        ]);
     });
+  }, [allIngredients, ingredients]);
+
+  const ingredientsSum = () => {
+    let sum: number = 0;
+    detailedIngredients.forEach((ingredient) => (sum += ingredient.price));
     return sum === 0 ? "Not calculatble" : sum;
+  };
+
+  const handleClick = () => {
+    dispatch(
+      setSelectedOrderInFeed({
+        ingredients: detailedIngredients,
+        number,
+        createdAt,
+        status,
+        name,
+      })
+    );
   };
 
   return (
     <Link
+      onClick={handleClick}
       to={{
         pathname: `${ROUTES.PROFILE}${ROUTES.ORDERS}/${1}`,
-        state: { background: location },
+        state: {
+          background: location,
+        },
       }}
     >
       <div className={`${OrderInFeedStyle.order} pt-4 pb-4 pl-4 pr-4 mb-4`}>
@@ -62,7 +92,7 @@ export const OrderInFeed = (props: Props) => {
         </main>
         <footer className={`${OrderInFeedStyle.footer} mt-4`}>
           <section className={`${OrderInFeedStyle.footer__ingredients}`}>
-            {ingredients.map((ingredient, i) => {
+            {detailedIngredients.map((ingredient, i) => {
               if (i >= 6) return null;
               return i < 5 ? (
                 <div
@@ -72,9 +102,7 @@ export const OrderInFeed = (props: Props) => {
                   <img
                     className={`${OrderInFeedStyle.footer__ingredient_content}`}
                     alt={"ingredient representation"}
-                    src={`${
-                      allIngredients.find((it) => it._id === ingredient)?.image
-                    }`}
+                    src={`${ingredient.image}`}
                   />
                 </div>
               ) : (
@@ -86,15 +114,13 @@ export const OrderInFeed = (props: Props) => {
                     style={{ zIndex: 0 }}
                     className={`${OrderInFeedStyle.footer__ingredient_content}`}
                     alt={"more than 5 items is provided to the order"}
-                    src={`${
-                      allIngredients.find((it) => it._id === ingredient)?.image
-                    }`}
+                    src={`${ingredient.image}`}
                   />
                   <p
                     style={{ opacity: 1 }}
                     className={`text text_type_digits-default ${OrderInFeedStyle.footer__ingredient_contentLast}`}
                   >
-                    +{ingredients.length - 5 + 1}
+                    +{ingredients.length - 5}
                   </p>
                 </div>
               );
@@ -102,7 +128,7 @@ export const OrderInFeed = (props: Props) => {
           </section>
           <div className={`${OrderInFeedStyle.footer__price}`}>
             <p className="text text_type_digits-default mr-2">
-              {ingredientsSum(ingredients)}
+              {ingredientsSum()}
             </p>
             <CurrencyIcon type="primary" />
           </div>
