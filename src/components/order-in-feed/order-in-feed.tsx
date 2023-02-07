@@ -1,16 +1,14 @@
 import { CurrencyIcon } from "@ya.praktikum/react-developer-burger-ui-components";
-import React, { useEffect, useMemo, useState } from "react";
+import React, { useMemo, useState } from "react";
 import { Link, useLocation } from "react-router-dom";
-import {
-  OrderDetails,
-  setSelectedOrderInFeed,
-} from "../../redux/slices/orders-feed";
+import { setSelectedOrderInFeed } from "../../redux/slices/orders-feed";
 import { useAppDispatch } from "../../redux/store";
+import { OrderDetailsType } from "../../types/feed";
 import { IngredientDetailsType } from "../../utils/types";
 import { ROUTES } from "../app/app";
 import OrderInFeedStyle from "./order-in-feed.module.css";
 
-type Props = OrderDetails & {
+type Props = OrderDetailsType & {
   showStatus?: boolean;
   allIngredients: IngredientDetailsType[];
 };
@@ -22,8 +20,6 @@ export const OrderInFeed = (props: Props) => {
     name,
     number,
     status,
-    updatedAt,
-    _id,
     showStatus,
     allIngredients,
   } = props;

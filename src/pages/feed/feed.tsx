@@ -3,7 +3,6 @@ import { OrderInFeed } from "../../components/order-in-feed/order-in-feed";
 import feedPageStyle from "./feed.module.css";
 import { useAppDispatch, useAppSelector } from "../../redux/store";
 import {
-  OrderDetails,
   selectOrders,
   selectTotalOrders,
   selectTotalOrdersToday,
@@ -16,8 +15,8 @@ import {
 } from "../../redux/slices/ingredients";
 import { chunkArray } from "../../utils/chunkArray";
 import { ORDER_STATUS } from "../../components/order-info-feed-popup/order-info-feed-popup";
-import { shearBearerInToken, getCookie } from "../../utils/cookieHandler";
 import { ORDERS_URL_BASE } from "../../api";
+import { OrderDetailsType } from "../../types/feed";
 
 const ROWS_PER_COLUMN_IN_READY_STATE = 12;
 
@@ -28,7 +27,7 @@ export const FeedPage = () => {
   const allOrders = useAppSelector(selectOrders);
   const { allIngredients } = useAppSelector(selectIngredientsState);
   const [doneOrdersChunks, setDoneOrdersChunks] = useState<
-    OrderDetails[][] | null
+    OrderDetailsType[][] | null
   >(null);
 
   useEffect(() => {

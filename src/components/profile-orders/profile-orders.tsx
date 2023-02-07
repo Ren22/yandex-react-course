@@ -4,13 +4,10 @@ import {
   loadAllIngredients,
   selectIngredientsState,
 } from "../../redux/slices/ingredients";
-import {
-  OrderDetails,
-  selectOrders,
-  wsInit,
-} from "../../redux/slices/orders-feed";
+import { selectOrders, wsInit } from "../../redux/slices/orders-feed";
 import { getUserDataReducer } from "../../redux/slices/user";
 import { useAppDispatch, useAppSelector } from "../../redux/store";
+import { OrderDetailsType } from "../../types/feed";
 import { shearBearerInToken, getCookie } from "../../utils/cookieHandler";
 import { OrderInFeed } from "../order-in-feed/order-in-feed";
 import ProfileOrdersStyle from "./profile-orders.module.css";
@@ -18,9 +15,9 @@ import ProfileOrdersStyle from "./profile-orders.module.css";
 export const ProfileOrders = () => {
   const dispatch = useAppDispatch();
   const userOrders = useAppSelector(selectOrders);
-  const [userOrdersReversed, setUserOrdersReversed] = useState<OrderDetails[]>(
-    []
-  );
+  const [userOrdersReversed, setUserOrdersReversed] = useState<
+    OrderDetailsType[]
+  >([]);
   const { allIngredients } = useAppSelector(selectIngredientsState);
 
   useEffect(() => {

@@ -1,5 +1,9 @@
 import { createSlice } from "@reduxjs/toolkit";
-import { IngredientDetailsType } from "../../utils/types";
+import {
+  InitialStateOrdersFeed,
+  wsOrdersResp,
+  SelectedOrderInFeed,
+} from "../../types/feed";
 import { RootState } from "../store";
 
 enum WebsocketStatus {
@@ -8,44 +12,10 @@ enum WebsocketStatus {
   OFFLINE = "OFFLINE",
 }
 
-type SelectedOrderInFeed = {
-  ingredients: IngredientDetailsType[];
-  number: number;
-  createdAt: string;
-  status: string;
-  name: string;
-};
-
-type InitialStateOrdersFeed = {
-  status: WebsocketStatus;
-  orders?: OrderDetails[];
-  totalOrders?: number;
-  totalToday?: number;
-  connectionError: string | undefined;
-  selectedOrderInFeed?: SelectedOrderInFeed;
-  webSocketURL?: string;
-};
-
 const initialState: InitialStateOrdersFeed = {
   status: WebsocketStatus.OFFLINE,
   orders: [],
   connectionError: undefined,
-};
-
-export type OrderDetails = {
-  createdAt: string;
-  ingredients: string[];
-  name: string;
-  number: number;
-  status: string;
-  updatedAt: string;
-  _id: string;
-};
-
-type wsOrdersResp = {
-  orders: OrderDetails[];
-  total: number;
-  totalToday: number;
 };
 
 const ordersFeedSlice = createSlice({

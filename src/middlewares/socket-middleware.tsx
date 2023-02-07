@@ -5,18 +5,11 @@ import {
   wsOpen,
 } from "../redux/slices/orders-feed";
 import { AnyAction, Dispatch, Middleware } from "redux";
-import { getCookie, shearBearerInToken } from "../utils/cookieHandler";
-import { ORDERS_URL_BASE } from "../api";
 
 export const socketMiddlwareCreator = (): Middleware<{}> => {
   return (store) => {
     let socket: WebSocket | null = null;
-    // let socket = new WebSocket(
-    //   `wss://${ALL_ORDERS_URL}?token=${shearBearerInToken(
-    //     getCookie("accessToken")
-    //   )}`
-    // );
-    const { dispatch, getState } = store;
+    const { dispatch } = store;
 
     return (next: Dispatch) => (action: AnyAction) => {
       const { type, payload } = action;
