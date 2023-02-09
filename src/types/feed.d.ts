@@ -14,7 +14,6 @@ export type InitialStateOrdersFeed = {
   totalToday?: number;
   connectionError: string | undefined;
   selectedOrderInFeed?: SelectedOrderInFeed;
-  webSocketURL?: string;
 };
 
 

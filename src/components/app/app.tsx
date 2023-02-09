@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { Switch, Route, useLocation, useHistory } from "react-router-dom";
 import {
   HomePage,
@@ -10,7 +10,10 @@ import {
 import * as H from "history";
 import { PROFILE_TABS } from "../../pages/profile/profile";
 import { ResetPasswordPage } from "../../pages/reset-password/reset-password";
-import { closeIngredientDetails } from "../../redux/slices/ingredients";
+import {
+  closeIngredientDetails,
+  loadAllIngredients,
+} from "../../redux/slices/ingredients";
 import { useAppDispatch } from "../../redux/store";
 import Header from "../header/header";
 import IngredientDetails from "../ingredient-details/ingredient-details";
@@ -44,6 +47,10 @@ const App = () => {
     dispatch(closeIngredientDetails());
     history.goBack();
   };
+
+  useEffect(() => {
+    dispatch(loadAllIngredients());
+  }, [dispatch]);
 
   const background =
     (location.state as object) &&

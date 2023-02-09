@@ -59,5 +59,9 @@
 }
 
 .status {
+  color: #f2f2f3;
+}
+
+.status_done {
   color: #00cccc;
 }

@@ -1,10 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { ORDERS_URL_BASE } from "../../api";
-import {
-  loadAllIngredients,
-  selectIngredientsState,
-} from "../../redux/slices/ingredients";
-import { selectOrders, wsInit } from "../../redux/slices/orders-feed";
+import { selectIngredientsState } from "../../redux/slices/ingredients";
+import { selectOrders, wsClose, wsInit } from "../../redux/slices/orders-feed";
 import { getUserDataReducer } from "../../redux/slices/user";
 import { useAppDispatch, useAppSelector } from "../../redux/store";
 import { OrderDetailsType } from "../../types/feed";
@@ -25,7 +22,6 @@ export const ProfileOrders = () => {
   }, [userOrders]);
 
   useEffect(() => {
-    dispatch(loadAllIngredients());
     dispatch(getUserDataReducer()).then(() =>
       dispatch(
         wsInit(
@@ -35,13 +31,19 @@ export const ProfileOrders = () => {
         )
       )
     );
+
+    const handleClose = () => dispatch(wsClose());
+
+    return () => {
+      handleClose();
+    };
   }, [dispatch]);
 
   return (
     <div className={`${ProfileOrdersStyle.ordersContainer} mr-2 `}>
       {userOrdersReversed.map((order) => (
         <OrderInFeed
-          showStatus={false}
+          showStatus={true}
           allIngredients={allIngredients}
           {...order}
         />

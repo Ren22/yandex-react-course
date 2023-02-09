@@ -1,19 +1,22 @@
 import { CurrencyIcon } from "@ya.praktikum/react-developer-burger-ui-components";
-import React, { useMemo, useState } from "react";
+import React, { FC, useCallback, useMemo } from "react";
 import { Link, useLocation } from "react-router-dom";
 import { setSelectedOrderInFeed } from "../../redux/slices/orders-feed";
 import { useAppDispatch } from "../../redux/store";
 import { OrderDetailsType } from "../../types/feed";
 import { IngredientDetailsType } from "../../utils/types";
 import { ROUTES } from "../app/app";
+import { ORDER_STATUS } from "../order-info-feed-popup/order-info-feed-popup";
 import OrderInFeedStyle from "./order-in-feed.module.css";
+
+const MAX_INGREDIENTS_PICTOGRAMS = 5;
 
 type Props = OrderDetailsType & {
   showStatus?: boolean;
   allIngredients: IngredientDetailsType[];
 };
 
-export const OrderInFeed = (props: Props) => {
+export const OrderInFeed: FC<Props> = (props) => {
   const {
     createdAt,
     ingredients,
@@ -24,28 +27,21 @@ export const OrderInFeed = (props: Props) => {
     allIngredients,
   } = props;
   const location = useLocation();
-  const [detailedIngredients, setDetailedIngredients] = useState<
-    IngredientDetailsType[]
-  >([]);
   const dispatch = useAppDispatch();
 
-  useMemo(() => {
-    setDetailedIngredients([]);
-    ingredients.forEach((ingredient) => {
+  const detailedIngredients = useMemo(() => {
+    return ingredients.map((ingredient) => {
       const ing = allIngredients.find((it) => it._id === ingredient);
-      if (ing)
-        setDetailedIngredients((detailedIngredients) => [
-          ...detailedIngredients,
-          ing,
-        ]);
+      if (!ing) throw new Error("Cannot find detailed ingredient infomation");
+      return ing;
     });
   }, [allIngredients, ingredients]);
 
-  const ingredientsSum = () => {
+  const ingredientsSum = useCallback(() => {
     let sum: number = 0;
     detailedIngredients.forEach((ingredient) => (sum += ingredient.price));
     return sum === 0 ? "Not calculatble" : sum;
-  };
+  }, [detailedIngredients]);
 
   const handleClick = () => {
     dispatch(
@@ -57,6 +53,19 @@ export const OrderInFeed = (props: Props) => {
         name,
       })
     );
+  };
+
+  const handleOrderStatus = () => {
+    switch (status) {
+      case ORDER_STATUS.CREATED:
+        return "Создан";
+      case ORDER_STATUS.DONE:
+        return "Выполнен";
+      case ORDER_STATUS.PENDING:
+        return "Готовится";
+      default:
+        break;
+    }
   };
 
   return (
@@ -80,18 +89,23 @@ export const OrderInFeed = (props: Props) => {
           <p className="text text_type_main-medium">{name}</p>
           {showStatus && (
             <p
-              className={`${OrderInFeedStyle.status} text text_type_main-small mt-2`}
+              className={`${
+                status === ORDER_STATUS.DONE
+                  ? OrderInFeedStyle.status_done
+                  : OrderInFeedStyle.status
+              } text text_type_main-small mt-2 `}
             >
-              Выполнен
+              {handleOrderStatus()}
             </p>
           )}
         </main>
         <footer className={`${OrderInFeedStyle.footer} mt-4`}>
           <section className={`${OrderInFeedStyle.footer__ingredients}`}>
             {detailedIngredients.map((ingredient, i) => {
-              if (i >= 6) return null;
-              return i < 5 ? (
+              if (i > MAX_INGREDIENTS_PICTOGRAMS + 1) return null;
+              return i < MAX_INGREDIENTS_PICTOGRAMS ? (
                 <div
+                  key={i}
                   style={{ zIndex: ingredients.length - i }}
                   className={OrderInFeedStyle.footer__ingredient_border}
                 >
@@ -103,6 +117,7 @@ export const OrderInFeed = (props: Props) => {
                 </div>
               ) : (
                 <div
+                  key={i}
                   style={{ zIndex: ingredients.length - i }}
                   className={OrderInFeedStyle.footer__ingredient_border}
                 >

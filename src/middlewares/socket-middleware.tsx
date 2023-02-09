@@ -6,6 +6,10 @@ import {
 } from "../redux/slices/orders-feed";
 import { AnyAction, Dispatch, Middleware } from "redux";
 
+enum ERROR_CODES {
+  "NORMAL_CLOSURE" = 1000,
+}
+
 export const socketMiddlwareCreator = (): Middleware<{}> => {
   return (store) => {
     let socket: WebSocket | null = null;
@@ -16,6 +20,9 @@ export const socketMiddlwareCreator = (): Middleware<{}> => {
 
       if (type === "ordersFeed/wsInit") {
         socket = new WebSocket(payload);
+      }
+      if (socket && type === "ordersFeed/wsClose") {
+        socket.close(ERROR_CODES.NORMAL_CLOSURE, "Closing the connection");
       }
       if (socket) {
         socket.onopen = () => {
@@ -31,7 +38,7 @@ export const socketMiddlwareCreator = (): Middleware<{}> => {
           dispatch(wsGetMessage(restParsedData));
         };
         socket.onclose = (event) => {
-          if (event.code !== 1000) {
+          if (event.code !== ERROR_CODES.NORMAL_CLOSURE) {
             dispatch(wsError(event.code.toString()));
           }
           dispatch(wsClose());

@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useMemo } from "react";
 import { OrderInFeed } from "../../components/order-in-feed/order-in-feed";
 import feedPageStyle from "./feed.module.css";
 import { useAppDispatch, useAppSelector } from "../../redux/store";
@@ -6,13 +6,11 @@ import {
   selectOrders,
   selectTotalOrders,
   selectTotalOrdersToday,
+  wsClose,
   wsInit,
 } from "../../redux/slices/orders-feed";
 import { useEffect, useState } from "react";
-import {
-  loadAllIngredients,
-  selectIngredientsState,
-} from "../../redux/slices/ingredients";
+import { selectIngredientsState } from "../../redux/slices/ingredients";
 import { chunkArray } from "../../utils/chunkArray";
 import { ORDER_STATUS } from "../../components/order-info-feed-popup/order-info-feed-popup";
 import { ORDERS_URL_BASE } from "../../api";
@@ -30,7 +28,7 @@ export const FeedPage = () => {
     OrderDetailsType[][] | null
   >(null);
 
-  useEffect(() => {
+  useMemo(() => {
     const doneOrders = allOrders?.filter(
       (order) => order.status === ORDER_STATUS.DONE
     );
@@ -42,8 +40,13 @@ export const FeedPage = () => {
   }, [allOrders]);
 
   useEffect(() => {
-    dispatch(loadAllIngredients());
     dispatch(wsInit(`wss://${ORDERS_URL_BASE}/all?`));
+
+    const handleClose = () => dispatch(wsClose());
+
+    return () => {
+      handleClose();
+    };
   }, [dispatch]);
 
   return (
@@ -54,8 +57,9 @@ export const FeedPage = () => {
             Лента заказов
           </h1>
           <div className={`${feedPageStyle.ordersContainer} mr-2 `}>
-            {allOrders?.map((order) => (
+            {allOrders?.map((order, i) => (
               <OrderInFeed
+                key={i}
                 showStatus={false}
                 allIngredients={allIngredients}
                 {...order}
@@ -70,10 +74,11 @@ export const FeedPage = () => {
             >
               <p className="text text_type_main-medium mb-5">Готовы:</p>
               <div className={`${feedPageStyle.ordersStatus__readyOrders}`}>
-                {doneOrdersChunks?.map((ordersChunks) => (
-                  <div className=" mr-4">
-                    {ordersChunks.map((order) => (
+                {doneOrdersChunks?.map((ordersChunks, i) => (
+                  <div key={i} className=" mr-4">
+                    {ordersChunks.map((order, j) => (
                       <p
+                        key={j}
                         className={`${feedPageStyle.readyOrders__number} text text_type_digits-default`}
                       >
                         {order.number}
@@ -87,8 +92,9 @@ export const FeedPage = () => {
               <p className="text text_type_main-medium mb-5">В работе:</p>
               {allOrders
                 ?.filter((order) => order.status !== "done")
-                .map((it) => (
+                .map((it, i) => (
                   <p
+                    key={i}
                     className={`${feedPageStyle.readyOrders__number} text text_type_digits-default`}
                   >
                     {it.number}
