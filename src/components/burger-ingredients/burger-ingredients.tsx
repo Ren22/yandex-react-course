@@ -1,18 +1,9 @@
-import React, {
-  SyntheticEvent,
-  useEffect,
-  useMemo,
-  useRef,
-  useState,
-} from "react";
+import React, { SyntheticEvent, useMemo, useRef, useState } from "react";
 import BurgerIngredientsItem from "./components/burger-ingredients-item/burger-ingredients-item";
 import burgerIngredientsStyle from "./burger-ingredients.module.css";
 import { Tab } from "@ya.praktikum/react-developer-burger-ui-components";
-import {
-  loadAllIngredients,
-  selectIngredientsState,
-} from "../../redux/slices/ingredients";
-import { useAppDispatch, useAppSelector } from "../../redux/store";
+import { selectIngredientsState } from "../../redux/slices/ingredients";
+import { useAppSelector } from "../../redux/store";
 import { INGREDIENT_TYPES } from "../../utils/types";
 
 enum NAV_TYPES {
@@ -24,15 +15,10 @@ enum NAV_TYPES {
 const BurgerIngredients = () => {
   const [current, setCurrent] = useState("buns");
   const { allIngredients } = useAppSelector(selectIngredientsState);
-  const dispatch = useAppDispatch();
   const burgerIngredientsContainerRef = useRef<HTMLElement>(null);
   const bunsHeaderRef = useRef<HTMLHeadingElement>(null);
   const sauceHeaderRef = useRef<HTMLHeadingElement>(null);
   const fillingsHeaderRef = useRef<HTMLHeadingElement>(null);
-
-  useEffect(() => {
-    dispatch(loadAllIngredients());
-  }, [dispatch]);
 
   const buns = useMemo(() => {
     return allIngredients?.filter((b) => b.type === INGREDIENT_TYPES.bun);

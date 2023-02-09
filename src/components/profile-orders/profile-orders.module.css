@@ -1,0 +1,6 @@
+.ordersContainer {
+  gap: 24px;
+  height: 75vh;
+  overflow-y: scroll;
+  width: 85%;
+}

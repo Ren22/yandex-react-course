@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { Switch, Route, useLocation, useHistory } from "react-router-dom";
 import {
   HomePage,
@@ -8,15 +8,19 @@ import {
   ProfilePage,
 } from "../../pages";
 import * as H from "history";
-import { ProfileOrder } from "../../pages/profile-order/profile-order";
 import { PROFILE_TABS } from "../../pages/profile/profile";
 import { ResetPasswordPage } from "../../pages/reset-password/reset-password";
-import { closeIngredientDetails } from "../../redux/slices/ingredients";
+import {
+  closeIngredientDetails,
+  loadAllIngredients,
+} from "../../redux/slices/ingredients";
 import { useAppDispatch } from "../../redux/store";
 import Header from "../header/header";
 import IngredientDetails from "../ingredient-details/ingredient-details";
 import Modal from "../modal/modal";
 import { ProtectedRoute } from "../protected-route/protected-route";
+import { FeedPage } from "../../pages/feed/feed";
+import { OrderInfoFeedPopUp } from "../order-info-feed-popup/order-info-feed-popup";
 
 export interface TotalSum {
   value: number;
@@ -31,6 +35,7 @@ export enum ROUTES {
   PROFILE = "/profile",
   ORDERS = "/orders",
   INGREDIENTS = "/ingredients",
+  FEED = "/feed",
 }
 
 const App = () => {
@@ -42,6 +47,10 @@ const App = () => {
     dispatch(closeIngredientDetails());
     history.goBack();
   };
+
+  useEffect(() => {
+    dispatch(loadAllIngredients());
+  }, [dispatch]);
 
   const background =
     (location.state as object) &&
@@ -72,11 +81,19 @@ const App = () => {
           <ProfilePage activeTab={`${PROFILE_TABS.ORDERS}`} />
         </ProtectedRoute>
         <ProtectedRoute path={`${ROUTES.PROFILE}${ROUTES.ORDERS}/:id`} exact>
-          <ProfileOrder />
+          <OrderInfoFeedPopUp />
         </ProtectedRoute>
-        <Route path={`${ROUTES.INGREDIENTS}/:id`}>
+        <Route path={`${ROUTES.INGREDIENTS}/:id`} exact>
           <>
             <IngredientDetails />
+          </>
+        </Route>
+        <Route path={`${ROUTES.FEED}`} exact>
+          <FeedPage />
+        </Route>
+        <Route path={`${ROUTES.FEED}/:id`} exact>
+          <>
+            <OrderInfoFeedPopUp />
           </>
         </Route>
       </Switch>
@@ -85,6 +102,16 @@ const App = () => {
           <Route path={`${ROUTES.INGREDIENTS}/:id`}>
             <Modal header="Детали ингредиента" closeModal={handleCloseModal}>
               <IngredientDetails />
+            </Modal>
+          </Route>
+          <Route path={`${ROUTES.FEED}/:id`}>
+            <Modal closeModal={handleCloseModal}>
+              <OrderInfoFeedPopUp />
+            </Modal>
+          </Route>
+          <Route path={`${ROUTES.PROFILE}${ROUTES.ORDERS}/:id`}>
+            <Modal closeModal={handleCloseModal}>
+              <OrderInfoFeedPopUp />
             </Modal>
           </Route>
         </>

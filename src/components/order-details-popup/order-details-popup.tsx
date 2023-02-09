@@ -1,5 +1,5 @@
 import React from "react";
-import OrderDetailsStyle from "./order-details.module.css";
+import OrderDetailsStyle from "./order-details-popup.module.css";
 
 type Props = {
   orderId?: string;

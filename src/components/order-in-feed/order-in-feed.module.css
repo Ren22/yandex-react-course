@@ -1,0 +1,67 @@
+.order {
+  background: #1c1c21;
+  box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.04), 0px 0px 2px rgba(0, 0, 0, 0.06),
+    0px 0px 1px rgba(0, 0, 0, 0.04);
+  border-radius: 40px;
+  display: flex;
+  flex-direction: column;
+  color: #fff;
+}
+
+.header {
+  display: flex;
+  justify-content: space-between;
+}
+
+.footer {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.footer__price {
+  display: flex;
+}
+
+.footer__ingredients {
+  display: flex;
+  flex-direction: row;
+}
+
+.footer__ingredients div:not(:first-child) {
+  margin-left: -1rem;
+}
+
+.footer__ingredient_border {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  position: relative;
+  width: 4rem;
+  height: 4rem;
+  background: linear-gradient(90deg, #801ab2, #4c4cff);
+  border-radius: 50%;
+}
+
+.footer__ingredient_content {
+  width: 3.8rem;
+  height: 3.8rem;
+  object-fit: contain;
+  background: #000;
+  border-radius: 50%;
+}
+
+.footer__ingredient_contentLast {
+  position: absolute;
+  left: 30%;
+  object-fit: contain;
+  width: 100%;
+}
+
+.status {
+  color: #f2f2f3;
+}
+
+.status_done {
+  color: #00cccc;
+}

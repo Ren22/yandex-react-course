@@ -6,7 +6,7 @@ import {
 } from "@ya.praktikum/react-developer-burger-ui-components";
 import listStyle from "./burger-constructor.module.css";
 import Modal from "../modal/modal";
-import OrderDetails from "../order-details/order-details";
+import OrderDetails from "../order-details-popup/order-details-popup";
 import {
   addIngredient,
   selectIsIngredientDragged,

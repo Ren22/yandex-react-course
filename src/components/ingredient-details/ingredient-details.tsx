@@ -2,7 +2,6 @@ import React, { useEffect, useState } from "react";
 import { useRouteMatch } from "react-router-dom";
 import {
   selectIngredientsState,
-  loadAllIngredients,
   pickIngredient,
 } from "../../redux/slices/ingredients";
 import { useAppDispatch, useAppSelector } from "../../redux/store";
@@ -19,10 +18,6 @@ const IngredientDetails = () => {
   const dispatch = useAppDispatch();
   const [pickedIngredient, setPickedIngredient] =
     useState<IngredientDetailsType | null>(null);
-
-  useEffect(() => {
-    dispatch(loadAllIngredients());
-  }, [dispatch]);
 
   useEffect(() => {
     const ingredient = allIngredients.find((ing) => ing._id === params.id);

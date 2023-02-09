@@ -1,0 +1,47 @@
+.main {
+  display: flex;
+  justify-content: center;
+  height: calc(100% - (4rem));
+}
+
+.leftColumn {
+  flex-basis: 600px;
+  height: 55vh;
+}
+
+.rightColumn {
+  flex-basis: calc(600px - (40px));
+}
+
+.ordersContainer {
+  gap: 24px;
+  height: 75vh;
+  overflow-y: scroll;
+}
+
+.readyOrders__number {
+  color: #00cccc;
+}
+
+.ordersStatusWrapper {
+  display: flex;
+}
+
+.ordersStatus__readyOrdersWrapper {
+  display: flex;
+  flex-direction: column;
+}
+
+.ordersStatus__readyOrders {
+  display: flex;
+}
+
+.ordersStatus__lineBreak {
+  flex-grow: 1;
+}
+
+.doneOverall,
+.doneToday {
+  display: flex;
+  flex-direction: column;
+}

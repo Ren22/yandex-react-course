@@ -35,18 +35,18 @@ const Header = () => {
               </span>
             </div>
           </Link>
-          <Link to={ROUTES.ORDERS}>
+          <Link to={ROUTES.FEED}>
             <div
               className={`${headerStyles.header__item}
             ${
-              location.pathname === ROUTES.ORDERS
+              location.pathname === ROUTES.FEED
                 ? headerStyles.header__item_active
                 : null
             } `}
             >
               <ListIcon
                 type={
-                  location.pathname === ROUTES.ORDERS ? "primary" : "secondary"
+                  location.pathname === ROUTES.FEED ? "primary" : "secondary"
                 }
               />
               <span className="text text_type_main-default p-2">
