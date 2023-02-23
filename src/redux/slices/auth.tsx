@@ -23,16 +23,14 @@ interface InitialStateAuth {
   userIsPasswordReset: boolean;
   resetPswrdIsLoading?: boolean;
   error?: string;
-  userPassword?: string;
   userLogoutIsLoading?: boolean;
 }
 
-const initialState: InitialStateAuth = {
+export const initialState: InitialStateAuth = {
   userIsLoggedIn: false,
   userIsRegistered: false,
   userForgotPswrdEmailSent: false,
   userIsPasswordReset: false,
-  userPassword: "",
 };
 
 export const registerUserReducer = createAsyncThunk(
@@ -70,7 +68,7 @@ export const logoutUserReducer = createAsyncThunk("logout", async () => {
   await logoutUser(token);
 });
 
-const authSlice = createSlice({
+export const authSlice = createSlice({
   name: "auth",
   initialState,
   reducers: {
@@ -96,10 +94,11 @@ const authSlice = createSlice({
         state.userIsRegistered = false;
       })
       .addCase(registerUserReducer.rejected, (state, action) => {
-        alert(action.error.message);
+        const errorText = "User registration failed, please contact support";
+        alert(errorText);
         state.userIsLoading = false;
         state.userIsRegistered = false;
-        state.error = "User registration failed, please contact support.";
+        state.error = errorText;
       })
       // user login
       .addCase(loginUserReducer.fulfilled, (state, action) => {
@@ -114,10 +113,11 @@ const authSlice = createSlice({
         state.userIsLoggedIn = false;
       })
       .addCase(loginUserReducer.rejected, (state, action) => {
+        const errorText = "User login failed, please contact support";
         state.userIsLoading = false;
         state.userIsLoggedIn = false;
-        alert(action.error.message);
-        state.error = "User login failed, please contact support.";
+        alert(errorText);
+        state.error = errorText;
       })
       // forgot pswrd
       .addCase(forgotPasswordReducer.fulfilled, (state) => {
@@ -181,7 +181,8 @@ export const selectIsForgotPswrdEmailSent = (rootState: RootState) =>
   rootState.auth.userForgotPswrdEmailSent;
 export const selectIsResetPasswordReqSent = (rootState: RootState) =>
   rootState.auth.userIsPasswordReset;
-export default authSlice.reducer;
 
 export const { setIsEmailSentToDefault, setIsResetPasswordReqSentToDefault } =
   authSlice.actions;
+
+export default authSlice.reducer;

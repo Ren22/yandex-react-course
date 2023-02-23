@@ -2,16 +2,15 @@ import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import { refreshAccessToken } from "../../api/auth";
 import { getUserData, patchUserData } from "../../api/user";
 import { UserDataResponse } from "../../types/user";
-import { setCookie } from "../../utils/cookieHandler";
+import { getCookie, setCookie } from "../../utils/cookieHandler";
 import { RootState } from "../store";
-import { logoutUserReducer } from "./auth";
 export interface User {
   email?: string;
   name?: string;
   password?: string;
 }
 
-interface InitialStateUser {
+export interface InitialStateUser {
   user: User | null;
   userIsLoading: boolean;
   userIsLoaded?: boolean;
@@ -40,7 +39,8 @@ export const getUserDataReducer = createAsyncThunk(
   "getUserData",
   async (_, { rejectWithValue }) => {
     const commonPart = async () => {
-      const res = (await getUserData()) as UserDataResponse;
+      const accesToken = getCookie("accessToken");
+      const res = (await getUserData(accesToken)) as UserDataResponse;
       return { ...res };
     };
     try {
@@ -62,8 +62,13 @@ export const getUserDataReducer = createAsyncThunk(
 export const setUserDataReducer = createAsyncThunk(
   "setUserData",
   async (userInput: User, { rejectWithValue }) => {
+    const accesToken = getCookie("accessToken");
+
     const commonPart = async () => {
-      const res = (await patchUserData(userInput)) as UserDataResponse;
+      const res = (await patchUserData(
+        userInput,
+        accesToken
+      )) as UserDataResponse;
       return { ...res };
     };
     try {
@@ -82,10 +87,15 @@ export const setUserDataReducer = createAsyncThunk(
   }
 );
 
-const userSlice = createSlice({
+export const userSlice = createSlice({
   name: "user",
   initialState,
-  reducers: {},
+  reducers: {
+    setUserToNull: (state) => {
+      state.user = null;
+      state.userIsLoaded = false;
+    },
+  },
   extraReducers: (builder) => {
     builder
       .addCase(getUserDataReducer.fulfilled, (state, action) => {
@@ -97,7 +107,7 @@ const userSlice = createSlice({
         state.userIsLoading = true;
         state.userIsLoaded = false;
       })
-      .addCase(getUserDataReducer.rejected, (state, action) => {
+      .addCase(getUserDataReducer.rejected, (state) => {
         state.userIsLoading = false;
         state.userIsLoaded = false;
       })
@@ -116,19 +126,15 @@ const userSlice = createSlice({
         state.userIsLoaded = false;
         state.userIsLoading = false;
         alert(action.error.message);
-      })
-      .addCase(logoutUserReducer.fulfilled, (state) => {
-        state.user = null;
-        state.userIsLoaded = false;
       });
   },
 });
 
 export default userSlice.reducer;
 
-export const selectUserData = (rootState: RootState) => rootState.user.user;
+export const selectUser = (rootState: RootState) => rootState.user.user;
 
 export const selectUserIsLoaded = (rootState: RootState) =>
   rootState.user.userIsLoaded;
 
-export const selectUser = (rootState: RootState) => rootState.user.user;
+export const { setUserToNull } = userSlice.actions;

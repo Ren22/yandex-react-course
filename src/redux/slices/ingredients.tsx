@@ -24,7 +24,7 @@ export const loadAllIngredients = createAsyncThunk(
   }
 );
 
-const ingredientsSlice = createSlice({
+export const ingredientsSlice = createSlice({
   name: "ingredients",
   initialState,
   reducers: {
@@ -78,13 +78,13 @@ const ingredientsSlice = createSlice({
   extraReducers: (builder) => {
     builder
       .addCase(loadAllIngredients.fulfilled, (state, action) => {
-        state.ingredientsAreLoaded = false;
+        state.ingredientsAreLoaded = true;
         state.allIngredients = action.payload
           ? action.payload.allIngredients
           : [];
       })
       .addCase(loadAllIngredients.pending, (state) => {
-        state.ingredientsAreLoaded = true;
+        state.ingredientsAreLoaded = false;
       })
       .addCase(loadAllIngredients.rejected, (state) => {
         state.ingredientsAreLoaded = false;
