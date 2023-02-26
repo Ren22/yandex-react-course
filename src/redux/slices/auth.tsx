@@ -93,7 +93,7 @@ export const authSlice = createSlice({
         state.userIsLoading = true;
         state.userIsRegistered = false;
       })
-      .addCase(registerUserReducer.rejected, (state, action) => {
+      .addCase(registerUserReducer.rejected, (state) => {
         const errorText = "User registration failed, please contact support";
         alert(errorText);
         state.userIsLoading = false;
@@ -130,14 +130,15 @@ export const authSlice = createSlice({
         state.userIsLoggedIn = false;
       })
       .addCase(forgotPasswordReducer.rejected, (state, action) => {
-        alert(action.error.message);
+        const errMessage =
+          "User forgot password check failed, please contact support";
+        alert(errMessage);
         state.userForgotPswrdEmailSent = false;
         state.forgotPswrdIsLoading = false;
-        state.error =
-          "User forgot password check failed, please contact support.";
+        state.error = errMessage;
       })
       // reset pswrd
-      .addCase(resetPasswordReducer.fulfilled, (state, action) => {
+      .addCase(resetPasswordReducer.fulfilled, (state) => {
         state.resetPswrdIsLoading = false;
         state.userIsPasswordReset = true;
         alert(
@@ -149,10 +150,11 @@ export const authSlice = createSlice({
         state.userIsPasswordReset = false;
       })
       .addCase(resetPasswordReducer.rejected, (state, action) => {
-        alert(action.error.message);
+        const err = "User password reset has failed, please contact support.";
+        alert(err);
         state.resetPswrdIsLoading = false;
         state.userIsPasswordReset = false;
-        state.error = "User password reset has failed, please contact support.";
+        state.error = err;
       })
       // logout user
       .addCase(logoutUserReducer.fulfilled, (state) => {
@@ -166,9 +168,8 @@ export const authSlice = createSlice({
         state.userLogoutIsLoading = true;
       })
       .addCase(logoutUserReducer.rejected, (state, action) => {
-        alert(action.error.message);
         state.userLogoutIsLoading = false;
-        alert(action.error.message);
+        alert("Logout failed. Please contact administrator");
       });
   },
 });
