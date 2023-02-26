@@ -21,7 +21,7 @@ import { deleteCookie, setCookie } from "../../utils/cookieHandler";
 const middlewares = [thunk];
 const mockStore = configureMockStore<RootState, AppDispatch>(middlewares);
 
-const initialStateAuth = {
+export const initialStateAuth = {
   userForgotPswrdEmailSent: false,
   userIsPasswordReset: false,
 };
