@@ -1,5 +1,6 @@
 {
   "name": "react-burger",
+  "homepage": "https://Ren22.github.io/yandex-react-course",
   "version": "0.1.0",
   "private": true,
   "dependencies": {
@@ -30,7 +31,8 @@
     "build": "react-scripts build",
     "test": "react-scripts test --coverage --coverageDirectory=coverage",
     "eject": "react-scripts eject",
-    "cypress:open": "./node_modules/.bin/cypress open"
+    "cypress:open": "./node_modules/.bin/cypress open",
+    "deploy": "gh-pages -d build"
   },
   "eslintConfig": {
     "extends": [
@@ -56,6 +58,7 @@
     "cypress": "^12.7.0",
     "eslint-plugin-cypress": "^2.12.1",
     "fetch-mock": "^9.11.0",
+    "gh-pages": "^5.0.0",
     "react-test-renderer": "^18.2.0",
     "redux-mock-store": "^1.5.4"
   }
