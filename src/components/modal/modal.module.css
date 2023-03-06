@@ -19,7 +19,7 @@
   z-index: 999;
 }
 
-.modalWrapper {
+.modalContent {
   position: absolute;
   width: 100vw;
   height: 100vh;

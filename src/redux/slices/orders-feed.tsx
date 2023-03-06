@@ -22,7 +22,7 @@ export const ordersFeedSlice = createSlice({
   name: "ordersFeed",
   initialState,
   reducers: {
-    wsInit: (state) => {
+    wsInit: (state, action: { payload: string }) => {
       state.status = WebsocketStatus.CONNECTING;
     },
     wsOpen: (state) => {

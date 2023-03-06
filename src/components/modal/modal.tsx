@@ -32,7 +32,7 @@ const Modal = ({ children, header, closeModal }: Props) => {
   return ReactDOM.createPortal(
     <>
       <ModalOverlay onClickModalOverlay={closeModal} />
-      <div className={modalStyle.modalWrapper}>
+      <div className={modalStyle.modalContent}>
         <section className={`${modalStyle.modal}`}>
           <header
             className={`${modalStyle.header} pl-10 pr-10 pt-10 text text_type_main-large`}
