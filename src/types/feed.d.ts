@@ -9,7 +9,7 @@ export type SelectedOrderInFeed = {
 
 export type InitialStateOrdersFeed = {
   status: WebsocketStatus;
-  orders?: OrderDetails[];
+  orders?: OrderDetailsType[];
   totalOrders?: number;
   totalToday?: number;
   connectionError: string | undefined;
@@ -28,7 +28,7 @@ export type OrderDetailsType = {
 };
 
 export type wsOrdersResp = {
-  orders: OrderDetails[];
+  orders: OrderDetailsType[];
   total: number;
   totalToday: number;
 };

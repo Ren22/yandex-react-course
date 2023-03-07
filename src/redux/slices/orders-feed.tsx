@@ -6,7 +6,7 @@ import {
 } from "../../types/feed";
 import { RootState } from "../store";
 
-enum WebsocketStatus {
+export enum WebsocketStatus {
   CONNECTING = "CONNECTING",
   ONLINE = "ONLINE",
   OFFLINE = "OFFLINE",
@@ -18,7 +18,7 @@ const initialState: InitialStateOrdersFeed = {
   connectionError: undefined,
 };
 
-const ordersFeedSlice = createSlice({
+export const ordersFeedSlice = createSlice({
   name: "ordersFeed",
   initialState,
   reducers: {

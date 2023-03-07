@@ -96,6 +96,7 @@ const App = () => {
             <OrderInfoFeedPopUp />
           </>
         </Route>
+        <Route component={HomePage} />
       </Switch>
       {background && (
         <>

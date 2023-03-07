@@ -6,9 +6,10 @@ import { ProfileInputs } from "../../components/profile-inputs/profile-inputs";
 import { ProfileOrders } from "../../components/profile-orders/profile-orders";
 import { logoutUserReducer } from "../../redux/slices/auth";
 import {
-  selectUserData,
+  selectUser,
   getUserDataReducer,
   setUserDataReducer,
+  setUserToNull,
 } from "../../redux/slices/user";
 import { useAppDispatch, useAppSelector } from "../../redux/store";
 
@@ -31,7 +32,7 @@ export const ProfilePage = ({ activeTab }: Props) => {
   useEffect(() => {
     dispatch(getUserDataReducer());
   }, [dispatch]);
-  const user = useAppSelector(selectUserData);
+  const user = useAppSelector(selectUser);
   const history = useHistory();
   const [dataIsChanged, setDataIsChanged] = useState(false);
 
@@ -64,9 +65,10 @@ export const ProfilePage = ({ activeTab }: Props) => {
   };
 
   const handleLogout = () => {
-    dispatch(logoutUserReducer()).then(() =>
-      history.push({ pathname: `${ROUTES.LOGIN}` })
-    );
+    dispatch(logoutUserReducer()).then(() => {
+      dispatch(setUserToNull());
+      history.push({ pathname: `${ROUTES.LOGIN}` });
+    });
   };
 
   const helperText = () => {

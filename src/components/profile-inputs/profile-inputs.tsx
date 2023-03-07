@@ -1,6 +1,6 @@
 import React, { useCallback, useEffect, useRef, useState } from "react";
 import { Input } from "@ya.praktikum/react-developer-burger-ui-components";
-import { selectUserData } from "../../redux/slices/user";
+import { selectUser } from "../../redux/slices/user";
 import { useAppSelector } from "../../redux/store";
 
 interface Props {
@@ -29,7 +29,7 @@ export const ProfileInputs = ({
   const [isLoginInputActive, setIsLoginInputActive] = useState(false);
   const [isPasswordInputActive, setIsPasswordInputActive] = useState(false);
 
-  const user = useAppSelector(selectUserData);
+  const user = useAppSelector(selectUser);
 
   const setAllInputsInactive = useCallback(() => {
     setIsNameInputActive(false);

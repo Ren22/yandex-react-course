@@ -1,12 +1,11 @@
 import { BASE_URL } from ".";
 import { YandexCustomErrorResp } from "../types/error";
 import { UserDataResponse, UserUpdateInput } from "../types/user";
-import { getCookie } from "../utils/cookieHandler";
 import { request } from "../utils/request";
 
-export async function getUserData(): Promise<
-  UserDataResponse | YandexCustomErrorResp
-> {
+export async function getUserData(
+  accessToken?: string
+): Promise<UserDataResponse | YandexCustomErrorResp> {
   return request(`${BASE_URL}/auth/user`, {
     method: "GET",
     mode: "cors",
@@ -14,7 +13,7 @@ export async function getUserData(): Promise<
     credentials: "same-origin",
     headers: {
       "Content-Type": "application/json",
-      Authorization: getCookie("accessToken") ?? "",
+      Authorization: accessToken ?? "",
     },
     redirect: "follow",
     referrerPolicy: "no-referrer",
@@ -22,7 +21,8 @@ export async function getUserData(): Promise<
 }
 
 export async function patchUserData(
-  userUpdateInput: UserUpdateInput
+  userUpdateInput: UserUpdateInput,
+  accessToken?: string
 ): Promise<UserDataResponse | YandexCustomErrorResp> {
   return request(`${BASE_URL}/auth/user`, {
     method: "PATCH",
@@ -31,7 +31,7 @@ export async function patchUserData(
     credentials: "same-origin",
     headers: {
       "Content-Type": "application/json",
-      Authorization: getCookie("accessToken") ?? "",
+      Authorization: accessToken ?? "",
     },
     redirect: "follow",
     referrerPolicy: "no-referrer",

@@ -72,7 +72,7 @@ export const LoginPage = () => {
           extraClass="ml-1 mt-6"
         />
         <Button
-          extraClass={"mt-6 mb-20"}
+          extraClass={"mt-6 mb-20 loginButton"}
           htmlType="submit"
           type="primary"
           size="medium"
